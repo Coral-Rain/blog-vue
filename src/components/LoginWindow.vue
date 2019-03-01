@@ -1,10 +1,13 @@
 <template>
   <div v-show="showLoginWindow" class="tool-window">
     <div v-if="showLogin" class="tool-login">
+      <button title="关闭" @click="hideLoginWindow" class="btn btn-default pull-right">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
       <p>账号密码登录</p>
       <form>
         <div>
-          <input v-model.trim="account" id="account" type="text" placeholder="请输入邮箱">
+          <input v-model.trim="email" id="account" type="text" placeholder="请输入邮箱">
         </div>
         <div>
           <input v-model.trim="password" id="password" type="password" placeholder="请输入密码">
@@ -18,10 +21,13 @@
       </div>
     </div>
     <div v-else class="tool-registe">
+      <button title="关闭" @click="hideLoginWindow" class="btn btn-default pull-right">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
       <p>注册账号</p>
       <form>
         <div>
-          <input type="text" id="petname" v-model.trim="petname" placeholder="请输入用户名" />
+          <input type="text" id="petname" v-model.trim="username" placeholder="请输入用户名" />
         </div>
         <div>
           <input type="text" id="email" v-model.trim="email" placeholder="请输入邮箱" />
@@ -37,6 +43,10 @@
                  style="width: 40%;display: inline-block;float: left"/>
           <img :src="getCaptcha" id="captchaImg" @click="signDate = new Date()"
                style="vertical-align: middle;width: 60%; padding-top: 7px; height: 47px;">
+        </div>
+        <div>
+          <a href="javascript:" @click="sendRegCode" class="btn btn-primary btn-code">获取验证码</a>
+          <input type="text" style="display: inline-block;width: 60%;" id="code" v-model.trim="code" placeholder="请输入邮件验证码" />
         </div>
         <div>
           <input @click.prevent="submitRegForm()" type="submit" value="注册"><br>
@@ -56,12 +66,13 @@
     data() {
       return {
         signDate: new Date(),
-        account: '',
+        email: '',
         password: '',
-        petname: '',
+        username: '',
         passwordReg: '',
         repeat: '',
-        captcha: ''
+        captcha: '',
+        code: ''
       }
     },
     props: {
@@ -79,11 +90,7 @@
     },
     methods: {
       submitLoginForm: function () {
-
-        EventBus.$emit("loginSuccess", {username: '测试'})
-        return;
-
-        if(!(/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.account))){
+        if(!(/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email))){
           layerError("错误: 账号格式输入错误！");
           $('#account').focus();
           return;
@@ -94,7 +101,7 @@
           return;
         }
         const data = new FormData()
-        data.append("account", this.account)
+        data.append("account", this.email)
         data.append("password", this.password)
         const that = this
         POST({
@@ -102,16 +109,15 @@
           data: data,
           callback: res => {
             if(res.code === 200) {
-              localStorage.setItem("user", JSON.stringify(res.data.user))
               if(res.data.message){
                 layerMsg(res.data.message)
               } else {
                 layerMsg("登录成功...")
               }
-              EventBus.$emit("loginSuccess", res.data.user)
-              // setTimeout(function(){
-              //   that.$router.replace("/cloud")
-              // },2000)
+              localStorage.setItem("user", JSON.stringify(res.data.user))
+              setTimeout(function(){
+                EventBus.$emit("loginSuccess", res.data.user)
+              },2000)
             } else {
               layerError(res.message);
             }
@@ -120,13 +126,31 @@
       },
       goRegiste: function () {
         EventBus.$emit("goRegiste")
+        this.password = ''
+        this.email = ''
       },
       goLogin: function () {
         EventBus.$emit("goLogin")
+        this.email = ''
+        this.passwordReg = ''
+        this.repeat = ''
+        this.captcha = ''
+        this.code = ''
+        this.username = ''
+      },
+      hideLoginWindow: function() {
+        this.email = ''
+        this.passwordReg = ''
+        this.repeat = ''
+        this.captcha = ''
+        this.code = ''
+        this.username = ''
+        this.password = ''
+        EventBus.$emit("hideLoginWindow")
       },
       submitRegForm: function () {
 
-        if(this.petname.length === 0 || this.petname.length > 10) {
+        if(this.username.length === 0 || this.username.length > 10) {
           layerError('错误: 用户名应为1-10位字符！');
           $('#petname').focus();
           return;
@@ -141,17 +165,17 @@
           $('#passwordReg').focus();
           return;
         }
-        if (this.password !== this.repeat) {
+        if (this.passwordReg !== this.repeat) {
           layerError('错误: 两次输入的密码不相同！');
           $('#repeatPassword').focus();
           return;
         }
         const data = new FormData()
-        data.append("petname", this.petname)
+        data.append("username", this.username)
         data.append("email", this.email)
         data.append("password", this.passwordReg)
         data.append("repeatPassword", this.repeat)
-        data.append("captcha", this.captcha)
+        data.append("code", this.code)
         const that = this
         POST({
           url: '/api/user/registe',
@@ -166,7 +190,7 @@
               if (res.code === 402){
                 $('#email').focus();
               } else if (res.code === 401){
-                $('#captcha').focus();
+                $('#code').focus();
               } else if(res.code === 403){
                 $('#petname').focus();
               } else if(res.code === 404){
@@ -175,6 +199,38 @@
                 $('#repeatPassword').focus();
               }
               that.signDate = new Date()
+              layerError(res.message);
+            }
+          }
+        })
+      },
+      sendRegCode: function () {
+        if(!/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email)){
+          layerError('错误: 邮箱格式输入不正确！');
+          $('#email').focus();
+          return;
+        }
+        const that = this
+        const data = new FormData()
+        data.append("email", this.email)
+        data.append("captcha", this.captcha)
+        POST({
+          url: '/api/user/sendRegCode',
+          data: data,
+          callback: res => {
+            if (res.code === 200) {
+              layerMsg('已发送验证邮件, 请登录邮箱查收！');
+              // setTimeout(function(){
+              //   that.$router.replace("/index/login")
+              // },2000)
+              $('#code').focus()
+            } else {
+              if (res.code === 401){
+                $('#captcha').focus();
+                that.signDate = new Date()
+              } else if (res.code === 400){
+                $('#email').focus();
+              }
               layerError(res.message);
             }
           }
@@ -298,5 +354,12 @@
     border-radius: 3px;
     display: inline-block;
     text-decoration: none;
+  }
+
+  .btn-code {
+    line-height: 26px;
+    float: right;
+    width: 40%;
+    margin-top: 16px;
   }
 </style>

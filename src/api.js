@@ -5,9 +5,9 @@ export function POST(params) {
         let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data
         if(res.code === 144){
             layerError(res.message)
-            localStorage.clear()
-            sessionStorage.clear()
-            location.href = location.protocol + "//" + location.host + "/#/index/login"
+            // localStorage.clear()
+            // sessionStorage.clear()
+            // location.href = location.protocol + "//" + location.host + "/#/index/login"
             return
         }
         params.callback(res)

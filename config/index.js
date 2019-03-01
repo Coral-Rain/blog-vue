@@ -17,13 +17,6 @@ module.exports = {
         pathRewrite: {
           '^/api': '/api'
         }
-      },
-      '/file': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/file': '/file'
-        }
       }
     },
 

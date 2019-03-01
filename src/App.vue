@@ -26,8 +26,25 @@
               <input type="text" class="form-control" placeholder="Search">
             </div>
           </form>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" @click="toLogin">{{isLogin ? user.username : '登录'}}</a></li>
+          <ul v-if="isLogin" style="vertical-align: center" class="nav navbar-nav navbar-right">
+            <!--Img, Name-->
+            <li style="line-height: 50px">
+              <img src="../static/avatar.png" title="修改头像" @click="" class="navbar-avatar" :alt="user.username">
+            </li>
+            <li class="dropdown">
+              <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+                {{user.username}}
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><router-link :to="{name: 'PersonDefault', params: {userId: user.id}}">个人中心</router-link></li>
+                <li class="divider" role="separator"></li>
+                <li><a href="javascript:" @click="logout">注销</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul v-else class="nav navbar-nav navbar-right">
+            <li><a href="#" @click="toLogin">登录</a></li>
             <li><a href="#" @click="toRegiste">注册</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -41,19 +58,24 @@
 <script>
 import LoginWindow from '@/components/LoginWindow'
 import EventBus from '@/EventBus'
+import {GET, POST} from './api'
 export default {
   name: 'App',
   components: {LoginWindow},
   data() {
-    // localStorage.getItem("user")
+    let isLogin = false
+    let userSession = localStorage.getItem("user")
+    if(userSession){
+      isLogin = true
+      userSession = JSON.parse(userSession)
+    }
+    console.log(userSession)
 
     return {
       showLoginWindow: false,
       showLogin: true,
-      isLogin: false,
-      user: {
-        username: '测试'
-      }
+      isLogin: isLogin,
+      user: userSession
     }
   },
   methods: {
@@ -62,12 +84,40 @@ export default {
       this.showLogin = true
     },
     toRegiste: function () {
+      // layerError("dadasdas")
       this.showLoginWindow = true
       this.showLogin = false
+    },
+    logout: function () {
+      this.isLogin = false
+      const that = this
+      GET({
+        url: '/api/user/logout',
+        callback: res => {
+          if(res.code === 200){
+            localStorage.clear()
+            layerMsg("Logout Success!")
+            setTimeout(function () {
+              that.$router.replace("/blog")
+            }, 2000)
+          } else {
+            layerMsg("Logout Error: " + res.message + "!")
+          }
+        }
+      })
     }
   },
   mounted: function () {
     const that = this
+    // var data = new FormData()
+    // data.append("captcha", "0000000")
+    // POST({
+    //   url: '/api/user/sendRegCode',
+    //   data: data,
+    //   callback: res => {
+    //     layerMsg(res.message)
+    //   }
+    // })
     EventBus.$on("loginSuccess", function (user) {
       that.showLoginWindow = false
       that.isLogin = true
@@ -78,6 +128,9 @@ export default {
     })
     EventBus.$on("goLogin", function () {
       that.toLogin()
+    })
+    EventBus.$on("hideLoginWindow", function () {
+      that.showLoginWindow = false
     })
   }
 }
@@ -93,4 +146,11 @@ export default {
   height: 100%;
   background-color: #eeeeee;
 }
+
+  .navbar-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+  }
 </style>

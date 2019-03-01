@@ -9,12 +9,15 @@ import Vuex from 'vuex'
 import 'jquery'
 import layer from '../static/lib/layer/layer'
 import Global from './tools/Global.vue'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 Vue.prototype.GLOBAL = Global
 Vue.config.productionTip = false
+axios.defaults.withCredentials=true;
 
 
-Vue.use(VueAxios,axios,Vuex, layer);
+Vue.use(mavonEditor,VueAxios,axios,Vuex, layer);
 
 Vue.filter('fileSize', function (value) {
   var size = parseInt(value);

@@ -1,9 +1,9 @@
 <template>
-  <div id="container-main" class="container">
+  <div class="container">
     <div class="content col-md-2 visible-lg visible-md"><!--Left-->
       <TagList :list="list"></TagList>
     </div>
-    <div class="content col-md-7 col-sm-9 col-xs-12"><!--Center-->
+    <div class="content col-md-7 col-sm-8 col-xs-12"><!--Center-->
       <div class="text-left">
         <ol class="breadcrumb breadcrumb-path">
           <li><a href="/blog">博客</a></li>
@@ -23,7 +23,7 @@
         <!--所有-->
       </div>
     </div>
-    <div class="content col-md-3 col-sm-3 hidden-xs"> <!--Right-->
+    <div class="content col-md-3 col-sm-4 hidden-xs"> <!--Right-->
       <div>
         <img width="100%" src="../../static/www_blog_sidebar_bottom_ISxBA.jpg" />
       </div>
@@ -45,7 +45,6 @@
     components: {RecommendPanel, TagList},
     data () {
       return {
-        screenWidth: document.body.clientWidth,   // 这里是给到了一个默认值 （这个很重要）
         list: [
           {
             id: "1",
@@ -103,47 +102,10 @@
         this.tagName = element.innerText
       }
       const that = this
-      window.onresize = () => {
-        return (() => {
-          window.screenWidth = document.body.clientWidth
-          that.screenWidth = window.screenWidth
-        })()
-      }
       EventBus.$on("changeTagName", function (name) {
         that.tagName = name
         // console.log(that.tagName)
       })
-    },
-    watch: {
-      screenWidth(val){
-        if (!this.timer) {
-            this.timer = true
-          this.screenWidth = val
-          let that = this
-          if (that.screenWidth <= 1300 && that.screenWidth > 992) {
-            console.log("set--------")
-            setTimeout(function () {
-              document.getElementById("container-main").style.width = 992 + 'px'
-              that.timer = false
-            }, 200)
-          } else if(that.screenWidth > 1300) {
-            setTimeout(function () {
-              document.getElementById("container-main").style.width = 1300 + 'px'
-              that.timer = false
-            }, 200)
-          } else if(that.screenWidth <= 992 && that.screenWidth > 768) {
-            setTimeout(function () {
-              document.getElementById("container-main").style.width = 768 + 'px'
-              that.timer = false
-            }, 200)
-          } else {
-            setTimeout(function () {
-              document.getElementById("container-main").style.width = that.screenWidth + 'px'
-              that.timer = false
-            }, 200)
-          }
-        }
-      }
     }
   }
 </script>
@@ -152,11 +114,33 @@
   h3{
     margin-top: 5px;
   }
+  @media only screen and (min-width: 768px) and (max-width: 992px) {
+    .container {
+      width: 768px;
+    }
+  }
+  @media only screen and (min-width: 993px) and (max-width: 1300px) {
+    .container {
+      width: 992px;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .container {
+      width: 100%;
+    }
+  }
+  @media only screen and (min-width: 1300px) {
+    .container {
+      width: 1300px;
+    }
+  }
   .container{
     padding-top: 50px;
+    padding-left: 0;
+    padding-right: 0;
     background-color: #eeeeee;
     height: 100%;
-    width: 1300px;
+    /*width: 1300px;*/
     margin-left: auto;
     margin-right: auto;
   }

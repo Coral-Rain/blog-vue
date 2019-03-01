@@ -36,32 +36,78 @@
 </script>
 
 <style scoped>
-  .recommend-panel {
-    display: flex;
-    margin-left: -12px;
-    margin-right: -12px;
+
+  @media only screen and (min-width: 768px) {
+    .recommend-panel {
+      display: flex;
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+    .recommend-panel-div {
+      margin: 14px 6px;
+      width: calc(33.33333% - 12px);
+      border: 1px solid rgba(0,0,0,.3);
+      border-radius: 3px;
+      position: relative;
+    }
+    .recommend-content .text-left {
+      height: 40px
+    }
+    .recommend-panel-image {
+      width: 100%;
+      height: 120px;
+      cursor: pointer;
+    }
   }
-  .recommend-panel-div {
-    margin: 14px 12px;
-    width: calc(33.33333% - 24px);
-    border: 1px solid rgba(0,0,0,.3);
-    border-radius: 3px;
-    position: relative;
+  @media only screen and (max-width: 768px) {
+    .recommend-panel {
+      /*display: flex;*/
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+    .recommend-panel-div {
+      margin: 14px 6px;
+      width: 100%;
+      border: 1px solid rgba(0,0,0,.3);
+      border-radius: 3px;
+      position: relative;
+    }
+    .recommend-content .text-left {
+      height: auto
+    }
+    .recommend-panel-image {
+      width: 100%;
+      height: 180px;
+      cursor: pointer;
+    }
   }
-  .recommend-panel-image {
-    width: 100%;
-    height: 120px;
-    cursor: pointer;
-  }
+  /*.recommend-panel {*/
+    /*display: flex;*/
+    /*margin-left: -12px;*/
+    /*margin-right: -12px;*/
+  /*}*/
+    /*.recommend-panel-div {*/
+      /*margin: 14px 6px;*/
+      /*width: calc(33.33333% - 12px);*/
+      /*border: 1px solid rgba(0,0,0,.3);*/
+      /*border-radius: 3px;*/
+      /*position: relative;*/
+    /*}*/
+
+  /*.recommend-panel-image {*/
+    /*width: 100%;*/
+    /*height: 120px;*/
+    /*cursor: pointer;*/
+  /*}*/
   .recommend-content {
     padding: 14px;
   }
   a:hover,a:focus{
     text-decoration: none;
   }
-  .recommend-content .text-left {
-    height: 40px
-  }
+  /*.recommend-content .text-left {*/
+    /*height: 40px*/
+  /*}*/
   .recommend-content a{
     color: rgba(0,0,0,.87);
     font-weight: 600;
