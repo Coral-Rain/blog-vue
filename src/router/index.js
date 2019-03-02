@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/Home'
 import PersonHome from '../components/person/PersonHome'
-import BlogList from '../components/person/BlogList'
+import Newest from '../components/person/Newest'
 import Activity from '../components/person/Activity'
 import Tweet from '../components/person/Tweet'
 import Popular from '../components/person/Popular'
@@ -36,7 +36,7 @@ const router = new Router({
         {
           path: '',
           name: 'PersonDefault',
-          component: BlogList
+          component: Newest
         },
         {
           path: 'popular',
@@ -46,7 +46,7 @@ const router = new Router({
         {
           path: 'newest',
           name: 'Newest',
-          component: BlogList
+          component: Newest
         },
         {
           path: 'activity',

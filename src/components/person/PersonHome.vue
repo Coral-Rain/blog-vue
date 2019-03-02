@@ -64,16 +64,37 @@
       </div>
       <div class="content right">
         <ul class="nav nav-tabs">
-          <li role="presentation" id="tab-newest" class="active dropdown-tab" >
+          <li role="presentation" id="tab-newest" class="active dropdown-tab dropdown btn-group" >
             <!--<a href="#" class="btn btn-default">-->
               <!--全部博文 <span class="caret"></span></a>-->
-            <router-link @click.native="changeTab($event)" :to="{name: 'Newest', params: {userId: user.id}}">全部博文</router-link>
-            <!--<ul class="dropdown-menu">-->
-              <!--<li><a href="#" class="blog-type-dropdown"><span class="text-left">全部博文</span><span class="text-right">0</span></a></li>-->
-              <!--<li><a href="#" class="blog-type-dropdown"><span class="text-left">工作日志</span><span class="text-right">0</span></a></li>-->
-              <!--<li><a href="#" class="blog-type-dropdown"><span class="text-left">日常记录</span><span class="text-right">0</span></a></li>-->
-              <!--<li><a href="#" class="blog-type-dropdown"><span class="text-left">转载文章</span><span class="text-right">0</span></a></li>-->
-            <!--</ul>-->
+            <router-link @click.native="changeTab($event)"
+                         class="btn btn-default tab-dropdown-button"
+                         :to="{name: 'Newest', params: {userId: user.id}, query: {categoryId: activeType.id}}">
+              {{activeType.name}}
+            </router-link>
+            <button type="button" class="btn btn-default dropdown-toggle tab-dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            <ul class="dropdown-menu">
+              <li @click="changeBlogType()">
+                <router-link :to="{name: 'Newest', params: {userId: user.id}, query: {categoryId: 0}}"
+                             class="blog-type-dropdown item-li" :class="isTypeActive(0) ? 'active' : ''">
+                  <span class="text-left">全部博文</span>
+                  <span class="text-right">{{blogCount}}</span>
+                </router-link>
+              </li>
+              <li class="divider" role="separator"></li>
+              <li v-for="type in blogTypes" @click="changeBlogType()">
+                <router-link :to="{name: 'Newest', params: {userId: user.id}, query: {categoryId: type.id}}"
+                             class="blog-type-dropdown item-li" :class="isTypeActive(type.id) ? 'active' : ''">
+                  <span class="text-left">{{type.name}}</span>
+                  <span class="text-right">{{type.count}}</span>
+                </router-link>
+              </li>
+            </ul>
           </li>
           <li role="presentation" id="tab-popular" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Popular', params: {userId: user.id}}">热门博文</router-link></li>
           <li role="presentation" id="tab-activity" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Activity', params: {userId: user.id}}">动态</router-link></li>
@@ -85,15 +106,14 @@
           </li>
         </ul>
         <!--引入组件-->
-        <div>
           <router-view></router-view>
-        </div>
       </div>
     </div>
 </template>
 
 <script>
   import echarts from 'echarts'
+  import {POST} from '../../api'
   export default {
     name: 'PersonHome',
     data() {
@@ -102,8 +122,34 @@
         userSession = JSON.parse(userSession)
       }
 
+      const formdata = new FormData()
+      formdata.append('userId', this.$route.params.userId)
+      const that = this
+      POST({
+        url: '/api/blog/listBlogTypes',
+        data: formdata,
+        callback: res => {
+          if(res.code === 200){
+            that.blogTypes = res.data.blogTypes
+          } else {
+            layerError(res.message)
+          }
+        }
+      })
+
+      let categoryId = 0
+      if(this.$route.query.categoryId){
+        categoryId = this.$route.query.categoryId
+      }
+
       return {
-        user: userSession
+        user: userSession,
+        tagName: '',
+        blogTypes: [
+          {id: '1', name: '工作日志', count: 0},
+          {id: '2', name: '日常作品', count: 0},
+          {id: '3', name: '转载文章', count: 0}
+        ]
       }
     },
     methods: {
@@ -168,6 +214,11 @@
         console.log(event)
         $('.dropdown-tab').removeClass('active')
         event.target.parentElement.classList.add('active')
+      },
+      changeBlogType: function () {
+        console.log("changeBlogType")
+        $('.dropdown-tab').removeClass('active')
+        $('#tab-newest').addClass('active')
       }
     },
     mounted() {
@@ -175,6 +226,7 @@
       const path = location.pathname.split('/')
       if(path.length > 3){
         const tagName = path[3]
+        this.tagName = tagName
         if(!tagName || tagName === 'newest'){
           $('#tab-newest').addClass('active')
         }else if(tagName === 'activity'){
@@ -191,6 +243,33 @@
       this.$nextTick(function () {
         this.drawPie('echarts')
       })
+    },
+    computed: {
+      isTypeActive: function () {
+        return function (id) {
+          return this.activeType.id === id
+        }
+      },
+      blogCount: function () {
+        let count = 0
+        this.blogTypes.forEach(type => {
+          count += type.count
+        })
+        return count
+      },
+      activeType: function () {
+        let categoryId = 0
+        if(this.$route.query.categoryId){
+          categoryId = this.$route.query.categoryId
+        }
+
+        const res = this.blogTypes.filter(type => type.id === categoryId)
+        if(res.length > 0){
+          return res[0]
+        } else {
+          return {id: 0, name: '全部博文'}
+        }
+      }
     }
   }
 </script>
@@ -236,6 +315,7 @@
   .container .content {
     display: inline-block;
     height: 100%;
+    min-height: 900px;
     background-color: white;
     padding-top: 20px;
     box-sizing: inherit;
@@ -316,7 +396,7 @@
   .blog-type-dropdown span{
     flex: 1;
     font-size: 16px;
-    margin: 5px 0;
+    margin: 3px 5px;
   }
 
   .right li[role=presentation] a {
@@ -324,7 +404,7 @@
     color: black;
   }
 
-  .right li[role=presentation].active>a {
+  .right li[role=presentation].active>a,.right li[role=presentation] a.router-link-active:not(.item-li) {
     color: #32aa66!important;
     cursor: pointer!important;
     font-weight: 600;
@@ -335,4 +415,47 @@
     border-radius: 10px;
   }
 
+  .dropdown-menu .item-li {
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+  .dropdown-menu .item-li:hover {
+    background-color: #eee;
+  }
+  .dropdown-menu .item-li.active {
+    font-weight: 600;
+    background-color: #eee;
+  }
+  .dropdown.open {
+    z-index: 1550;
+  }
+
+  .tab-dropdown-button {
+    margin-right: 0;
+  }
+  .tab-dropdown-button :hover,.tab-dropdown-button :focus{
+    border-right: none;
+  }
+
+  .tab-dropdown-toggle {
+    height: 44px;
+    border-left: none;
+  }
+
+  li.active .tab-dropdown-toggle{
+    border-bottom: none;
+  }
+
+  li:not(.active) .tab-dropdown-toggle {
+    /*border: ;*/
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid rgb(221,221,221);
+  }
+  li:not(.active) .tab-dropdown-button {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
 </style>
