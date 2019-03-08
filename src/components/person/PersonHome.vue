@@ -6,7 +6,7 @@
             <a href=""><img src="../../../static/avatar.png" :alt="user.username"></a>
           </div>
           <p>{{user.username}}</p>
-          <router-link class="btn btn-default" :to="{name: 'PersonProfile', params: {userId: user.id}}">
+          <router-link class="btn btn-default" :to="{name: 'AdminDefault'}">
             <i class="glyphicon glyphicon-cog"></i> 账号设置
           </router-link>
           <div class="user-statistics">
@@ -106,7 +106,7 @@
           </li>
         </ul>
         <!--引入组件-->
-          <router-view></router-view>
+        <router-view></router-view>
       </div>
     </div>
 </template>
@@ -114,6 +114,7 @@
 <script>
   import echarts from 'echarts'
   import {POST} from '../../api'
+  import EventBus from '@/EventBus'
   export default {
     name: 'PersonHome',
     data() {
@@ -131,6 +132,7 @@
         callback: res => {
           if(res.code === 200){
             that.blogTypes = res.data.blogTypes
+            EventBus.$emit("refreshBlogTypes", res.data.blogTypes)
           } else {
             layerError(res.message)
           }
@@ -242,6 +244,10 @@
       }
       this.$nextTick(function () {
         this.drawPie('echarts')
+      })
+      const that = this
+      EventBus.$on("requestBlogTypes", function () {
+        EventBus.$emit("refreshBlogTypes", that.blogTypes)
       })
     },
     computed: {

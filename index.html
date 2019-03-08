@@ -16,6 +16,7 @@
         layer.open({
           skin:'msg',
           content:content,
+          anim: 6,
           time:2
         });
       }
@@ -24,6 +25,8 @@
         layer.open({
           skin:'msg',
           content:content,
+          offset: 't',
+          anim: 6,
           time:2,
           style:'background-color:#ddd; color:red; font-size:20px;'
         });
@@ -37,6 +40,9 @@
     body{
       height: 100%;
       font-family: 'PingFang SC','Helvetica Neue','Microsoft YaHei UI','Microsoft YaHei','Noto Sans CJK SC',Sathu,EucrosiaUPC,Arial,Helvetica,sans-serif;
+    }
+    #blog-data img {
+      max-width: 100%;
     }
   </style>
 

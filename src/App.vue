@@ -39,6 +39,10 @@
               <ul class="dropdown-menu">
                 <li><router-link :to="{name: 'PersonDefault', params: {userId: user.id}}">个人中心</router-link></li>
                 <li class="divider" role="separator"></li>
+                <li>
+                  <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}">写博客</router-link>
+                </li>
+                <li class="divider" role="separator"></li>
                 <li><a href="javascript:" @click="logout">注销</a></li>
               </ul>
             </li>
@@ -97,9 +101,12 @@ export default {
           if(res.code === 200){
             localStorage.clear()
             layerMsg("Logout Success!")
-            setTimeout(function () {
-              that.$router.replace("/blog")
-            }, 2000)
+            // if(!that.$route.meta.skipAuth){
+              setTimeout(function () {
+              location.reload()
+                // that.$router.replace("/blog")
+              }, 2000)
+            // }
           } else {
             layerMsg("Logout Error: " + res.message + "!")
           }

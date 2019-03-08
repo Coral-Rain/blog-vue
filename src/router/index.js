@@ -8,6 +8,8 @@ import Tweet from '../components/person/Tweet'
 import Popular from '../components/person/Popular'
 import WriteBlog from '../components/blog/WriteBlog'
 import BlogDetail from '../components/blog/BlogDetail'
+import Admin from '../components/admin/Admin'
+import Profile from '../components/admin/Profile'
 
 Vue.use(Router)
 
@@ -17,7 +19,10 @@ const router = new Router({
     {
       path: '/',
       name: 'HomeDefault',
-      component: Home
+      component: Home,
+      meta: {
+        skipAuth: true
+      }
     },
     {
       path: '/blog',
@@ -36,27 +41,166 @@ const router = new Router({
         {
           path: '',
           name: 'PersonDefault',
-          component: Newest
+          component: Newest,
+          meta: {
+            skipAuth: true
+          }
         },
         {
           path: 'popular',
           name: 'Popular',
-          component: Popular
+          component: Popular,
+          meta: {
+            skipAuth: true
+          }
         },
         {
           path: 'newest',
           name: 'Newest',
-          component: Newest
+          component: Newest,
+          meta: {
+            skipAuth: true
+          }
         },
         {
           path: 'activity',
           name: 'Activity',
-          component: Activity
+          component: Activity,
+          meta: {
+            skipAuth: true
+          }
         },
         {
           path: 'tweet',
           name: 'Tweet',
-          component: Tweet
+          component: Tweet,
+          meta: {
+            skipAuth: true
+          }
+        }
+      ],
+      meta: {
+        skipAuth: true
+      }
+    },
+    {
+      path: '/u/:userId/admin',
+      name: 'PersonAdmin',
+      component: Admin,
+      children: [
+        {
+          path: '',
+          name: 'AdminDefault',
+          redirect: 'profile',
+          component: Admin
+        },
+        {
+          path: 'inbox',
+          name: 'AdminInbox',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'profile',
+          name: 'AdminProfile',
+          component: Profile,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'chpwd',
+          name: 'AdminChpwd',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'change-email',
+          name: 'AdminChangeEmail',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'user-settings',
+          name: 'AdminUserSetting',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'privacy',
+          name: 'AdminPrivacy',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'mail-settings',
+          name: 'AdminMailSetting',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'openid',
+          name: 'AdminOpenId',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'mobile',
+          name: 'AdminMobile',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'drafts',
+          name: 'Drafts',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'blog-settings',
+          name: 'BlogSetting',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'blog-catalogs',
+          name: 'BlogCatalog',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'blog-comments',
+          name: 'BlogComment',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'blog-exports',
+          name: 'BlogExport',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'translation',
+          name: 'Translation',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'translation-delivered',
+          name: 'TranslationDelivered',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'releases',
+          name: 'Release',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'projects',
+          name: 'Project',
+          component: Admin,
+          children: [{path: '*', redirect: ''}]
         }
       ]
     },
@@ -73,7 +217,18 @@ const router = new Router({
     {
       path: '/u/:userId/blog/:blogId',
       name: 'BlogDetail',
-      component: BlogDetail
+      component: BlogDetail,
+      meta: {
+        skipAuth: true
+      }
+    },
+    {
+      path: '/u/:userId/blog/:blogId#comments',
+      name: 'BlogDetailComment',
+      component: BlogDetail,
+      meta: {
+        skipAuth: true
+      }
     }
   ]
 })

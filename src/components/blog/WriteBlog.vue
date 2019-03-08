@@ -2,7 +2,7 @@
     <div class="container">
       <div class="text-left">
         <ol class="breadcrumb breadcrumb-path">
-          <li><router-link :to="{name: 'PersonHome', params: {userId: user.id}}">{{user.username}}的个人空间</router-link></li>
+          <li><router-link :to="{name: 'PersonDefault'}">{{user.username}}的个人空间</router-link></li>
           <li class="active">写博客</li>
         </ol>
       </div>

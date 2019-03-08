@@ -11,11 +11,24 @@ import layer from '../static/lib/layer/layer'
 import Global from './tools/Global.vue'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import marked from 'marked'
+import '../semantic/dist/semantic.min.css'
+import '../semantic/dist/semantic.min.js'
 
 Vue.prototype.GLOBAL = Global
 Vue.config.productionTip = false
 axios.defaults.withCredentials=true;
-
+const rendererMD = new marked.Renderer()
+marked.setOptions({
+  renderer: rendererMD,
+  gfm: true,
+  tables: true,
+  breaks: true,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false
+})
 
 Vue.use(mavonEditor,VueAxios,axios,Vuex, layer);
 
@@ -66,7 +79,24 @@ Vue.filter('datetime', function (value) {
   if (h < 10) h = '0' + h;
   if (m < 10) m = '0' + m;
 
-  return y + '-' + M + '-' + d + ' ' + h + ':' + m;
+  const today = new Date(new Date().toLocaleDateString())
+  const dep = today.getTime() - value
+  console.log(dep)
+  if(dep < 0){
+    return '今天 ' + h + ":" + m
+  }else if(0 <= dep && dep < 24 * 60*60*1000){
+    //昨天  201859000
+    return '昨天 ' + h + ":" + m
+  } else if(24 * 60*60*1000 <= dep && dep < 24*3600*1000*2) {
+    // 前天
+    return '前天 ' + h + ":" + m
+  } else {
+    if(today.getFullYear() === y){
+      return M + '/' + d + ' ' + h + ':' + m
+    } else {
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m
+    }
+  }
 });
 
 Vue.filter('memberLevel', function (exp) {
@@ -115,6 +145,11 @@ Vue.filter('status', function (status) {
   } else {
     return '登录成功'
   }
+})
+
+Vue.filter('markdown', function (content) {
+  const html =  marked(content, {sanitize: true})
+  return html.replace(/<[^>]*>|/g, '')
 })
 
 /* eslint-disable no-new */

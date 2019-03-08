@@ -17,6 +17,8 @@
     "jquery": "^3.3.1",
     "marked": "^0.6.1",
     "mavon-editor": "^2.6.17",
+    "semantic-ui": "^2.4.2",
+    "semantic-ui-css": "^2.4.1",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
     "vue-router": "^3.0.1",
