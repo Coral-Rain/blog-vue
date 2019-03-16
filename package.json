@@ -18,9 +18,11 @@
     "marked": "^0.6.1",
     "mavon-editor": "^2.6.17",
     "semantic-ui": "^2.4.2",
+    "semantic-ui-calendar": "0.0.8",
     "semantic-ui-css": "^2.4.1",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
+    "vue-cropper": "^0.4.8",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0",
     "zui": "^1.8.1"

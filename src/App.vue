@@ -150,8 +150,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: auto;
-  min-height: 100%;
+  height: 100%;
+  /*min-height: 100%;*/
   background-color: #eeeeee;
 }
 
@@ -160,5 +160,9 @@ export default {
     height: 30px;
     border-radius: 15px;
     cursor: pointer;
+  }
+
+  .label.ui.prompt.visible {
+    font-weight: normal!important;
   }
 </style>

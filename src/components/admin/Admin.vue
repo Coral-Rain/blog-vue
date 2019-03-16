@@ -205,7 +205,6 @@
   .container .content {
     display: inline-block;
     height: 100%;
-    min-height: 900px;
     background-color: white;
     padding-top: 20px;
     box-sizing: inherit;
@@ -250,6 +249,7 @@
   .breadcrumb-path {
     background-color: transparent;
     margin-bottom: 0;
+    padding-left: 0;
   }
   .breadcrumb-path li.active {
     font-weight: 700;

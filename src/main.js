@@ -12,8 +12,11 @@ import Global from './tools/Global.vue'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import marked from 'marked'
+import semantic from 'semantic'
 import '../semantic/dist/semantic.min.css'
-import '../semantic/dist/semantic.min.js'
+// import '../semantic/dist/semantic.min.js'
+import '../node_modules/semantic-ui-calendar/dist/calendar'
+import '../node_modules/semantic-ui-calendar/dist/calendar.min.css'
 
 Vue.prototype.GLOBAL = Global
 Vue.config.productionTip = false

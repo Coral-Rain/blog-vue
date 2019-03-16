@@ -10,6 +10,14 @@ import WriteBlog from '../components/blog/WriteBlog'
 import BlogDetail from '../components/blog/BlogDetail'
 import Admin from '../components/admin/Admin'
 import Profile from '../components/admin/Profile'
+import Chpwd from '../components/admin/Chpwd'
+import ChangeEmail from '../components/admin/ChangeEmail'
+import UserSettings from '../components/admin/UserSettings'
+import MailSettings from '../components/admin/MailSettings'
+import Privacy from '../components/admin/Privacy'
+import OpenId from '../components/admin/OpenId'
+import Mobile from '../components/admin/Mobile'
+import Drafts from '../components/admin/Drafts'
 
 Vue.use(Router)
 
@@ -109,49 +117,49 @@ const router = new Router({
         {
           path: 'chpwd',
           name: 'AdminChpwd',
-          component: Admin,
+          component: Chpwd,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'change-email',
           name: 'AdminChangeEmail',
-          component: Admin,
+          component: ChangeEmail,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'user-settings',
           name: 'AdminUserSetting',
-          component: Admin,
+          component: UserSettings,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'privacy',
           name: 'AdminPrivacy',
-          component: Admin,
+          component: Privacy,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'mail-settings',
           name: 'AdminMailSetting',
-          component: Admin,
+          component: MailSettings,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'openid',
           name: 'AdminOpenId',
-          component: Admin,
+          component: OpenId,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'mobile',
           name: 'AdminMobile',
-          component: Admin,
+          component: Mobile,
           children: [{path: '*', redirect: ''}]
         },
         {
           path: 'drafts',
           name: 'Drafts',
-          component: Admin,
+          component: Drafts,
           children: [{path: '*', redirect: ''}]
         },
         {
