@@ -6,7 +6,7 @@
         <div class="field">
           <label>我的网址</label>
           <div class="two fields">
-            <div class="seven wide field ui labeled input">
+            <div class="seven wide field ui labeled input" style="padding-right: 0">
               <div class="ui label" style="font-weight: 400">http://www.coralcloud.cn/</div>
               <input type="text" placeholder="请输入个性网址">
             </div>

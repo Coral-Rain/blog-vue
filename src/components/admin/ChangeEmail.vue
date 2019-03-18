@@ -74,7 +74,10 @@
           data: formdata,
           callback: res => {
             if(res.code === 200) {
-
+              layerMsg("验证邮箱已发送, 请点击链接激活!")
+              that.password = ''
+              that.email = ''
+              that.captcha = ''
             } else if(res.code === 400){
               $('.ui.form').form('add prompt', 'password', '密码错误')
             } else if(res.code === 401){

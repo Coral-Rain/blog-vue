@@ -18,6 +18,7 @@ import Privacy from '../components/admin/Privacy'
 import OpenId from '../components/admin/OpenId'
 import Mobile from '../components/admin/Mobile'
 import Drafts from '../components/admin/Drafts'
+import BlogCatalogs from '../components/admin/BlogCatalogs'
 
 Vue.use(Router)
 
@@ -171,7 +172,7 @@ const router = new Router({
         {
           path: 'blog-catalogs',
           name: 'BlogCatalog',
-          component: Admin,
+          component: BlogCatalogs,
           children: [{path: '*', redirect: ''}]
         },
         {

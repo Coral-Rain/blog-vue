@@ -259,7 +259,7 @@
         formdata.append("userId", this.user.id)
         const that = this
         POST({
-          url: '/api/blog/addBlogType',
+          url: '/api/catalog/add',
           data: formdata,
           callback: res => {
             if(res.code === 200){

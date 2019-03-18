@@ -40,41 +40,25 @@
   import TagList from './TagList'
   import EventBus from '../EventBus'
   import RecommendPanel from '@/components/RecommendPanel'
+  import {GET} from '@/api'
   export default {
     name: 'Home',
     components: {RecommendPanel, TagList},
     data () {
-      return {
-        list: [
-          {
-            id: "1",
-            name: "前沿技术",
-            tags: [
-              {
-                id: "10001",
-                name: "人工智能"
-              },
-              {
-                id: "10002",
-                name: "大数据"
-              }
-            ]
-          },
-          {
-            id: "2",
-            name: "开发领域",
-            tags: [
-              {
-                id: "10004",
-                name: "前端开发"
-              },
-              {
-                id: "10005",
-                name: "后端开发"
-              }
-            ]
+      let list = []
+      const that = this
+      GET({
+        url: '/api/blog/listItemTagType',
+        callback: res => {
+          if(res.code === 200){
+            that.list = res.data.list
           }
-        ],
+        }
+      })
+
+
+      return {
+        list,
         blogs: [
           {
             name: "JavaScript 九种跨域方式实现原理",

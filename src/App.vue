@@ -17,7 +17,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">博客</a></li>
+            <li class="active"><router-link to="/">博客</router-link>
             <li><a href="#">翻译</a></li>
             <li><a href="#">问答</a></li>
           </ul>
@@ -42,6 +42,9 @@
                 <li>
                   <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}">写博客</router-link>
                 </li>
+                <li class="divider" role="separator"></li><li>
+                <router-link :to="{name: 'AdminProfile', params: {userId: user.id}}">修改个人资料</router-link>
+              </li>
                 <li class="divider" role="separator"></li>
                 <li><a href="javascript:" @click="logout">注销</a></li>
               </ul>
@@ -56,16 +59,18 @@
     </nav>
     <router-view/>
     <LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>
+    <Avatar src="/static/avatar.png" :is-show="uploadAvatar" />
   </div>
 </template>
 
 <script>
 import LoginWindow from '@/components/LoginWindow'
+import Avatar from "@/components/Avatar"
 import EventBus from '@/EventBus'
 import {GET, POST} from './api'
 export default {
   name: 'App',
-  components: {LoginWindow},
+  components: {LoginWindow,Avatar},
   data() {
     let isLogin = false
     let userSession = localStorage.getItem("user")
@@ -79,7 +84,8 @@ export default {
       showLoginWindow: false,
       showLogin: true,
       isLogin: isLogin,
-      user: userSession
+      user: userSession,
+      uploadAvatar: false
     }
   },
   methods: {
@@ -138,6 +144,12 @@ export default {
     })
     EventBus.$on("hideLoginWindow", function () {
       that.showLoginWindow = false
+    })
+    EventBus.$on("closeAvatar", function () {
+      that.uploadAvatar = false
+    })
+    EventBus.$on("showAvatar", function () {
+      that.uploadAvatar = true
     })
   }
 }

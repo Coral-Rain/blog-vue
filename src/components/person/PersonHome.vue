@@ -127,12 +127,12 @@
       formdata.append('userId', this.$route.params.userId)
       const that = this
       POST({
-        url: '/api/blog/listBlogTypes',
+        url: '/api/catalog/list',
         data: formdata,
         callback: res => {
           if(res.code === 200){
-            that.blogTypes = res.data.blogTypes
-            EventBus.$emit("refreshBlogTypes", res.data.blogTypes)
+            that.blogTypes = res.data.catalogs
+            EventBus.$emit("refreshBlogTypes", that.blogTypes)
           } else {
             layerError(res.message)
           }

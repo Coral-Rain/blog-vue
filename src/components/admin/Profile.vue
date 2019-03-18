@@ -83,7 +83,7 @@
                 <div class="avatar-wrap" @mouseover="showUploadAvatarBtn()" @mouseout="hideUploadAvatarBtn()">
                   <div class="ui small circular image bordered dimmable">
                     <div class="ui dimmer upload-btn-wrap transition hidden">
-                      <div class="content" @click="uploadAvatar()">
+                      <div class="content" @click="showUploadAvatar()">
                         <div class="ui small primary button upload-avatar-btn">上传头像</div>
                       </div>
                     </div>
@@ -139,9 +139,11 @@
 <script>
   import TabPage from '../TabPage'
   import {GET, POST} from '@/api'
+  import Avatar from '@/components/Avatar'
+  import EventBus from '@/EventBus'
   export default {
     name: 'Profile',
-    components: {TabPage},
+    components: {Avatar, TabPage},
     data(){
 
       const that = this
@@ -231,11 +233,21 @@
         user: userSession,
         provinces: [],
         cities: [],
-        timeSetting
+        timeSetting,
+        uploadAvatar: false
       }
     },
     mounted: function () {
       this.init()
+      const that = this
+      EventBus.$on("closeAvatar", function () {
+        let userSession = localStorage.getItem("user")
+        if(userSession) {
+          // console.log(userSession)
+          userSession = JSON.parse(userSession)
+        }
+        that.user = userSession
+      })
     },
     methods: {
       changeProvince: function () {
@@ -256,7 +268,7 @@
         })
       },
       showUploadAvatarBtn: function () {
-        $('.upload-btn-wrap').removeClass('hidden').addClass('active').addClass('active')
+        $('.upload-btn-wrap').removeClass('hidden').addClass('active')
       },
       hideUploadAvatarBtn: function () {
         $('.upload-btn-wrap').removeClass('active').removeClass('visible').addClass('hidden')
@@ -395,8 +407,9 @@
           })
         })
       },
-      uploadAvatar: function () {
-
+      showUploadAvatar: function () {
+        this.uploadAvatar = true
+        EventBus.$emit("showAvatar")
       }
     },
     watch: {
