@@ -64,6 +64,7 @@
     display: block;
     text-align: left;
     margin-left: 20px;
+    line-height: 1;
   }
   .item-all{
     margin-left: 10px!important;

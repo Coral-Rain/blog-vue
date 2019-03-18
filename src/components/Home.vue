@@ -17,10 +17,16 @@
           <h3 class="content-title">推荐博客</h3>
         </div>
         <!--引入组件, 传入data-->
-        <RecommendPanel :blogs="blogs"></RecommendPanel>
+        <RecommendPanel :blogs="recommendBlogs"></RecommendPanel>
       </div>
-      <div>
-        <!--所有-->
+      <div class="scroll-tab hidden-scroll">
+        <div class="ui green pointing secondary massive menu">
+          <a class=" blog-tab item active" @click="showBlogs($event, 1)">最新发表</a>
+          <a class=" blog-tab item" @click="showBlogs($event, 2)">每日一博</a>
+          <div v-if="user" class="right menu small">
+            <router-link :to="{name: 'WriteBlog', params: {userId: '10000001'}}" class="item" target="_blank"><i class="edit icon"></i>写博客</router-link>
+          </div>
+        </div>
       </div>
     </div>
     <div class="content col-md-3 col-sm-4 hidden-xs"> <!--Right-->
@@ -40,10 +46,11 @@
   import TagList from './TagList'
   import EventBus from '../EventBus'
   import RecommendPanel from '@/components/RecommendPanel'
-  import {GET} from '@/api'
+  import {GET, POST} from '@/api'
+  import TabPage from '@/components/TabPage'
   export default {
     name: 'Home',
-    components: {RecommendPanel, TagList},
+    components: {TabPage, RecommendPanel, TagList},
     data () {
       let list = []
       const that = this
@@ -56,10 +63,26 @@
         }
       })
 
+      const formdata = new FormData()
+      formdata.append("type", "1")
+      formdata.append("pageNum", "1")
+
+      POST({
+        url: '/api/blog/list',
+        data: formdata,
+        callback: res => {
+
+        }
+      })
+
+      let userSession = localStorage.getItem("user")
+      if(userSession) {
+        userSession = JSON.parse(userSession)
+      }
 
       return {
         list,
-        blogs: [
+        recommendBlogs: [
           {
             name: "JavaScript 九种跨域方式实现原理",
             author: "作者001",
@@ -76,7 +99,13 @@
             comments: "2"
           }
         ],
-        tagName : '全部'
+        tagName : '全部',
+        tabs: [
+          {id: 1, name: '最新发表'},
+          {id: 2, name: '每日一博'}
+        ],
+        user: userSession,
+        blogType: 1
       }
     },
     mounted() {
@@ -90,6 +119,14 @@
         that.tagName = name
         // console.log(that.tagName)
       })
+    },
+    methods: {
+      showBlogs: function (event, type) {
+        // console.log(event)
+        $('.blog-tab.item').removeClass('active')
+        event.srcElement.classList.add("active")
+        this.blogType = type
+      }
     }
   }
 </script>
