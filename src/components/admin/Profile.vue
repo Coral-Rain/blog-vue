@@ -280,7 +280,7 @@
         const that = this
         const formdata = new FormData()
         formdata.append('username', this.user.username)
-        formdata.append('birthday', this.user.birthday)
+        formdata.append('birthday', this.user.birthday ? this.user.birthday : '')
         formdata.append('province', this.user.province)
         formdata.append('city', this.user.city)
         formdata.append('signature', this.user.signature)

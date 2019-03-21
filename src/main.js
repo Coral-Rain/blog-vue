@@ -84,6 +84,13 @@ Vue.filter('datetime', function (value) {
 
   const today = new Date(new Date().toLocaleDateString())
   const dep = today.getTime() - value
+  const now = (new Date()).getTime()
+  if(now - value < 3600 * 1000){
+    if(now - value < 1000 * 60){
+      return '刚刚'
+    }
+    return parseInt((now-value) / 1000 / 60) + '分钟前'
+  }
 
   if(dep < 0){
     return '今天 ' + h + ":" + m

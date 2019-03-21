@@ -1,7 +1,12 @@
 <template>
     <div class="container">
       <div class="text-left">
-        <ol class="breadcrumb breadcrumb-path">
+        <ol v-if="blogId" class="breadcrumb breadcrumb-path">
+          <li><router-link :to="{name: 'PersonDefault'}">{{user.username}}的个人空间</router-link></li>
+          <li><router-link :to="{name: 'Drafts'}">草稿箱</router-link></li>
+          <li class="active">编辑草稿</li>
+        </ol>
+        <ol v-else class="breadcrumb breadcrumb-path">
           <li><router-link :to="{name: 'PersonDefault'}">{{user.username}}的个人空间</router-link></li>
           <li class="active">写博客</li>
         </ol>
@@ -103,6 +108,10 @@
   export default {
     name: 'WriteBlog',
     data() {
+      let blogId = ''
+      if(this.$route.params.blogId){
+        blogId = this.$route.params.blogId
+      }
       let userSession = localStorage.getItem("user")
       if(userSession) {
         userSession = JSON.parse(userSession)
@@ -134,11 +143,35 @@
             that.sysTypes = res.data.sysTypes
             that.selectSysType = res.data.sysTypes[0]
             that.selectBlogType = res.data.blogTypes[0]
+
+            if(blogId){
+              const fd = new FormData()
+              fd.append("blogId", blogId)
+              POST({
+                url: '/api/blog/getDrafts',
+                data: fd,
+                callback: res => {
+                  if(res.code === 200){
+                    that.title = res.data.draft.title
+                    that.content = res.data.draft.content
+                    that.privated = res.data.draft.privated
+                    that.original = res.data.draft.type
+                    that.reprintUrl = res.data.draft.reprintUrl
+                    that.stick = res.data.draft.stick
+                    that.selectSysType = that.sysTypes.filter(x => x.id === res.data.draft.tagId)[0]
+                    that.selectBlogType = that.blogTypes.filter(x => x.id === res.data.draft.userTagId)[0]
+
+                  }
+                }
+              })
+            }
           }
         }
       })
+
       return {
         user: userSession,
+        blogId,
         blogTypes: bts,
         sysTypes: sts,
         title: '',
@@ -195,7 +228,7 @@
         this.selectSysType = {id: id, name: name}
       },
       submitBlog: function(){
-        console.log(this.content)
+        // console.log(this.content)
         const title = this.title.replace(/^\s+|\s+$/gm,'')
         if(title.length === 0 || title.length > 50){
           layerError('文章标题不能为空, 且须限制在50个字符内!')
@@ -229,6 +262,9 @@
         formdata.append("tagId", this.selectSysType.id)
         formdata.append("author", this.user.id)
         formdata.append("status", "2")
+        if(this.blogId){
+          formdata.append("id", this.blogId)
+        }
         const that = this
         POST({
           url: '/api/blog/submitBlog',
@@ -255,7 +291,55 @@
         })
       },
       saveBlog: function(){
-        console.log("SaveBlog")
+        const title = this.title.replace(/^\s+|\s+$/gm,'')
+        if(title.length === 0 || title.length > 50){
+          layerError('文章标题不能为空, 且须限制在50个字符内!')
+          return
+        }
+        if(this.selectSysType.name.length === 0){
+          layerError('请选择系统分类!')
+          return
+        }
+
+        if(this.content.replace(/^\s+|\s+$/gm,'').length === 0){
+          layerError('文章内容不能为空!')
+          return
+        }
+
+        if(!this.original && this.reprintUrl.length === 0){
+          layerError('原文链接不能为空!')
+          return
+        }
+
+        const formdata = new FormData()
+        formdata.append("title", title)
+        formdata.append("content", this.content.replace(/^\s+|\s+$/gm,''))
+        formdata.append("type", this.original)
+        if(!this.original){
+          formdata.append("reprintUrl", this.reprintUrl)
+        }
+        formdata.append("stick", this.stick)
+        formdata.append("privated", this.privated)
+        formdata.append("userTagId", this.selectBlogType.id)
+        formdata.append("tagId", this.selectSysType.id)
+        formdata.append("author", this.user.id)
+        formdata.append("status", "0")
+        if(this.blogId){
+          formdata.append("id", this.blogId)
+        }
+        const that = this
+        POST({
+          url: '/api/blog/submitBlog',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200){
+              that.blogId =res.data.blogId
+              layerMsg("保存完成!")
+            } else {
+              layerError(res.message)
+            }
+          }
+        })
       },
       addBlogType: function(){
         console.log(this.newBlogType)

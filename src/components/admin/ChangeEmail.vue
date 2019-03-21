@@ -22,7 +22,7 @@
           <div class="ui right labeled input">
             <input type="text" v-model="captcha" name="captcha" placeholder="请输入验证码">
             <div class="ui basic label captcha">
-              <img :src="getCaptcha" id="captchaImg" @click="signDate = new Date()">
+              <img :src="getCaptcha" id="captchaImg" style="cursor: pointer" @click="signDate = new Date()">
             </div>
           </div>
         </div>

@@ -232,6 +232,11 @@ const router = new Router({
       component: WriteBlog
     },
     {
+      path: '/u/:userId/blog/write/draft/:blogId',
+      name: 'EditDraft',
+      component: WriteBlog
+    },
+    {
       path: '/u/:userId/blog/:blogId',
       name: 'BlogDetail',
       component: BlogDetail,

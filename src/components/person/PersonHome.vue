@@ -6,7 +6,7 @@
             <a href=""><img src="../../../static/avatar.png" :alt="user.username"></a>
           </div>
           <p>{{user.username}}</p>
-          <div class="signature">哒哒哒</div>
+          <div class="signature" v-if="user.signature">{{user.signature}}</div>
           <router-link v-if="isTarget" class="btn btn-default" :to="{name: 'AdminDefault'}">
             <i class="glyphicon glyphicon-cog"></i> 账号设置
           </router-link>
@@ -34,7 +34,7 @@
                 <i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;写博客
               </router-link>
               <router-link :to="{name: 'Drafts', params: {userId: user.id}}" class="btn btn-default">
-                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;草稿箱 (0)
+                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;草稿箱 ({{count.draftCount}})
               </router-link>
             </div>
             <div v-else>
