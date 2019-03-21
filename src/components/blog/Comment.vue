@@ -1,14 +1,19 @@
 <template>
     <div>
       <div v-for="comment in comments" class="comment">
-        <a class="avatar" href="#"><img src="/static/avatar.png" alt=""></a>
+        <router-link class="avatar" :to="{name: 'PersonDefault', params: {userId: comment.user.id}}">
+          <img src="/static/avatar.png" alt="">
+        </router-link>
         <div class="main text-left">
           <div class="head">
             <router-link :to="{name: 'PersonDefault', params: {userId: comment.user.id}}">
               {{comment.user.username}}
             </router-link>
+            <div class="time">
+              {{comment.createTime | datetime}}
+            </div>
           </div>
-          <CommentReply :comment="comment.parent" v-if="comment.replyTo !== 0"/>
+          <CommentReply :comment="comment.parent" v-if="comment.replyTo !== '0'"/>
           <div class="content">
             {{comment.comment}}
           </div>
@@ -93,6 +98,13 @@
   }
   .main .head a:hover{
     color: #4183c4;
+  }
+
+  .main .head .time {
+    margin-left: 10px;
+    color: rgba(0,0,0,.4);
+    display: inline-block;
+    font-size: 13px;
   }
 
   .content {

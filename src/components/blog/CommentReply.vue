@@ -3,7 +3,7 @@
       <div class="head">
         引用来自"{{comment.user.username}}"的评论
       </div>
-      <CommentReply v-if="comment.reply !== 0" :comment="comment.parent" />
+      <CommentReply v-if="comment.reply !== '0'" :comment="comment.parent" />
       <div class="content">
         {{comment.comment}}
       </div>

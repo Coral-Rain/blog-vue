@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="content col-md-2 visible-lg visible-md"><!--Left-->
-      <TagList :list="list"></TagList>
+      <!--<div class="ui tab attached">-->
+        <TagList :list="list"></TagList>
+
+      <!--</div>-->
     </div>
     <div class="content col-md-7 col-sm-8 col-xs-12"><!--Center-->
       <div class="text-left">
@@ -28,6 +31,9 @@
           </div>
         </div>
       </div>
+      <div class="ui attached tab">
+        <BlogList :blogs="blogs" />
+      </div>
     </div>
     <div class="content col-md-3 col-sm-4 hidden-xs"> <!--Right-->
       <div>
@@ -48,11 +54,13 @@
   import RecommendPanel from '@/components/RecommendPanel'
   import {GET, POST} from '@/api'
   import TabPage from '@/components/TabPage'
+  import BlogList from '@/components/BlogList'
   export default {
     name: 'Home',
-    components: {TabPage, RecommendPanel, TagList},
+    components: {BlogList, TabPage, RecommendPanel, TagList},
     data () {
       let list = []
+      let blogs = []
       const that = this
       GET({
         url: '/api/blog/listItemTagType',
@@ -60,18 +68,6 @@
           if(res.code === 200){
             that.list = res.data.list
           }
-        }
-      })
-
-      const formdata = new FormData()
-      formdata.append("type", "1")
-      formdata.append("pageNum", "1")
-
-      POST({
-        url: '/api/blog/list',
-        data: formdata,
-        callback: res => {
-
         }
       })
 
@@ -99,33 +95,67 @@
             comments: "2"
           }
         ],
-        tagName : '全部',
+        tagName : '',
         tabs: [
           {id: 1, name: '最新发表'},
           {id: 2, name: '每日一博'}
         ],
         user: userSession,
-        blogType: 1
+        blogType: 1,
+        blogs
       }
     },
     mounted() {
-      const element = document.getElementsByClassName('tag-checked')[0].firstElementChild
+      // const element = document.getElementsByClassName('tag-checked')[0].firstElementChild
       // console.log(element)
-      if(element !== null){
-        this.tagName = element.innerText
-      }
+      // if(element !== null){
+      //   this.tagName = element.innerText
+      // }
       const that = this
       EventBus.$on("changeTagName", function (name) {
         that.tagName = name
         // console.log(that.tagName)
       })
+
+      const formdata = new FormData()
+      formdata.append("type", "1")
+      formdata.append("pageNo", "1")
+
+      $('.ui.attached.tab').addClass("loading").removeClass("display-block")
+      POST({
+        url: '/api/blog/list',
+        data: formdata,
+        callback: res => {
+          if(res.code === 200) {
+            that.blogs = res.data.blogs
+            $('.ui.attached.tab').removeClass("loading").addClass("display-block")
+          }
+        }
+      })
     },
     methods: {
       showBlogs: function (event, type) {
         // console.log(event)
+        const that = this
         $('.blog-tab.item').removeClass('active')
         event.srcElement.classList.add("active")
         this.blogType = type
+        this.blogs = []
+
+        $('.ui.attached.tab').addClass("loading").removeClass("display-block")
+        const formdata = new FormData()
+        formdata.append("type", this.blogType)
+        formdata.append("pageNo", "1")
+        POST({
+          url: '/api/blog/list',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200) {
+              that.blogs = res.data.blogs
+              $('.ui.attached.tab').removeClass("loading").addClass("display-block")
+            }
+          }
+        })
       }
     }
   }
@@ -155,11 +185,10 @@
       width: 1300px;
     }
   }
+
   .container{
-    padding-top: 50px;
-    padding-left: 0;
-    padding-right: 0;
-    background-color: #eeeeee;
+    padding: 50px 0 0px;
+    background-color: #fff;
     height: 100%;
     /*width: 1300px;*/
     margin-left: auto;
@@ -191,5 +220,8 @@
   }
   a:focus,a:hover{
     text-decoration: none;
+  }
+  .display-block {
+    display: block !important;
   }
 </style>

@@ -84,7 +84,7 @@ Vue.filter('datetime', function (value) {
 
   const today = new Date(new Date().toLocaleDateString())
   const dep = today.getTime() - value
-  console.log(dep)
+
   if(dep < 0){
     return '今天 ' + h + ":" + m
   }else if(0 <= dep && dep < 24 * 60*60*1000){
@@ -153,6 +153,17 @@ Vue.filter('status', function (status) {
 Vue.filter('markdown', function (content) {
   const html =  marked(content, {sanitize: true})
   return html.replace(/<[^>]*>|/g, '')
+})
+
+Vue.filter('imgUrl', function (content) {
+  const html =  marked(content, {sanitize: true})
+  const imgs = $(html).find('img')
+  console.log(imgs)
+  if(imgs.length > 0) {
+    return imgs[0].currentSrc
+  } else {
+    return ""
+  }
 })
 
 /* eslint-disable no-new */

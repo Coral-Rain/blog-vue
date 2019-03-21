@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="pull-right" style="margin-top: -15px">
-      <button class="btn btn-success" data-toggle="modal" data-target="#addBlogCatalogModal">
+      <button class="btn btn-success" @click="showAddModal()">
         <i class="plus icon"></i>
         添加分类
       </button>
@@ -22,71 +22,55 @@
           <td class="ten wide">{{c.name}}</td>
           <td class="two wide">{{c.count}}</td>
           <td class="three wide">
-            <button data-toggle="modal" data-target="#updateBlogCatalogModal" @click="showUpdateModal(c)" class="ui small compact button edit">修改</button>
-            <button data-toggle="modal" data-target="#deleteBlogCatalogModal" @click="deletedCatalog = c" class="ui small compact button delete">删除</button>
+            <button  @click="showUpdateModal(c)" class="ui small compact button edit">修改</button>
+            <button @click="showDeleteModal(c)" class="ui small compact button delete">删除</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="modal fade" id="addBlogCatalogModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="gridSystemModalLabel">添加分类</h4>
+    <div class="ui mini catalog-add modal">
+      <i class="icon close"></i>
+      <div class="header">添加分类</div>
+      <div class="content">
+        <form>
+          <div class="form-group">
+            <label for="blogTypeInput">分类名称</label>
+            <input id="blogTypeInput" v-model="newBlogCatalog" placeholder="请输入分类名称..." class="form-control" type="text">
           </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="blogTypeInput">分类名称</label>
-                <input id="blogTypeInput" v-model="newBlogCatalog" placeholder="请输入分类名称..." class="form-control" type="text">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-success" @click="addBlogCatalog()">确定</button>
-          </div>
-        </div>
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui button green" @click="addBlogCatalog()">确定</div>
       </div>
     </div>
-    <div class="modal fade" id="updateBlogCatalogModal" tabindex="-1" role="dialog" aria-labelledby="updateCatalog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="updateCatalog">修改分类</h4>
+
+    <div class="ui mini catalog-update modal">
+      <i class="icon close"></i>
+      <div class="header">修改分类</div>
+      <div class="content">
+        <form>
+          <div class="form-group">
+            <label for="blogTypeInput-update">分类名称</label>
+            <input id="blogTypeInput-update" v-model="updatedCatalog.name" placeholder="请输入分类名称..." class="form-control" type="text">
           </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="blogTypeInput-update">分类名称</label>
-                <input id="blogTypeInput-update" v-model="updatedCatalog.name" placeholder="请输入分类名称..." class="form-control" type="text">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-success" @click="updateCatalog()">确定</button>
-          </div>
-        </div>
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui button green" @click="updateCatalog()">确定</div>
       </div>
     </div>
-    <div class="modal fade" id="deleteBlogCatalogModal" tabindex="-1" role="dialog" aria-labelledby="deleteCatalog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="deleteCatalog">删除分类</h4>
-          </div>
-          <div class="modal-body text-left">
-            确定删除分类 {{deletedCatalog.name}} 吗?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-danger" @click="deleteCatalog()">确定</button>
-          </div>
-        </div>
+
+    <div class="ui mini catalog-delete modal">
+      <i class="icon close"></i>
+      <div class="header">删除分类</div>
+      <div class="content">
+        确定删除分类 {{deletedCatalog.name}} 吗?
+      </div>
+      <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui button red" @click="deleteCatalog()">确定</div>
       </div>
     </div>
   </div>
@@ -143,8 +127,7 @@
           data: formdata,
           callback: res => {
             if(res.code === 200){
-              $('#addBlogCatalogModal').modal('hide')
-              $('#blogTypeInput').val('')
+              $('.ui.modal.catalog-add').modal('hide')
               // Refresh localData
               that.catalogs = res.data.blogTypes
             } else {
@@ -155,6 +138,14 @@
       },
       showUpdateModal: function (catalog) {
         this.updatedCatalog = JSON.parse(JSON.stringify(catalog))
+        $('.catalog-update.mini.modal').modal('show')
+      },
+      showDeleteModal: function (catalog) {
+        this.deletedCatalog = JSON.parse(JSON.stringify(catalog))
+        $('.catalog-delete.mini.modal').modal('show')
+      },
+      showAddModal: function () {
+        $('.catalog-add.mini.modal').modal('show')
       },
       updateCatalog: function () {
         if(this.updatedCatalog.name.replace(/^\s+|\s+$/gm,'').length === 0) {
@@ -171,10 +162,10 @@
           data: formdata,
           callback: res => {
             if(res.code === 200){
-              $('#updateBlogCatalogModal').modal('hide')
+              $('.ui.modal.catalog-update').modal('hide')
               // Refresh localData
               // that.catalogs = res.data.blogTypes
-              that.catalogs.filter(x => x.id = that.updatedCatalog.id)[0].name = that.updatedCatalog.name
+              that.catalogs.filter(x => x.id === that.updatedCatalog.id)[0].name = that.updatedCatalog.name
             } else {
               layerError(res.message)
             }
@@ -183,11 +174,15 @@
       },
       deleteCatalog: function () {
         const that = this
-        GET({
-          url: '/api/catalog/delete/' + that.deletedCatalog.id,
+        const formdata = new FormData()
+        formdata.append("id", this.deletedCatalog.id)
+        formdata.append("userId", this.user.id)
+        POST({
+          url: '/api/catalog/delete',
+          data: formdata,
           callback: res => {
             if(res.code === 200){
-              $('#deleteBlogCatalogModal').modal('hide')
+              $('.ui.modal.catalog-delete').modal('hide')
               // Refresh localData
               that.catalogs = res.data.catalogs
             } else {
@@ -196,6 +191,9 @@
           }
         })
       }
+    },
+    mounted: function () {
+      document.title = '博客分类管理 - ' + this.user.username + '的个人空间'
     }
   }
 </script>
@@ -205,6 +203,20 @@
     background-color: #f0f0f0;
     font-weight: 400;
   }
+
+  .ui.modal{
+    position: absolute;
+    top: 40%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .catalog-delete{
+    height: 200px;
+  }
+  .catalog-update,.catalog-add{
+    height: 250px;
+  }
+
   @media only screen and (min-width: 768px) {
     .modal-dialog {
       width: 380px!important;

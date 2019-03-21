@@ -52,6 +52,9 @@
           <div class="item" :class="path === 'blog-exports' ? 'active' : ''">
             <router-link :to="{name: 'BlogExport'}">导出备份</router-link>
           </div>
+          <div class="item" :class="path === 'favorites' ? 'active' : ''">
+            <router-link :to="{name: 'Favorites'}">收藏夹</router-link>
+          </div>
         </div>
         <div class="menu">
           <h5>动作翻译管理</h5>
@@ -135,8 +138,8 @@
           'translation': '我翻译的',
           'translation-delivered': '我投递的',
           'releases': '我投递的新闻',
-          'projects': '投递软件管理'
-
+          'projects': '投递软件管理',
+          'favorites': '我的收藏夹'
         },
         user: userSession
       }
@@ -197,7 +200,7 @@
   }
   .container {
     height: 100%;
-    background-color: #eeeeee;
+    background-color: #eee;
     padding-top: 50px;
     margin-left: auto;
     margin-right: auto;
@@ -207,6 +210,7 @@
     height: 100%;
     background-color: white;
     padding-top: 20px;
+    min-height: 900px;
     box-sizing: inherit;
     -webkit-box-sizing: inherit;
     -moz-box-sizing: inherit;

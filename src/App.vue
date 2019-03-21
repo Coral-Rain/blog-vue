@@ -42,9 +42,14 @@
                 <li>
                   <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}">写博客</router-link>
                 </li>
-                <li class="divider" role="separator"></li><li>
-                <router-link :to="{name: 'AdminProfile', params: {userId: user.id}}">修改个人资料</router-link>
-              </li>
+                <li class="divider" role="separator"></li>
+                <li>
+                  <router-link :to="{name: 'Favorites', params: {userId: user.id}}">我的收藏夹</router-link>
+                </li>
+                <li class="divider" role="separator"></li>
+                <li>
+                  <router-link :to="{name: 'AdminProfile', params: {userId: user.id}}">修改个人资料</router-link>
+                </li>
                 <li class="divider" role="separator"></li>
                 <li><a href="javascript:" @click="logout">注销</a></li>
               </ul>
@@ -58,6 +63,39 @@
       </div><!-- /.container-fluid -->
     </nav>
     <router-view/>
+    <div id="footer" class="ui vertical footer segment">
+      <div class="ui container">
+        <div class="ui grid">
+          <div class="eight wide mobile four wide tablet four wide computer column">
+            <h4 class="ui header">开源中国社区</h4>
+            <div class="ui link list">
+              <a class="item" href="https://www.oschina.net/home/aboutosc" target="_blank">关于我们</a>
+              <a class="item" href="https://www.oschina.net/home/aboutosc" target="_blank">联系我们</a>
+              <a class="item" href="https://www.oschina.net/home/aboutosc#partners#" target="_blank">合作伙伴</a>
+              <a class="item" href="https://www.oschina.net/openapi" target="_blank">Open API</a>
+            </div>
+          </div>
+          <div class="eight wide mobile four wide tablet four wide computer column">
+            <h4 class="ui header">在线工具</h4>
+            <div class="ui link list">
+              <a class="item" href="https://gitee.com/?from=osc-bottom" target="_blank">码云 Gitee.com</a>
+              <a class="item" href="https://gitee.com/enterprises?from=osc-bottom" target="_blank">企业研发管理</a>
+              <a class="item" href="https://copycat.gitee.com/?from=osc-bottom" target="_blank">CopyCat-代码克隆检测</a>
+              <a class="item" href="https://tool.oschina.net" target="_blank">实用在线工具</a>
+            </div>
+          </div>
+          <div class="center aligned eight wide mobile two wide tablet two wide computer column">
+            <h4 class="ui header">微信公众号</h4>
+            <img src="https://static.oschina.net/new-osc/img/wechat_qrcode.jpg?t=1484694603000" alt="微信公众号">
+          </div>
+          <div class="center aligned eight wide mobile six wide tablet six wide computer column">
+            <h3 class="ui header">开源中国 APP</h3>
+            <p>聚合全网技术文章，根据你的阅读喜好进行个性推荐</p>
+            <a href="https://www.oschina.net/app" target="_blank" class="ui large primary button">下载 APP</a>
+          </div>
+        </div>
+      </div>
+    </div>
     <LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>
     <Avatar src="/static/avatar.png" :is-show="uploadAvatar" />
   </div>
@@ -106,12 +144,12 @@ export default {
         callback: res => {
           if(res.code === 200){
             localStorage.clear()
-            layerMsg("Logout Success!")
+            // layerMsg("Logout Success!")
             // if(!that.$route.meta.skipAuth){
-              setTimeout(function () {
+            //   setTimeout(function () {
               location.reload()
                 // that.$router.replace("/blog")
-              }, 2000)
+              // }, 2000)
             // }
           } else {
             layerMsg("Logout Error: " + res.message + "!")
@@ -162,8 +200,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
-  /*min-height: 100%;*/
+  /*height: 100%;*/
+  min-height: 100%;
   background-color: #eeeeee;
 }
 
@@ -176,5 +214,21 @@ export default {
 
   .label.ui.prompt.visible {
     font-weight: normal!important;
+  }
+
+  #footer {
+    background-color: #fff;
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+.dropdown-menu li a{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+  .dropdown-menu li[role=separator]{
+    margin: 3px 0;
   }
 </style>

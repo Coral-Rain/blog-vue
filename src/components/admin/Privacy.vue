@@ -19,7 +19,10 @@
   import CheckBox from '@/components/CheckBox'
   export default {
     name: 'Privacy',
-    components: {CheckBox}
+    components: {CheckBox},
+    mounted: function () {
+      document.title = '个人隐私设置 - ' + this.user.username + '的个人空间'
+    }
   }
 </script>
 

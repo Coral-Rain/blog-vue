@@ -18,6 +18,7 @@ import Privacy from '../components/admin/Privacy'
 import OpenId from '../components/admin/OpenId'
 import Mobile from '../components/admin/Mobile'
 import Drafts from '../components/admin/Drafts'
+import Favorites from '../components/admin/Favorites'
 import BlogCatalogs from '../components/admin/BlogCatalogs'
 
 Vue.use(Router)
@@ -30,7 +31,8 @@ const router = new Router({
       name: 'HomeDefault',
       component: Home,
       meta: {
-        skipAuth: true
+        skipAuth: true,
+        title: '博客专区'
       }
     },
     {
@@ -209,6 +211,12 @@ const router = new Router({
           path: 'projects',
           name: 'Project',
           component: Admin,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'favorites',
+          name: 'Favorites',
+          component: Favorites,
           children: [{path: '*', redirect: ''}]
         }
       ]

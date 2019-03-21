@@ -6,7 +6,8 @@
             <a href=""><img src="../../../static/avatar.png" :alt="user.username"></a>
           </div>
           <p>{{user.username}}</p>
-          <router-link class="btn btn-default" :to="{name: 'AdminDefault'}">
+          <div class="signature">哒哒哒</div>
+          <router-link v-if="isTarget" class="btn btn-default" :to="{name: 'AdminDefault'}">
             <i class="glyphicon glyphicon-cog"></i> 账号设置
           </router-link>
           <div class="user-statistics">
@@ -22,18 +23,39 @@
               <div>0</div>
               <div>关注</div>
             </a>
-            <a href="#" class="statistics">
+            <router-link v-if="isTarget" :to="{name: 'Favorites'}" class="statistics">
               <div>0</div>
               <div>收藏</div>
-            </a>
+            </router-link>
           </div>
           <div class="user-action">
-            <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}" style="width: 110px" class="btn btn-success">
-              <i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;写博客
-            </router-link>
-            <router-link :to="{name: 'PersonDrafts', params: {userId: user.id}}" class="btn btn-default">
-              <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;草稿箱 (0)
-            </router-link>
+            <div v-if="isTarget">
+              <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}" style="width: 110px" class="btn btn-success">
+                <i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;写博客
+              </router-link>
+              <router-link :to="{name: 'Drafts', params: {userId: user.id}}" class="btn btn-default">
+                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;草稿箱 (0)
+              </router-link>
+            </div>
+            <div v-else>
+              <div class="item action clearfix">
+                <a class="ui green button follow-btn" @mouseover="hoverFollow = true" @mouseleave="hoverFollow = false">
+                  <i class="heart icon" :class="hoverFollow ? '' : 'outline'"></i>
+                  <span class="text">关注</span>
+                </a>
+                <a class="ui green basic button send-message-btn"><i class="envelope outline icon"></i>私信</a>
+                <div class="ui basic dropdown more dropdown-more" tabindex="0">
+                  <div class="ui icon green basic button menu-btn"><i class="bars icon"></i></div>
+                  <div class="menu transition hidden" tabindex="-1">
+                    <a class="item" href="#" target="_blank"><i class="comment outline icon"></i>提问</a>
+                    <a class="item" ><i class="ban icon"></i><span class="text">加灰</span></a>
+                    <a class="item ban">
+                      <i class="flag icon"></i>举报
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div>
@@ -53,12 +75,13 @@
           -->
           <h4>访问统计</h4>
           <div class="statistics text-left">
-            <span class="count">今日访问: 0</span>
-            <span class="count">昨日访问: 0</span>
-            <span class="count">本周访问: 0</span>
-            <span class="count">本月访问: 0</span>
-            <span class="count">加入时间: 昨天 17:22</span>
-            <span class="count">最近登陆: 今天 10:22</span>
+            <span class="count">今日访问: {{count.today}}</span>
+            <span class="count">昨日访问: {{count.yesterday}}</span>
+            <span class="count">本周访问: {{count.week}}</span>
+            <span class="count">本月访问: {{count.month}}</span>
+            <span class="count">所有访问: {{count.total}}</span>
+            <span class="count">加入时间: {{user.createTime | datetime}}</span>
+            <span class="count">最近登陆: {{count.lastLogin | datetime}}</span>
           </div>
         </div>
       </div>
@@ -106,14 +129,16 @@
           </li>
         </ul>
         <!--引入组件-->
-        <router-view></router-view>
+        <div class="ui tab attached">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
 </template>
 
 <script>
   import echarts from 'echarts'
-  import {POST} from '../../api'
+  import {GET, POST} from '../../api'
   import EventBus from '@/EventBus'
   export default {
     name: 'PersonHome',
@@ -143,15 +168,41 @@
       if(this.$route.query.categoryId){
         categoryId = this.$route.query.categoryId
       }
+      let user = {}
+      let userId = this.$route.params.userId
+      const fd = new FormData()
+      fd.append('userId', userId)
+      POST({
+        url: '/api/user/getDetailById',
+        data: fd,
+        callback: res => {
+          if(res.code === 200){
+            that.user = res.data.userDetail
+            document.title = that.user.username + '的个人空间'
+          }
+        }
+      })
 
+      let count = {}
+      GET({
+        url: '/api/user/statistics/' + userId,
+        callback: res => {
+          if(res.code === 200) {
+            that.count = res.data.count
+          }
+        }
+      })
       return {
-        user: userSession,
+        userSession: userSession,
         tagName: '',
         blogTypes: [
           {id: '1', name: '工作日志', count: 0},
           {id: '2', name: '日常作品', count: 0},
           {id: '3', name: '转载文章', count: 0}
-        ]
+        ],
+        user,
+        hoverFollow: false,
+        count
       }
     },
     methods: {
@@ -205,7 +256,7 @@
             name: '测试标题名字',
             type: 'radar',
             data: [{
-              value: [0, 0, 0, 0, 0, 0],
+              value: [300, 350, 110, 200, 78, 330],
               name: '技能雷达图'
             }]
           }]
@@ -224,6 +275,7 @@
       }
     },
     mounted() {
+      $('.ui.dropdown').dropdown()
       $('.dropdown-tab').removeClass('active')
       const path = location.pathname.split('/')
       if(path.length > 3){
@@ -248,6 +300,19 @@
       const that = this
       EventBus.$on("requestBlogTypes", function () {
         EventBus.$emit("refreshBlogTypes", that.blogTypes)
+      })
+      EventBus.$on("startLoad", function () {
+        $('.ui.tab.attached').addClass("loading").removeClass("display-block")
+      })
+      EventBus.$on("endLoad", function () {
+        $('.ui.tab.attached').removeClass("loading").addClass("display-block")
+      })
+      EventBus.$on("loginSuccess", function () {
+        let userSession = localStorage.getItem("user")
+        if(userSession) {
+          userSession = JSON.parse(userSession)
+        }
+        that.userSession = userSession
       })
     },
     computed: {
@@ -275,6 +340,9 @@
         } else {
           return {id: 0, name: '全部博文'}
         }
+      },
+      isTarget: function () {
+        return this.userSession && this.userSession.id === this.user.id
       }
     }
   }
@@ -282,6 +350,9 @@
 
 <style scoped>
 
+  .display-block {
+    display: block !important;
+  }
   @media only screen and (max-width: 768px) {
     .container {
       width: 100%;
@@ -332,6 +403,8 @@
     width: 31.25%;
     float: left;
     position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .container .right {
     width: 68.75%;
@@ -341,7 +414,7 @@
     padding-right: 20px;
   }
   .user-info {
-    padding: 10px;
+    padding: 14px;
   }
 
   .user-info img{
@@ -351,9 +424,16 @@
   }
 
   .user-info p {
-    font-size: 17px;
+    font-size: 18px;
     margin-top: 15px;
     font-weight: 700;
+  }
+
+  .user-info .signature {
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: rgba(0,0,0,.6);
   }
 
   .user-info .user-statistics {
@@ -392,6 +472,7 @@
   .statistics .count {
     display: block;
     margin: 3px 0;
+    color: rgba(0,0,0,.87);
   }
 
   .blog-type-dropdown {
@@ -463,5 +544,23 @@
     border-top: none;
     border-left: none;
     border-right: none;
+  }
+  .green {
+    background-color: #32aa66!important;
+    border-color: #32aa66!important;
+  }
+  .green:hover {
+    background-color: #08aa4b !important;
+    border-color: #08aa4b!important;
+  }
+  .ui.basic.green.button {
+    box-shadow: 0 0 0 1px #32aa66!important;
+    color: #32aa66!important
+  }
+  .ui.button {
+    font-weight: 400!important;
+  }
+  .follow-btn {
+    width: 112px;
   }
 </style>

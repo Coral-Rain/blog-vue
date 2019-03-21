@@ -34,6 +34,10 @@
       notify: function () {
         return this.$refs.notify.checked
       }
+    },
+    mounted: function () {
+
+      document.title = '邮件提醒设置 - ' + this.user.username + '的个人空间'
     }
   }
 </script>

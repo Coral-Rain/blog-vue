@@ -80,7 +80,7 @@
             <div class="four wide column">
               <div class="field">
                 <label>头像</label>
-                <div class="avatar-wrap" @mouseover="showUploadAvatarBtn()" @mouseout="hideUploadAvatarBtn()">
+                <div class="avatar-wrap" >
                   <div class="ui small circular image bordered dimmable">
                     <div class="ui dimmer upload-btn-wrap transition hidden">
                       <div class="content" @click="showUploadAvatar()">
@@ -88,7 +88,7 @@
                       </div>
                     </div>
                     <div class="field">
-                      <img class="ui small circular image" src="/static/avatar.png" alt="">
+                      <img class="" src="/static/avatar.png" alt="">
                     </div>
                   </div>
                 </div>
@@ -238,6 +238,7 @@
       }
     },
     mounted: function () {
+      document.title = '修改个人资料 - ' + this.user.username + '的个人空间'
       this.init()
       const that = this
       EventBus.$on("closeAvatar", function () {
@@ -267,12 +268,12 @@
           }
         })
       },
-      showUploadAvatarBtn: function () {
-        $('.upload-btn-wrap').removeClass('hidden').addClass('active')
-      },
-      hideUploadAvatarBtn: function () {
-        $('.upload-btn-wrap').removeClass('active').removeClass('visible').addClass('hidden')
-      },
+      // showUploadAvatarBtn: function () {
+      //   $('.upload-btn-wrap').removeClass('hidden').addClass('active')
+      // },
+      // hideUploadAvatarBtn: function () {
+      //   $('.upload-btn-wrap').removeClass('active').removeClass('visible').addClass('hidden')
+      // },
       submitBaseInfo: function () {
         console.log('submitBaseInfo')
         // this.user.birthday = $('input[name=birthday]').val()
@@ -325,7 +326,9 @@
         $(document).ready(function () {
           $('.ui.dropdown').dropdown()
           $('.birthday').calendar(that.timeSetting)
-
+          $('.avatar-wrap .image').dimmer({
+            on: 'hover'
+          })
           // baseinfo 表单验证
           $('.ui.form.baseinfo').form({
             inline: true,

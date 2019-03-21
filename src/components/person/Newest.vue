@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="ui tab attached main">
       <!--全部博文-->
       <!--引入子组件-->
       <BlogList :blogTypes="blogTypes" :blogs="blogs" />
@@ -21,7 +21,6 @@
       if(this.$route.query.categoryId){
         categoryId = this.$route.query.categoryId
       }
-
       this.queryBlogs(categoryId)
       // const that = this
       // EventBus.$on("refreshBlogTypes", function (blogTypes) {
@@ -34,8 +33,7 @@
           {id: '1', name: '工作日志', count: 0},
           {id: '2', name: '日常作品', count: 0},
           {id: '3', name: '转载文章', count: 0}
-        ],
-        loading: true
+        ]
       }
     },
     mounted: function () {
@@ -47,8 +45,9 @@
     },
     methods: {
       queryBlogs: function (categoryId) {
+        // $(".ui.attached.tab").addClass("loading").removeClass("display-block")
+        EventBus.$emit("startLoad")
         const that = this
-        that.loading = true
         //根据categoryId查询对应分类的数据
         const formdata = new FormData()
         formdata.append('userId', this.$route.params.userId)
@@ -62,7 +61,8 @@
             } else {
               layerError(res.message)
             }
-            that.loading = false
+            // $(".ui.attached.tab").removeClass("loading").addClass("display-block")
+            EventBus.$emit("endLoad")
           }
         })
       }
@@ -81,24 +81,5 @@
 <style scoped>
   .main {
     position: relative;
-  }
-  .loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 99999;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.2);
-  }
-  .loading .control {
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    margin-left: -15px;
-    background-color: #2e6da4;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
   }
 </style>

@@ -62,6 +62,10 @@
               </div>
             </div>
           </div>
+          <div v-if="!original" class="form-group form-inline text-left">
+            <label class="icon-must items-label v-center">原文链接</label>
+            <input v-model="reprintUrl" type="text" class="form-control" placeholder="请在此输入原文链接" style="margin-left: 10px;width: 450px">
+          </div>
           <div class="form-inline text-left form-action">
             <button class="btn btn-success" @click.prevent="submitBlog()">发表文章</button>
             <button class="btn btn-default" @click.prevent="saveBlog()">保存草稿</button>
@@ -207,6 +211,11 @@
           return
         }
 
+        if(!this.original && this.reprintUrl.length === 0){
+          layerError('原文链接不能为空!')
+          return
+        }
+
         const formdata = new FormData()
         formdata.append("title", title)
         formdata.append("content", this.content.replace(/^\s+|\s+$/gm,''))
@@ -309,6 +318,9 @@
           return this.selectSysType.id === id
         }
       }
+    },
+    mounted: function () {
+      document.title = '写博客 - ' + this.user.username + '的个人空间'
     }
   }
 </script>

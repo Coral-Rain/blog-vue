@@ -37,13 +37,20 @@
   export default {
     name: 'Chpwd',
     data(){
+      let userSession = localStorage.getItem("user")
+      if(userSession) {
+        // console.log(userSession)
+        userSession = JSON.parse(userSession)
+      }
       return {
+        user: userSession,
         oldPassword: '',
         newPassword: '',
         repeatPassword: ''
       }
     },
     mounted: function () {
+      document.title = '修改登录密码 - ' + this.user.username + '的个人空间'
       const that = this
       $(document).ready(function () {
         $('.ui.form').form({

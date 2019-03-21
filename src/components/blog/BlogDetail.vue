@@ -16,101 +16,103 @@
         </div>
       </div>
     </div>
-    <div class="content" v-if="blog.user">
-      <div class="text-left">
-        <ol class="breadcrumb breadcrumb-path">
-          <li><router-link target="_blank" :to="{name: 'PersonDefault'}">{{blog.user.username}}的个人空间</router-link></li>
-          <li><router-link target="_blank" :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: 1}}">工作日志</router-link></li>
-          <li class="active">正文</li>
-        </ol>
-      </div>
-      <div>
-        <h2 class="text-left title">{{blog.title}}</h2>
-        <div class="meta text-left">
-          <div class="item">
-            <router-link :to="{name: 'PersonDefault'}" target="_blank" class="user">
-              <img src="/static/avatar.png" style="width: 35px">{{blog.user.username}}
-            </router-link>
-            发布于 {{blog.createTime | datetime}}
-          </div>
-          <div class="item">字数 {{blog.length}}</div>
-          <div class="item">阅读 {{ blog.readCount }}</div>
-          <div @click="collectBlog" class="item action">收藏 {{blog.favorites.length}}</div>
-          <div @click="likeBlog" class="item action">点赞 {{blog.likes.length}}</div>
-          <div class="item action">
-            <a href="#comments" class="comment">
-              <i class="fa fa-comment-o"></i> 评论 {{blog.comments.length}}
-            </a>
-          </div>
+    <div class="ui tab attached content">
+      <div v-if="blog.user">
+        <div class="text-left">
+          <ol class="breadcrumb breadcrumb-path">
+            <li><router-link target="_blank" :to="{name: 'PersonDefault'}">{{blog.user.username}}的个人空间</router-link></li>
+            <li><router-link target="_blank" :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: 1}}">工作日志</router-link></li>
+            <li class="active">正文</li>
+          </ol>
         </div>
-        <div id="blog-data" class="data">
-          <div v-html="compiledMD"></div>
-          <div style="width: 100%; text-align: center">© 著作权归作者所有</div>
-        </div>
-        <div class="segment">
-          <div class="btn-group">
-            <button class="btn btn-success"><i class="fa fa-jpy"></i> 打赏</button>
-            <button @click="likeBlog()" class="btn btn-default" :class="isLike ? 'like-active' : ''">
-              <i class="fa" :class="isLike ? 'fa-thumbs-up' : 'fa-thumbs-o-up'"></i>
-               点赞 ({{blog.likes.length}})
-            </button>
-            <button @click="collectBlog()" class="btn btn-default" :class="isCollect ? 'favo-active' : ''">
-              <i class="fa" :class="isCollect ? ' fa-star' : ' fa-star-o'"></i>
-               收藏 ({{blog.favorites.length}})
-            </button>
-            <button class="btn btn-default"><i class="fa fa-share"></i> 分享</button>
-          </div>
-          <div class="jubao"><i class="fa fa-flag"></i> 举报</div>
-        </div>
-        <!--<div class="around-articles-wrap">-->
-          <!--<div class="around-left"></div>-->
-          <!--<div class="around-right"></div>-->
-        <!--</div>-->
-        <div class="author-card comment">
-          <div class="avatar">
-            <router-link target="_blank" :to="{name: 'PersonDefault', params: {userId: blog.user.id}}">
-              <img src="/static/avatar.png">
-            </router-link>
-          </div>
-          <div class="message text-left">
-            <router-link class="username" target="_blank" :to="{name: 'PersonDefault'}">{{blog.user.username}}</router-link>
-            <div class="meta">
-              <div class="meta-item">粉丝 0</div>
-              <div class="meta-item">博文 {{author.blogCount}}</div>
-              <div class="meta-item">码字总数 {{author.wordcount}}</div>
-              <div class="meta-item">作品 0</div>
+        <div>
+          <h2 class="text-left title">{{blog.title}}</h2>
+          <div class="meta text-left">
+            <div class="item">
+              <router-link :to="{name: 'PersonDefault'}" target="_blank" class="user">
+                <img src="/static/avatar.png" style="width: 35px">{{blog.user.username}}
+              </router-link>
+              发布于 {{blog.createTime | datetime}}
             </div>
-            <div class="address"><i class="fa fa-map-marker"></i> 广东 深圳</div>
-            <div>
-              <button class="btn btn-success"><i class="fa fa-heart-o"></i> 关注</button>
-              <button class="btn btn-default"><i class="fa fa-envelope-o"></i> 私信</button>
-              <button class="btn btn-default"><i class="fa fa-comment-o"></i> 提问</button>
+            <div class="item">字数 {{blog.length}}</div>
+            <div class="item">阅读 {{ blog.readCount }}</div>
+            <div @click="collectBlog" class="item action">收藏 {{blog.favorites.length}}</div>
+            <div @click="likeBlog" class="item action">点赞 {{blog.likes.length}}</div>
+            <div class="item action">
+              <a href="#comments" class="comment">
+                <i class="fa fa-comment-o"></i> 评论 {{blog.comments.length}}
+              </a>
             </div>
           </div>
-        </div>
-        <div id="comments" class="comments">
-          <div class="title">评论 ({{blog.comments.length}})</div>
-          <!--引入组件-->
-          <Comment :user="user" :comments="blog.comments" />
+          <div id="blog-data" class="data">
+            <div v-html="compiledMD"></div>
+            <div style="width: 100%; text-align: center">© 著作权归作者所有</div>
+          </div>
+          <div class="segment">
+            <div class="btn-group">
+              <button class="btn btn-success"><i class="fa fa-jpy"></i> 打赏</button>
+              <button @click="likeBlog()" class="btn btn-default" :class="isLike ? 'like-active' : ''">
+                <i class="fa" :class="isLike ? 'fa-thumbs-up' : 'fa-thumbs-o-up'"></i>
+                 点赞 ({{blog.likes.length}})
+              </button>
+              <button @click="collectBlog()" class="btn btn-default" :class="isCollect ? 'favo-active' : ''">
+                <i class="fa" :class="isCollect ? ' fa-star' : ' fa-star-o'"></i>
+                 收藏 ({{blog.favorites.length}})
+              </button>
+              <button class="btn btn-default"><i class="fa fa-share"></i> 分享</button>
+            </div>
+            <div class="jubao"><i class="fa fa-flag"></i> 举报</div>
+          </div>
+          <!--<div class="around-articles-wrap">-->
+            <!--<div class="around-left"></div>-->
+            <!--<div class="around-right"></div>-->
+          <!--</div>-->
+          <div class="author-card comment">
+            <div class="avatar">
+              <router-link target="_blank" :to="{name: 'PersonDefault', params: {userId: blog.user.id}}">
+                <img src="/static/avatar.png">
+              </router-link>
+            </div>
+            <div class="message text-left">
+              <router-link class="username" target="_blank" :to="{name: 'PersonDefault'}">{{blog.user.username}}</router-link>
+              <div class="meta">
+                <div class="meta-item">粉丝 0</div>
+                <div class="meta-item">博文 {{author.blogCount}}</div>
+                <div class="meta-item">码字总数 {{author.wordcount}}</div>
+                <div class="meta-item">作品 0</div>
+              </div>
+              <div class="address"><i class="fa fa-map-marker"></i> 广东 深圳</div>
+              <div>
+                <button class="btn btn-success"><i class="fa fa-heart-o"></i> 关注</button>
+                <button class="btn btn-default"><i class="fa fa-envelope-o"></i> 私信</button>
+                <button class="btn btn-default"><i class="fa fa-comment-o"></i> 提问</button>
+              </div>
+            </div>
+          </div>
+          <div id="comments" class="comments">
+            <div class="title">评论 ({{blog.comments.length}})</div>
+            <!--引入组件-->
+            <Comment :user="user" :comments="blog.comments" />
 
-          <div v-if="user" class="form">
-            <textarea v-model.trim="commentContent" placeholder="请在这里发表你对此文的观点"></textarea>
-            <div class="control">
-              <div class="tools">
-                <div class="tool"><i class="fa fa-smile-o"></i> 插入表情</div>
-                <div class="tool"># 插入软件</div>
-              </div>
-              <div class="count">{{commentContent.length}}/1000</div>
-              <div class="submit">
-                <a role="button" class="btn btn-success" :class="commentContent.length > 0 ? '' : 'disabled'"><i class="fa fa-pencil-square-o"></i>发表评论</a>
+            <div v-if="user" class="form">
+              <textarea v-model.trim="commentContent" placeholder="请在这里发表你对此文的观点"></textarea>
+              <div class="control">
+                <div class="tools">
+                  <div class="tool"><i class="fa fa-smile-o"></i> 插入表情</div>
+                  <div class="tool"># 插入软件</div>
+                </div>
+                <div class="count">{{commentContent.length}}/1000</div>
+                <div class="submit" @click="submitComment()">
+                  <a role="button" class="btn btn-success" :class="commentContent.length > 0 ? '' : 'disabled'"><i class="fa fa-pencil-square-o"></i>发表评论</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       <!--<div>-->
         <!--<TabPage :data="{}" :tabs="[{id: 1,name: '标签1'},{id: 2,name: '标签2'}]" />-->
       <!--</div>-->
+      </div>
     </div>
     <div class="right"></div>
   </div>
@@ -140,39 +142,9 @@
     data() {
       let userSession = localStorage.getItem("user")
       if(userSession) {
-        console.log(userSession)
         userSession = JSON.parse(userSession)
       }
-
       const blogId = this.$route.params.blogId
-
-      const formdata = new FormData()
-      formdata.append("blogId", blogId)
-
-      const that = this
-      //请求获取
-      POST({
-        url: '/api/blog/detail',
-        data: formdata,
-        callback: res => {
-          if(res.code === 200){
-            that.blog = res.data.blog
-            const fd = new FormData()
-            fd.append('userId', that.blog.author)
-            POST({
-              url: '/api/user/getDetailById',
-              data: fd,
-              callback: r => {
-                if(r.code === 200){
-                  that.author = r.data.userDetail
-                }
-              }
-            })
-          } else {
-          //  跳转到404
-          }
-        }
-      })
 
       return {
         blogId: blogId,
@@ -253,13 +225,65 @@
             })
           }
         }
+      },
+      submitComment: function () {
+        if(this.commentContent.length <= 0) {
+          return
+        }
+        const that = this
+        const formdata = new FormData()
+        formdata.append("userId", this.user.id)
+        formdata.append("blogId", this.blogId)
+        formdata.append("replyTo", "0")
+        formdata.append("comment", this.commentContent)
+        POST({
+          url: '/api/blog/addComment',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200) {
+              that.commentContent = ''
+              EventBus.$emit("addComment", res.data.comment)
+            } else {
+              layerError(res.message())
+            }
+          }
+        })
       }
     },
     created: function(){
       EventBus.$off('loginSuccess')
     },
     mounted: function () {
+
+      const formdata = new FormData()
+      formdata.append("blogId", this.blogId)
       const that = this
+      $('.ui.tab.attached').addClass("loading").removeClass("display-block")
+      //请求获取
+      POST({
+        url: '/api/blog/detail',
+        data: formdata,
+        callback: res => {
+          if(res.code === 200){
+            that.blog = res.data.blog
+            $('.ui.tab.attached').removeClass("loading").addClass("display-block")
+            document.title = that.blog.title + ' - ' + that.blog.user.username + '的个人空间'
+            const fd = new FormData()
+            fd.append('userId', that.blog.author)
+            POST({
+              url: '/api/user/getDetailById',
+              data: fd,
+              callback: r => {
+                if(r.code === 200){
+                  that.author = r.data.userDetail
+                }
+              }
+            })
+          } else {
+            //  跳转到404
+          }
+        }
+      })
       EventBus.$on('loginSuccess', function (user) {
         that.user = user
       })
@@ -269,8 +293,10 @@
     }
   }
 </script>
-
 <style scoped>
+  .display-block {
+    display: block!important;
+  }
   @media only screen and (min-width: 768px) and (max-width: 992px) {
     .container {
       width: 768px;

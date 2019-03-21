@@ -1,9 +1,9 @@
 <template>
     <div>
-      <router-link to="/blog" class="item item-all" :class="typeof(tagId) === 'undefined' ? 'tag-checked' : ''" @click.native="onTagClick($event, '全部')">全部</router-link>
+      <router-link to="/blog" class="item item-all" :class="tagClass('0', '全部')" @click.native="onTagClick($event, '全部')">全部</router-link>
       <div v-for="l in list" class="item-tag-container">
         <h4 class="header">{{l.name}}</h4>
-        <router-link @click.native="onTagClick($event, tag.name)" :class="tag.id === tagId ? 'tag-checked' : ''" class="item" :to="{path: '/blog', query:{item_tag: tag.id}}" v-for="tag in l.tags">
+        <router-link @click.native="onTagClick($event, tag.name)" :class="tagClass(tag.id, tag.name)" class="item" :to="{path: '/blog', query:{item_tag: tag.id}}" v-for="tag in l.tags">
           <li class="item">{{tag.name}}</li>
         </router-link>
       </div>
@@ -36,6 +36,25 @@
     data(){
       return{
         tagId: this.$route.query.item_tag
+      }
+    },
+    computed: {
+      tagClass: function () {
+        return function (id, name) {
+          if(typeof(this.tagId) === 'undefined'){
+            if(id === '0') {
+              EventBus.$emit("changeTagName", name)
+              return 'tag-checked'
+            } else {
+              return ''
+            }
+          } else if(this.tagId === id){
+              EventBus.$emit("changeTagName", name)
+              return 'tag-checked'
+          } else {
+            return ''
+          }
+        }
       }
     }
   }

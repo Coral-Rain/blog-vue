@@ -2,10 +2,10 @@
     <div class="data-main">
       <div v-for="blog in blogs" class="blog text-left">
         <div class="meta">
-          <router-link class="title" :to="{name: 'BlogDetail',path:'/#aaa', params: {userId: blog.user.id, blogId: blog.id}}">
-            <div v-if="blog.stick" class="icon label blue">顶</div>
-            <div v-if="blog.type" class="icon label teal">原</div>
-            <div v-else class="icon label">转</div>
+          <router-link class="title" target="_blank" :to="{name: 'BlogDetail',path:'/#aaa', params: {userId: blog.user.id, blogId: blog.id}}">
+            <div v-if="blog.stick" class="icon label blue"  data-tooltip="置顶" data-position="top center">顶</div>
+            <div v-if="blog.type" class="icon label teal"  data-tooltip="原创" data-position="top center">原</div>
+            <div v-else class="icon label"  data-tooltip="转载" data-position="top center">转</div>
             <span>{{blog.title}}</span>
           </router-link>
           <!--<a href="#" class="title">-->
@@ -20,8 +20,11 @@
           </div>
           <div class="items text-left">
             <div class="item">
-              <router-link :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: blog.userTagId}}">
+              <router-link v-if="blogTypes" :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: blog.userTagId}}">
                 {{blogType(blog.userTagId)}}
+              </router-link>
+              <router-link target="_blank" v-else :to="{name: 'PersonHome', params: {userId: blog.user.id}}">
+                {{blog.user.username}}
               </router-link>
             </div>
             <div class="item">{{blog.createTime | datetime}}</div>
@@ -35,10 +38,16 @@
                 &nbsp;{{blog.comments.length}}
               </router-link>
             </div>
+            <div class="item">
+              <i class="fa fa-heart-o"></i>
+              &nbsp;{{blog.likes.length}}
+            </div>
           </div>
         </div>
-        <div class="image">
-          <img src="" alt="">
+        <div v-if="hasImg(blog.content)" class="image">
+          <router-link target="_blank" class="ui small" :to="{name: 'BlogDetail', params: {userId: blog.user.id, blogId: blog.id}}">
+            <img :src="imgSrc(blog.content)" alt="">
+          </router-link>
         </div>
       </div>
     </div>
@@ -47,25 +56,21 @@
 <script>
   import marked from 'marked'
 
-  const rendererMD = new marked.Renderer()
-  marked.setOptions({
-    renderer: rendererMD,
-    gfm: true,
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false
-  })
+
   export default {
     name: 'BlogList',
+    data(){
+      return {
+      }
+    },
     props: {
       blogs: {
-        type: Array
+        type: Array,
+        required: true
       },
       blogTypes: {
-        type: Array
+        type: Array,
+        required: false
       }
     },
     computed: {
@@ -80,7 +85,35 @@
       },
       compiledMD: function () {
         return marked(this.blog.content, {sanitize: true})
+      },
+      hasImg: function () {
+        return function (content) {
+          const html =  marked(content, {sanitize: true})
+          const imgs = $(html).find('img')
+          return imgs.length > 0
+        }
+      },
+      imgSrc: function () {
+        return function (content) {
+          const html =  marked(content, {sanitize: true})
+          const imgs = $(html).find('img')
+          console.log(imgs[0].src)
+          return imgs[0].src
+        }
       }
+    },
+    mounted: function(){
+      const rendererMD = new marked.Renderer()
+      marked.setOptions({
+        renderer: rendererMD,
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false
+      })
     }
   }
 </script>
@@ -107,6 +140,9 @@
     padding-bottom: 15px;
     padding-top: 15px;
   }
+  .data-main .blog:last-child {
+    border-bottom: none;
+  }
   .blog .meta{
     display: inline-block;
     -webkit-box-flex: 1;
@@ -114,7 +150,7 @@
   }
   .blog .meta .title {
     font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     display: inline-block;
     color: rgba(0,0,0,.85);
   }
@@ -125,10 +161,14 @@
 
   .blog .meta .desc {
     margin-top: 8px;
+    color: rgba(0,0,0,.87);
+    line-height: 1.4285em;
   }
 
   .blog .meta .items{
     color: rgba(0,0,0,.4);
+    padding-top: 10px;
+    font-size: 14px;
   }
 
   .blog .meta .items .item {
@@ -148,6 +188,11 @@
     width: 110px;
     min-width: 110px;
     height: 70px;
+    margin-left: 5px;
+    border-radius: 5px;
+  }
+  .blog .image img {
+    width: 100%;
   }
 
   .label{

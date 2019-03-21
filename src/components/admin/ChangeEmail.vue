@@ -95,6 +95,7 @@
       }
     },
     mounted: function () {
+      document.title = '修改登录邮箱 - ' + this.user.username + '的个人空间'
       const that = this
       $(document).ready(function () {
         $('.ui.form').form({
