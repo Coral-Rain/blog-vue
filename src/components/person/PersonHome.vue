@@ -3,7 +3,7 @@
       <div class="content left">
         <div class="user-info">
           <div>
-            <a href=""><img src="../../../static/avatar.png" :alt="user.username"></a>
+            <router-link :to="{name: 'PersonDefault'}"><img :src="avatar(user.avatar)" :alt="user.username"></router-link>
           </div>
           <p>{{user.username}}</p>
           <div class="signature" v-if="user.signature">{{user.signature}}</div>

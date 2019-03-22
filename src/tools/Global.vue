@@ -6,11 +6,13 @@
     const HDFS_URL = "http://www.coralcloud.cn:50070/webhdfs/v1"
     const BLOG_BACK="http://localhost:8080"
     const FILE_SYS_URL = "http://www.coralcloud.cn:8081/blog/"
+    const AVATAR_URL = "http://www.coralcloud.cn:8081/blog/avatar/"
 
     export default {
         HDFS_URL,
       BLOG_BACK,
-      FILE_SYS_URL
+      FILE_SYS_URL,
+      AVATAR_URL
     }
 </script>
 

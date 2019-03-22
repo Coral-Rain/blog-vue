@@ -88,7 +88,7 @@
                       </div>
                     </div>
                     <div class="field">
-                      <img class="" src="/static/avatar.png" alt="">
+                      <img class="" :src="avatar(user.avatar)" alt="">
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
     <div>
       <div v-for="comment in comments" class="comment">
         <router-link class="avatar" :to="{name: 'PersonDefault', params: {userId: comment.user.id}}">
-          <img src="/static/avatar.png" alt="">
+          <img :src="avatar(comment.user.avatar)" alt="">
         </router-link>
         <div class="main text-left">
           <div class="head">

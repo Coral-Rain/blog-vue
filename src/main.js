@@ -19,6 +19,20 @@ import '../node_modules/semantic-ui-calendar/dist/calendar'
 import '../node_modules/semantic-ui-calendar/dist/calendar.min.css'
 
 Vue.prototype.GLOBAL = Global
+Vue.prototype.avatar = function(src){
+  return Global.AVATAR_URL + src
+}
+Vue.prototype.hasImg = function(content) {
+  const html =  marked(content, {sanitize: true})
+  const imgs = $(html).find('img')
+  return imgs.length > 0
+}
+Vue.prototype.imgSrc = function(content) {
+  const html =  marked(content, {sanitize: true})
+  const imgs = $(html).find('img')
+  console.log(imgs[0].src)
+  return imgs[0].src
+}
 Vue.config.productionTip = false
 axios.defaults.withCredentials=true;
 const rendererMD = new marked.Renderer()
@@ -34,6 +48,10 @@ marked.setOptions({
 })
 
 Vue.use(mavonEditor,VueAxios,axios,Vuex, layer);
+
+Vue.filter('avatar', function (src) {
+  return Global.AVATAR_URL + src
+})
 
 Vue.filter('fileSize', function (value) {
   var size = parseInt(value);

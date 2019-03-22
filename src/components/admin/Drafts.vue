@@ -1,18 +1,18 @@
 <template>
   <div>
     <h3 class="main-title ui dividing header text-left" style="margin-top: 10px">草稿箱 （{{drafts.length}}）</h3>
-    <div class="ui relaxed divided items list-container">
+    <div class="ui relaxed divided items attached tab">
       <div class="item draft text-left" v-for="draft in drafts">
         <div class="content">
           <router-link :to="{name: 'EditDraft', params: {userId: user.id, blogId: draft.id}}" target="_blank" class="header">
             {{draft.title}}
           </router-link>
           <div class="description">
-            <p class="line-clamp">{{draft.content}}</p>
+            <p class="line-clamp">{{draft.content | markdown}}</p>
           </div>
           <div class="extra">
             <div class="ui horizontal list">
-              <div class="item">{{draft.updateTime | datetime}}</div>
+              <div class="item">{{draft.createTime | datetime}}</div>
               <div class="item">
                 <router-link :to="{name: 'EditDraft', params: {userId: user.id, blogId: draft.id}}"><i class="edit icon"></i> 编辑</router-link>
               </div>
@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="ui mini modal">
+    <div class="ui mini drafts-delete modal">
       <i class="icon close"></i>
       <div class="header">删除草稿</div>
       <div class="content">
@@ -45,7 +45,7 @@
 
 <script>
   import {POST} from '@/api'
-  import marked from 'marked'
+  import {GET} from '../../api'
 
   export default {
     name: 'Drafts',
@@ -58,22 +58,6 @@
         userSession = JSON.parse(userSession)
       }
 
-      //获取草稿列表
-      const formdata = new FormData()
-      formdata.append("userId", userSession.id)
-      formdata.append("pageNo", "1")
-
-      POST({
-        url: '/api/blog/listDrafts',
-        data: formdata,
-        callback: res => {
-          if(res.code === 200){
-            that.drafts = res.data.blogs
-
-          }
-        }
-      })
-
       return {
         user: userSession,
         drafts,
@@ -84,28 +68,46 @@
     methods: {
       showDeleteModal: function (blogId) {
         this.deleteId = blogId
-        $('.mini.modal').modal('show')
+        $('.drafts-delete.modal').modal('show')
       },
       deleteDraft: function () {
+        const that = this
+        GET({
+          url: '/api/blog/deleteDrafts/' + that.deleteId,
+          callback: res => {
+            if(res.code === 200) {
+              // 删除本地
+              const index = that.drafts.findIndex(x => x.id === that.deleteId)
+              that.drafts.splice(index, 1)
+            } else {
+              layerError(res.message)
+            }
+            $('.drafts-delete.modal').modal('hide')
+          }
+        })
+      }
+    },
+    mounted: function () {
+      document.title = '草稿箱 - ' + this.user.username + '的个人空间'
+      $('.ui.attached.tab').addClass("loading").removeClass("display-block")
+      const that = this
+      //获取草稿列表
+      const formdata = new FormData()
+      formdata.append("userId", this.user.id)
+      formdata.append("pageNo", "1")
 
-      }
-    },
-    computed: {
-    hasImg: function () {
-      return function (content) {
-        const html =  marked(content, {sanitize: true})
-        const imgs = $(html).find('img')
-        return imgs.length > 0
-      }
-    },
-    imgSrc: function () {
-      return function (content) {
-        const html =  marked(content, {sanitize: true})
-        const imgs = $(html).find('img')
-        console.log(imgs[0].src)
-        return imgs[0].src
-      }
-    }
+      POST({
+        url: '/api/blog/listDrafts',
+        data: formdata,
+        callback: res => {
+          if(res.code === 200){
+            that.drafts = res.data.blogs
+          } else {
+            layerError(res.message)
+          }
+          $('.ui.attached.tab').removeClass("loading").addClass("display-block")
+        }
+      })
     }
   }
 </script>
@@ -142,6 +144,9 @@
     top: 40%;
     margin-left: auto;
     margin-right: auto;
+  }
+  .display-block {
+    display: block !important;
   }
 
 </style>

@@ -23,7 +23,7 @@
     },
     methods: {
       onTagClick: function(event, tagName){
-        console.log(event, tagName)
+        // console.log(event, tagName)
         const elements = document.getElementsByClassName("item")
         for(let i = 0; i < elements.length; i++) {
           const element = elements[i];

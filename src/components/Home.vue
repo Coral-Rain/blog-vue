@@ -24,7 +24,7 @@
       </div>
       <div class="scroll-tab hidden-scroll">
         <div class="ui green pointing secondary massive menu">
-          <a class=" blog-tab item active" @click="showBlogs($event, 1)">最新发表</a>
+          <a class=" blog-tab item active" id="newest" @click="showBlogs($event, 1)">最新发表</a>
           <a class=" blog-tab item" @click="showBlogs($event, 2)">每日一博</a>
           <div v-if="user" class="right menu small">
             <router-link :to="{name: 'WriteBlog', params: {userId: '10000001'}}" class="item" target="_blank"><i class="edit icon"></i>写博客</router-link>
@@ -102,7 +102,8 @@
         ],
         user: userSession,
         blogType: 1,
-        blogs
+        blogs,
+        tagId: this.$route.query.item_tag
       }
     },
     mounted() {
@@ -120,6 +121,9 @@
       const formdata = new FormData()
       formdata.append("type", "1")
       formdata.append("pageNo", "1")
+      if(this.tagId){
+        formdata.append("itemTag", this.tagId)
+      }
 
       $('.ui.attached.tab').addClass("loading").removeClass("display-block")
       POST({
@@ -138,7 +142,11 @@
         // console.log(event)
         const that = this
         $('.blog-tab.item').removeClass('active')
-        event.srcElement.classList.add("active")
+        if(event) {
+          event.srcElement.classList.add("active")
+        } else {
+          $('#newest').addClass('active')
+        }
         this.blogType = type
         this.blogs = []
 
@@ -146,6 +154,9 @@
         const formdata = new FormData()
         formdata.append("type", this.blogType)
         formdata.append("pageNo", "1")
+        if(this.tagId){
+          formdata.append("itemTag", this.tagId)
+        }
         POST({
           url: '/api/blog/list',
           data: formdata,
@@ -156,6 +167,14 @@
             }
           }
         })
+      }
+    },
+    watch: {
+      $route(){
+        this.tagId = this.$route.query.item_tag
+      },
+      tagId(){
+        this.showBlogs(null, 1)
       }
     }
   }

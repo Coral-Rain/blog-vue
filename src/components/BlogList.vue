@@ -85,21 +85,6 @@
       },
       compiledMD: function () {
         return marked(this.blog.content, {sanitize: true})
-      },
-      hasImg: function () {
-        return function (content) {
-          const html =  marked(content, {sanitize: true})
-          const imgs = $(html).find('img')
-          return imgs.length > 0
-        }
-      },
-      imgSrc: function () {
-        return function (content) {
-          const html =  marked(content, {sanitize: true})
-          const imgs = $(html).find('img')
-          console.log(imgs[0].src)
-          return imgs[0].src
-        }
       }
     },
     mounted: function(){

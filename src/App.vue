@@ -29,7 +29,7 @@
           <ul v-if="isLogin" style="vertical-align: center" class="nav navbar-nav navbar-right">
             <!--Img, Name-->
             <li style="line-height: 50px">
-              <img src="../static/avatar.png" title="修改头像" @click="" class="navbar-avatar" :alt="user.username">
+              <img :src="avatar(user.avatar)" title="修改头像" @click="" class="navbar-avatar" :alt="user.username">
             </li>
             <li class="dropdown">
               <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
@@ -97,7 +97,7 @@
       </div>
     </div>
     <LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>
-    <Avatar src="/static/avatar.png" :is-show="uploadAvatar" />
+    <Avatar v-if="isLogin" :src="avatar(user.avatar)" :is-show="uploadAvatar" />
   </div>
 </template>
 

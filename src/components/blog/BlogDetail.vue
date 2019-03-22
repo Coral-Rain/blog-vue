@@ -30,7 +30,7 @@
           <div class="meta text-left">
             <div class="item">
               <router-link :to="{name: 'PersonDefault'}" target="_blank" class="user">
-                <img src="/static/avatar.png" style="width: 35px">{{blog.user.username}}
+                <img :src="avatar(blog.user.avatar)" style="width: 35px">{{blog.user.username}}
               </router-link>
               发布于 {{blog.createTime | datetime}}
             </div>
@@ -70,7 +70,7 @@
           <div class="author-card comment">
             <div class="avatar">
               <router-link target="_blank" :to="{name: 'PersonDefault', params: {userId: blog.user.id}}">
-                <img src="/static/avatar.png">
+                <img :src="avatar(blog.user.avatar)">
               </router-link>
             </div>
             <div class="message text-left">
