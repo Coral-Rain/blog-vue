@@ -231,4 +231,7 @@ export default {
   .dropdown-menu li[role=separator]{
     margin: 3px 0;
   }
+  .navbar-fixed-top {
+    z-index: 999;
+  }
 </style>
