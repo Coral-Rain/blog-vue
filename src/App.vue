@@ -102,11 +102,12 @@
 </template>
 
 <script>
-import LoginWindow from '@/components/LoginWindow'
-import Avatar from "@/components/Avatar"
-import EventBus from '@/EventBus'
-import {GET, POST} from './api'
-export default {
+  import LoginWindow from '@/components/LoginWindow'
+  import Avatar from '@/components/Avatar'
+  import EventBus from '@/EventBus'
+  import {GET} from './api'
+
+  export default {
   name: 'App',
   components: {LoginWindow,Avatar},
   data() {
@@ -145,12 +146,13 @@ export default {
           if(res.code === 200){
             localStorage.clear()
             // layerMsg("Logout Success!")
-            // if(!that.$route.meta.skipAuth){
-            //   setTimeout(function () {
-              location.reload()
-                // that.$router.replace("/blog")
+            if(!that.$route.meta.skipAuth){
+              // setTimeout(function () {
+                that.$router.replace("/blog")
               // }, 2000)
-            // }
+            } else {
+              location.reload()
+            }
           } else {
             layerMsg("Logout Error: " + res.message + "!")
           }
@@ -185,6 +187,10 @@ export default {
     })
     EventBus.$on("closeAvatar", function () {
       that.uploadAvatar = false
+    })
+    EventBus.$on("changeAvatar", function () {
+      that.uploadAvatar = false
+      that.user = JSON.parse(localStorage.getItem("user"))
     })
     EventBus.$on("showAvatar", function () {
       that.uploadAvatar = true

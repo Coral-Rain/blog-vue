@@ -9,7 +9,7 @@ export function POST(params) {
             sessionStorage.clear()
             setTimeout(function () {
               location.href = location.protocol + "//" + location.host + "/"
-            }, 2000)
+            }, 1000)
             return
         }
         params.callback(res)

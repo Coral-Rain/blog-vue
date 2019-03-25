@@ -20,6 +20,7 @@ import Mobile from '../components/admin/Mobile'
 import Drafts from '../components/admin/Drafts'
 import Favorites from '../components/admin/Favorites'
 import BlogCatalogs from '../components/admin/BlogCatalogs'
+import BlogComments from '../components/admin/BlogComments'
 
 Vue.use(Router)
 
@@ -180,7 +181,7 @@ const router = new Router({
         {
           path: 'blog-comments',
           name: 'BlogComment',
-          component: Admin,
+          component: BlogComments,
           children: [{path: '*', redirect: ''}]
         },
         {
@@ -256,6 +257,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  $('.ui.modals').empty()
   if(to.meta.title){
     document.title = to.meta.title
   }

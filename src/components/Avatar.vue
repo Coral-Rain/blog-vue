@@ -178,7 +178,7 @@
                 const that = this
                 that.$refs.cropper.getCropBlob((avatar) => {
                     var formdata = new FormData()
-                    console.log(avatar)
+                    // console.log(avatar)
                     formdata.append("avatar", avatar)
                     POST({
                         url: '/api/user/updateAvatar',
@@ -191,9 +191,9 @@
                         callback: res => {
                             if(res.code === 200){
                                 let user = JSON.parse(localStorage.getItem("user"));
-                                user[avatar] = res.data.user.avatar
+                                user['avatar'] = res.data.filename
                                 localStorage.setItem("user", JSON.stringify(user))
-                                EventBus.$emit("closeAvatar")
+                                EventBus.$emit("changeAvatar")
                                 layerMsg("修改头像完成!")
                             } else {
                                 layerError(res.message)

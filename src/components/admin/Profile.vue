@@ -141,6 +141,7 @@
   import {GET, POST} from '@/api'
   import Avatar from '@/components/Avatar'
   import EventBus from '@/EventBus'
+
   export default {
     name: 'Profile',
     components: {Avatar, TabPage},
@@ -248,6 +249,9 @@
           userSession = JSON.parse(userSession)
         }
         that.user = userSession
+      })
+      EventBus.$on("changeAvatar", function () {
+        that.user = JSON.parse(localStorage.getItem("user"))
       })
     },
     methods: {

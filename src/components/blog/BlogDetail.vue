@@ -81,7 +81,7 @@
                 <div class="meta-item">码字总数 {{author.wordcount}}</div>
                 <div class="meta-item">作品 0</div>
               </div>
-              <div class="address"><i class="fa fa-map-marker"></i> 广东 深圳</div>
+              <div class="address"><i class="fa fa-map-marker"></i> {{author.provinceName}} {{author.cityName}}</div>
               <div>
                 <button class="btn btn-success"><i class="fa fa-heart-o"></i> 关注</button>
                 <button class="btn btn-default"><i class="fa fa-envelope-o"></i> 私信</button>
@@ -352,6 +352,7 @@
     width: 75%!important;
     padding: 20px 50px;
     margin-left: 12.5%;
+    min-height: 1000px;
   }
 
   .left .action {
