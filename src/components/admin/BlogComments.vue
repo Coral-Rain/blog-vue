@@ -10,7 +10,7 @@
             <router-link :to="{name: 'PersonDefault', params: {userId: c.userId}}" target="_blank" class="ui header small">
               {{c.username}}
             </router-link>
-            <div class="description"><p class="line-clamp">{{c.content}}</p></div>
+            <div class="description"><p class="line-clamp">{{circle(c) + c.content}}</p></div>
             <div class="extra user-actions">
               <div class="ui left floated middle aligned pub-date-info">
                 {{c.createTime | datetime}} 于
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <Pagination :total="pager.total" :display="display" :currentPage="pager.pageNo" @pagechange="pagechange"></Pagination>
+      <Pagination :total="pager.total" :display="pager.pageSize" :currentPage="pager.pageNo" @pagechange="pagechange"></Pagination>
       <div class="comment-delete modal ui mini">
         <i class="icon close"></i>
         <div class="header">删除评论</div>
@@ -70,13 +70,19 @@
       return {
         comments,
         user: userSession,
-        current: 1,
-        display: 5,
         pager: {pageNo: 1, total: 0, pageSize: 5},
         deletedComment: {}
       }
     },
     methods: {
+      circle: function(comment){
+        const parent = comment.parent
+        if(parent){
+          return this.circle(parent) + "引用来自\"" + parent.username + "\"的评论 [" + parent.content + "] "
+        } else {
+          return ""
+        }
+      },
       getLogs: function () {
         $('.ui.attached.tab').addClass("loading").removeClass("display-block")
         const data = new FormData()

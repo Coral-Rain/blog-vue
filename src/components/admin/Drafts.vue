@@ -123,6 +123,7 @@
 
   .line-clamp{
     width: 100%;
+    height: 38px;
     color: rgba(0,0,0,.87);
     overflow: hidden;
     text-overflow: ellipsis;

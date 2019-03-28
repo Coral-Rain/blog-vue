@@ -12,19 +12,19 @@
           </router-link>
           <div class="user-statistics">
             <a href="#" class="statistics">
-              <div>0</div>
+              <div>{{count.score}}</div>
               <div>积分</div>
             </a>
-            <a href="#" class="statistics">
-              <div>0</div>
+            <router-link :to="{name: 'Followers'}" class="statistics">
+              <div>{{count.fanCount}}</div>
               <div>粉丝</div>
-            </a>
-            <a href="#" class="statistics">
-              <div>0</div>
+            </router-link>
+            <router-link :to="{name: 'Following'}" class="statistics">
+              <div>{{count.followCount}}</div>
               <div>关注</div>
-            </a>
+            </router-link>
             <router-link v-if="isTarget" :to="{name: 'Favorites'}" class="statistics">
-              <div>0</div>
+              <div>{{count.collectCount}}</div>
               <div>收藏</div>
             </router-link>
           </div>
@@ -85,11 +85,11 @@
           </div>
         </div>
       </div>
-      <div class="content right">
+      <div v-if="isTabActive" class="content right">
         <ul class="nav nav-tabs">
           <li role="presentation" id="tab-newest" class="active dropdown-tab dropdown btn-group" >
             <!--<a href="#" class="btn btn-default">-->
-              <!--全部博文 <span class="caret"></span></a>-->
+            <!--全部博文 <span class="caret"></span></a>-->
             <router-link @click.native="changeTab($event)"
                          class="btn btn-default tab-dropdown-button"
                          :to="{name: 'Newest', params: {userId: user.id}, query: {categoryId: activeType.id}}">
@@ -133,6 +133,14 @@
           <router-view></router-view>
         </div>
       </div>
+      <div v-else class="text-left content right">
+        <div class="row">
+          <ol class="breadcrumb breadcrumb-path">
+            <li><router-link :to="{name: 'PersonDefault'}"><i class="icon angle left"></i>我的个人空间</router-link></li>
+          </ol>
+        </div>
+        <router-view></router-view>
+      </div>
     </div>
 </template>
 
@@ -168,7 +176,6 @@
       if(this.$route.query.categoryId){
         categoryId = this.$route.query.categoryId
       }
-      let user = {}
       let userId = this.$route.params.userId
       const fd = new FormData()
       fd.append('userId', userId)
@@ -200,8 +207,9 @@
           {id: '2', name: '日常作品', count: 0},
           {id: '3', name: '转载文章', count: 0}
         ],
-        user,
+        user: {avatar: 'avatar.png'},
         hoverFollow: false,
+        tabs: ['newest','popular','activity','tweet'],
         count
       }
     },
@@ -282,6 +290,7 @@
         const tagName = path[3]
         this.tagName = tagName
         if(!tagName || tagName === 'newest'){
+          this.tagName = 'newest'
           $('#tab-newest').addClass('active')
         }else if(tagName === 'activity'){
           $('#tab-activity').addClass('active')
@@ -292,6 +301,7 @@
         }
       } else {
         //  default
+        this.tagName = 'newest'
         $('#tab-newest').addClass('active')
       }
       this.$nextTick(function () {
@@ -343,6 +353,32 @@
       },
       isTarget: function () {
         return this.userSession && this.userSession.id === this.user.id
+      },
+      isTabActive: function () {
+        return this.tabs.filter(x => x === this.tagName).length > 0;
+      }
+    },
+    watch: {
+      $route(){
+        const path = location.pathname.split('/')
+        if(path.length > 3){
+          const tagName = path[3]
+          this.tagName = tagName
+          if(!tagName || tagName === 'newest'){
+            this.tagName = 'newest'
+            $('#tab-newest').addClass('active')
+          }else if(tagName === 'activity'){
+            $('#tab-activity').addClass('active')
+          }else if(tagName === 'popular'){
+            $('#tab-popular').addClass('active')
+          } else if(tagName === 'tweet'){
+            $('#tab-tweet').addClass('active')
+          }
+        } else {
+          //  default
+          this.tagName = 'newest'
+          $('#tab-newest').addClass('active')
+        }
       }
     }
   }
@@ -399,7 +435,7 @@
     -webkit-box-sizing: inherit;
     -moz-box-sizing: inherit;
   }
-  .container .left {
+  .container>.left {
     width: 31.25%;
     float: left;
     position: relative;
@@ -562,5 +598,15 @@
   }
   .follow-btn {
     width: 112px;
+  }
+
+  .breadcrumb-path {
+    background-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 5px;
+  }
+  .breadcrumb-path li {
+    width: 150px;
   }
 </style>

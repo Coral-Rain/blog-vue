@@ -120,7 +120,7 @@
 </script>
 
 <style scoped>
-  .collect .image {
+  .collect .images {
     width: 110px;
     min-width: 110px;
     height: 70px;
@@ -130,6 +130,7 @@
 
   .line-clamp{
     width: 100%;
+    height: 42px;
     color: rgba(0,0,0,.87);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -164,8 +165,8 @@
     height: 200px;
     position: absolute;
     top: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto!important;
+    margin-right: auto!important;
   }
   .display-block {
     display: block !important;

@@ -6,6 +6,8 @@ import Newest from '../components/person/Newest'
 import Activity from '../components/person/Activity'
 import Tweet from '../components/person/Tweet'
 import Popular from '../components/person/Popular'
+import Followers from '../components/person/Followers'
+import Following from '../components/person/Following'
 import WriteBlog from '../components/blog/WriteBlog'
 import BlogDetail from '../components/blog/BlogDetail'
 import Admin from '../components/admin/Admin'
@@ -86,6 +88,22 @@ const router = new Router({
           path: 'tweet',
           name: 'Tweet',
           component: Tweet,
+          meta: {
+            skipAuth: true
+          }
+        },
+        {
+          path: 'followers',
+          name: 'Followers',
+          component: Followers,
+          meta: {
+            skipAuth: true
+          }
+        },
+        {
+          path: 'following',
+          name: 'Following',
+          component: Following,
           meta: {
             skipAuth: true
           }
@@ -266,7 +284,7 @@ router.beforeEach((to, from, next) => {
       next()
     }else{
       //登录页
-      router.replace("/index/login")
+      router.replace("/")
     }
   }
   else{

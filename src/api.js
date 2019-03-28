@@ -4,12 +4,12 @@ export function POST(params) {
     axios.post(params.url, params.data, params.config).then(function (response) {
         let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data
         if(res.code === 144){
-            layerError(res.message)
             localStorage.clear()
             sessionStorage.clear()
             setTimeout(function () {
               location.href = location.protocol + "//" + location.host + "/"
             }, 1000)
+            layerError(res.message)
             return
         }
         params.callback(res)
