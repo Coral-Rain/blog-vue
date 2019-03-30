@@ -43,7 +43,7 @@
                   <i class="heart icon" :class="hoverFollow ? '' : 'outline'"></i>
                   <span class="text">关注</span>
                 </a>
-                <a class="ui green basic button send-message-btn"><i class="envelope outline icon"></i>私信</a>
+                <a class="ui green basic button" @click="showSendModal()"><i class="envelope outline icon"></i>私信</a>
                 <div class="ui basic dropdown more dropdown-more" tabindex="0">
                   <div class="ui icon green basic button menu-btn"><i class="bars icon"></i></div>
                   <div class="menu transition hidden" tabindex="-1">
@@ -63,16 +63,6 @@
           <div id="echarts" style="width: 340px;height: 200px"></div>
         </div>
         <div class="user-record text-left">
-          <!--访问统计-->
-          <!--
-          今日访问：0
-          昨日访问：0
-          本周访问：0
-          本月访问：0
-          所有访问：0
-          加入时间：昨天 17:39
-          最近登录：昨天 17:39
-          -->
           <h4>访问统计</h4>
           <div class="statistics text-left">
             <span class="count">今日访问: {{count.today}}</span>
@@ -136,10 +126,25 @@
       <div v-else class="text-left content right">
         <div class="row">
           <ol class="breadcrumb breadcrumb-path">
-            <li><router-link :to="{name: 'PersonDefault'}"><i class="icon angle left"></i>我的个人空间</router-link></li>
+            <li><router-link :to="{name: 'PersonDefault'}"><i class="icon angle left"></i>{{title}}</router-link></li>
           </ol>
         </div>
         <router-view></router-view>
+      </div>
+      <div class="message-send modal ui tiny">
+        <i class="icon close"></i>
+        <div class="header">发送私信给： {{send.username}}</div>
+        <div class="content">
+          <form class="ui form">
+            <div class="field">
+              <textarea v-model="send.message" placeholder="请输入内容" rows="5" style="resize: none;height: 100px"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="actions">
+          <div class="ui cancel button">取消</div>
+          <div class="ui positive right labeled icon button" @click="sendMessage()">发送<i class="send icon"></i></div>
+        </div>
       </div>
     </div>
 </template>
@@ -210,7 +215,8 @@
         user: {avatar: 'avatar.png'},
         hoverFollow: false,
         tabs: ['newest','popular','activity','tweet'],
-        count
+        count,
+        send: {id: '0', message: '', username: ''}
       }
     },
     methods: {
@@ -280,7 +286,18 @@
         console.log("changeBlogType")
         $('.dropdown-tab').removeClass('active')
         $('#tab-newest').addClass('active')
+      },
+      showSendModal: function () {
+        if(this.userSession) {
+          this.send.id = this.user.id
+          this.send.message = ''
+          this.send.username = this.user.username
+          $('.message-send.modal').modal('show')
+        } else {
+          layerError("请登录后操作")
+        }
       }
+
     },
     mounted() {
       $('.ui.dropdown').dropdown()
@@ -316,6 +333,12 @@
       })
       EventBus.$on("endLoad", function () {
         $('.ui.tab.attached').removeClass("loading").addClass("display-block")
+      })
+      EventBus.$on("sendMessage", function (userId, username) {
+        that.send.id = userId
+        that.send.message = ''
+        that.send.username = username
+        $('.message-send.modal').modal('show')
       })
       EventBus.$on("loginSuccess", function () {
         let userSession = localStorage.getItem("user")
@@ -356,6 +379,13 @@
       },
       isTabActive: function () {
         return this.tabs.filter(x => x === this.tagName).length > 0;
+      },
+      title: function () {
+        if(this.userSession && this.userSession.id === this.user.id) {
+          return "我的个人空间"
+        } else {
+          return this.user.username ? this.user.username + "的个人空间" : ''
+        }
       }
     },
     watch: {
@@ -607,6 +637,13 @@
     margin-bottom: 5px;
   }
   .breadcrumb-path li {
-    width: 150px;
+    width: 350px;
+  }
+  .message-send.modal{
+    height: 270px;
+    position: absolute;
+    top: 40%;
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>

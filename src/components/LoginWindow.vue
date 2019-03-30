@@ -1,9 +1,9 @@
 <template>
   <div v-show="showLoginWindow" class="tool-window">
     <div v-if="showLogin" class="tool-login">
-      <button title="关闭" @click="hideLoginWindow" class="btn btn-default pull-right">
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
+      <!--<button title="关闭" class="btn btn-default ">-->
+        <i class="close icon pull-right" @click="hideLoginWindow"></i>
+      <!--</button>-->
       <p>账号密码登录</p>
       <form>
         <div>

@@ -55,9 +55,15 @@
                     </select>
                   </div>
                   <div class="four wide field">
-                    <select class="ui fluid dropdown" id="city" v-model="user.city" name="city">
-                      <option value="">请选择地区</option>
+                    <select class="ui fluid dropdown" id="city" @change="changeCity()" v-model="user.city" name="city">
+                      <option value="">请选择城市</option>
                       <option v-for="c in cities" :value="c.id">{{c.city}}</option>
+                    </select>
+                  </div>
+                  <div class="four wide field">
+                    <select class="ui fluid dropdown" id="area" v-model="user.area" name="area">
+                      <option value="">请选择地区</option>
+                      <option v-for="a in areas" :value="a.id">{{a.area}}</option>
                     </select>
                   </div>
                 </div>
@@ -220,20 +226,25 @@
           }
         })
       }
+      if(userSession && userSession.city !== 0) {
+        GET({
+          url: '/api/city/area/' + userSession.city,
+          callback: res => {
+            if(res.code === 200){
+              that.areas = res.data.areas
+            }
+          }
+        })
+      }
 
       return {
         tabs,
         targetTab: targetTab,
         activeId,
-        // username: userSession.username,
-        // male: userSession.male,
-        // birthday: userSession.birthday,
-        // province: userSession.province,
-        // city: userSession.city,
-        // signature: userSession.signature,
         user: userSession,
         provinces: [],
         cities: [],
+        areas: [],
         timeSetting,
         uploadAvatar: false
       }
@@ -256,8 +267,11 @@
     },
     methods: {
       changeProvince: function () {
-        console.log("change province: ", this.user.province)
+        // console.log("change province: ", this.user.province)
         this.queryCity(this.user.province)
+      },
+      changeCity: function(){
+        this.queryArea(this.user.city)
       },
       queryCity: function (provinceId) {
         const that = this
@@ -268,18 +282,26 @@
             if(res.code === 200){
               that.cities = res.data.cities
               that.user.city = that.cities[0].id
+              that.queryArea(that.user.city)
             }
           }
         })
       },
-      // showUploadAvatarBtn: function () {
-      //   $('.upload-btn-wrap').removeClass('hidden').addClass('active')
-      // },
-      // hideUploadAvatarBtn: function () {
-      //   $('.upload-btn-wrap').removeClass('active').removeClass('visible').addClass('hidden')
-      // },
+      queryArea: function (cityId) {
+        const that = this
+        that.areas = []
+        GET({
+          url: '/api/city/area/' + cityId,
+          callback: res => {
+            if(res.code === 200){
+              that.areas = res.data.areas
+              that.user.area = that.areas[0].id
+            }
+          }
+        })
+      },
       submitBaseInfo: function () {
-        console.log('submitBaseInfo')
+        // console.log('submitBaseInfo')
         // this.user.birthday = $('input[name=birthday]').val()
         const that = this
         const formdata = new FormData()
@@ -287,6 +309,7 @@
         formdata.append('birthday', this.user.birthday ? this.user.birthday : '')
         formdata.append('province', this.user.province)
         formdata.append('city', this.user.city)
+        formdata.append('area', this.user.area)
         formdata.append('signature', this.user.signature)
 
         POST({

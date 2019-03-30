@@ -31,6 +31,9 @@
           <div class="item" :class="path === 'mobile' ? 'active' : ''">
             <router-link :to="{name: 'AdminMobile'}">手机号码绑定</router-link>
           </div>
+          <div class="item" :class="path === 'login-log' ? 'active' : ''">
+            <router-link :to="{name: 'AdminMobile'}">登录日志</router-link>
+          </div>
         </div>
         <div class="menu">
           <h5>博客管理</h5>

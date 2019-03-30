@@ -21,7 +21,7 @@
         <div class="text-left">
           <ol class="breadcrumb breadcrumb-path">
             <li><router-link target="_blank" :to="{name: 'PersonDefault'}">{{blog.user.username}}的个人空间</router-link></li>
-            <li><router-link target="_blank" :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: 1}}">工作日志</router-link></li>
+            <li><router-link target="_blank" :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: blog.userTag.id}}">{{blog.userTag.name}}</router-link></li>
             <li class="active">正文</li>
           </ol>
         </div>

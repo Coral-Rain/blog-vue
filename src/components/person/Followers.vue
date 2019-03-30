@@ -1,7 +1,7 @@
 <template>
   <div>
-    <FollowList :list="followers" title="我的粉丝"
-                :userId="this.$route.params.userId" :tergetUserId="this.user.id ? this.user.id : '0'"
+    <FollowList :list="followers" :title="title"
+                :userId="this.$route.params.userId" :tergetUserId="this.user ? this.user.id : '0'"
                 :pager="pager" @pagechange="pagechange"/>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
   import FollowList from '../tools/FollowList'
   import {POST} from '../../api'
+  import EventBus from '@/EventBus'
   export default {
     name: 'Followers',
     components: {FollowList},
@@ -56,9 +57,25 @@
         this.refreshData()
       }
     },
+    computed: {
+      title() {
+        if(this.user && this.user.id === this.$route.params.userId){
+          return "我的粉丝"
+        } else {
+          return "粉丝"
+        }
+      }
+    },
     mounted: function () {
       const that = this
 
+      EventBus.$on("loginSuccess", function () {
+        let userSession = localStorage.getItem("user")
+        if(userSession) {
+          userSession = JSON.parse(userSession)
+        }
+        that.user = userSession
+      })
       this.refreshData()
     },
     watch: {
