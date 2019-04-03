@@ -96,20 +96,21 @@
         </div>
       </div>
     </div>
-    <LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>
+    <!--<LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>-->
+    <LoginModal :show-login="showLogin" />
     <Avatar v-if="isLogin" :src="avatar(user.avatar)" :is-show="uploadAvatar" />
   </div>
 </template>
 
 <script>
-  import LoginWindow from '@/components/LoginWindow'
   import Avatar from '@/components/Avatar'
   import EventBus from '@/EventBus'
   import {GET} from './api'
+  import LoginModal from '@/components/tools/LoginModal'
 
   export default {
   name: 'App',
-  components: {LoginWindow,Avatar},
+  components: {LoginModal,Avatar},
   data() {
     let isLogin = false
     let userSession = localStorage.getItem("user")
@@ -129,13 +130,14 @@
   },
   methods: {
     toLogin: function () {
-      this.showLoginWindow = true
-      this.showLogin = true
+      // this.showLoginWindow = true
+      EventBus.$emit("showLoginModal", true)
     },
     toRegiste: function () {
       // layerError("dadasdas")
-      this.showLoginWindow = true
-      this.showLogin = false
+      // this.showLoginWindow = true
+      // this.showLogin = false
+      EventBus.$emit("showLoginModal", false)
     },
     logout: function () {
       this.isLogin = false
@@ -172,19 +174,19 @@
     //   }
     // })
     EventBus.$on("loginSuccess", function (user) {
-      that.showLoginWindow = false
+      // that.showLoginWindow = false
       that.isLogin = true
       that.user = user
     })
-    EventBus.$on("goRegiste", function () {
-      that.toRegiste()
-    })
-    EventBus.$on("goLogin", function () {
-      that.toLogin()
-    })
-    EventBus.$on("hideLoginWindow", function () {
-      that.showLoginWindow = false
-    })
+    // EventBus.$on("goRegiste", function () {
+    //   that.toRegiste()
+    // })
+    // EventBus.$on("goLogin", function () {
+    //   that.toLogin()
+    // })
+    // EventBus.$on("hideLoginWindow", function () {
+    //   that.showLoginWindow = false
+    // })
     EventBus.$on("closeAvatar", function () {
       that.uploadAvatar = false
       $('body').css('overflow-y', 'auto')
@@ -206,7 +208,7 @@
 </script>
 
 <style>
-  @import "../static/main.css";
+  @import "../static/css/main.css";
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

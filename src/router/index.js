@@ -282,7 +282,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  $('.ui.modals').empty()
+  $('.modal').remove(':not(.tools)')
   if(to.meta.title){
     document.title = to.meta.title
   }
@@ -297,6 +297,9 @@ router.beforeEach((to, from, next) => {
   else{
     next()
   }
+})
+router.afterEach((to, from) => {
+  $('html,body').animate({scrollTop: '0px'}, 200)
 })
 
 export default router
