@@ -1,35 +1,35 @@
 <template>
     <div v-if="isShow" class="update-div">
-        <div class="form">
-            <div class="cropper-content">
-                <div class="cropper">
-                    <vueCropper
-                        ref="cropper"
-                        :img="option.img"
-                        :outputSize="option.size"
-                        :outputType="option.outputType"
-                        :info="true"
-                        :full="option.full"
-                        :canMove="option.canMove"
-                        :canMoveBox="option.canMoveBox"
-                        :original="option.original"
-                        :autoCrop="option.autoCrop"
-                        :autoCropWidth="option.autoCropWidth"
-                        :autoCropHeight="option.autoCropHeight"
-                        :fixedBox="option.fixedBox"
-                        @realTime="realTime"
-                        @imgLoad="imgLoad"
-                    ></vueCropper>
-                </div>
-                <div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
-                    <div :style="previews.div" class="preview">
-                        <img :src="previews.url" :style="previews.img">
-                    </div>
-                </div>
+      <div class="form">
+        <div class="cropper-content">
+          <div class="cropper">
+            <vueCropper
+              ref="cropper"
+              :img="option.img"
+              :outputSize="option.size"
+              :outputType="option.outputType"
+              :info="true"
+              :full="option.full"
+              :canMove="option.canMove"
+              :canMoveBox="option.canMoveBox"
+              :original="option.original"
+              :autoCrop="option.autoCrop"
+              :autoCropWidth="option.autoCropWidth"
+              :autoCropHeight="option.autoCropHeight"
+              :fixedBox="option.fixedBox"
+              @realTime="realTime"
+              @imgLoad="imgLoad"
+            ></vueCropper>
+          </div>
+          <div class="show-preview" :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+            <div :style="previews.div" class="preview">
+              <img :src="previews.url" :style="previews.img">
             </div>
+          </div>
+        </div>
 
-            <div class="footer-btn">
-        <div class="scope-btn">
+        <div class="footer-btn">
+          <div class="scope-btn">
             <label class="btn btn-success" for="uploads">更换图片</label>
             <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);"
                    accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadImg($event, 1)">
@@ -38,17 +38,17 @@
             <button class="btn btn-warning" @click="changeScale(-1)">-</button>
             <button class="btn btn-warning" @click="rotateLeft">↺</button>
             <button class="btn btn-warning" @click="rotateRight">↻</button>
-        </div>
-        <div class="upload-btn">
+          </div>
+          <div class="upload-btn">
             <button  @click="uploadToServer" class="btn btn-primary">
-                &nbsp;&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
             <button  @click="cancle" class="btn btn-default">
-                &nbsp;&nbsp;&nbsp;&nbsp;取消&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;取消&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
+          </div>
         </div>
-    </div>
-        </div>
+      </div>
     </div>
 </template>
 
@@ -89,6 +89,9 @@
                 downImg: '#',
             };
         },
+      mounted: function(){
+
+      },
         methods: {
             changeScale: function(num) {
                 num = num || 1
@@ -211,6 +214,14 @@
 </script>
 
 <style scoped>
+  @media only screen and (max-width: 768px){
+    .update-div .form{
+      width: 95%!important;
+    }
+    .cropper-content .cropper{
+
+    }
+  }
     .cropper-content{
         display: flex;
         display: -webkit-flex;
@@ -276,11 +287,9 @@
         background-color: white;
         width: 680px;
         height: 420px;
-        position: relative;
         border-radius: 4px;
-        top: 20%;
-        left: 30%;
-        /*margin:-165px 0 0 -260px;*/
+        margin: 15% auto auto;
+      /*margin:-165px 0 0 -260px;*/
         padding-left: 20px;
         padding-top: 30px;
     }

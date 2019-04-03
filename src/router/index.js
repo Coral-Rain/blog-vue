@@ -21,6 +21,7 @@ import OpenId from '../components/admin/OpenId'
 import Mobile from '../components/admin/Mobile'
 import Drafts from '../components/admin/Drafts'
 import Favorites from '../components/admin/Favorites'
+import LoginLog from '../components/admin/LoginLog'
 import BlogCatalogs from '../components/admin/BlogCatalogs'
 import BlogComments from '../components/admin/BlogComments'
 
@@ -236,6 +237,12 @@ const router = new Router({
           path: 'favorites',
           name: 'Favorites',
           component: Favorites,
+          children: [{path: '*', redirect: ''}]
+        },
+        {
+          path: 'login-log',
+          name: 'LoginLog',
+          component: LoginLog,
           children: [{path: '*', redirect: ''}]
         }
       ]

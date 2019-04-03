@@ -3,7 +3,7 @@
       <div class="form">
         <textarea id="reply" v-model.trim="content" :placeholder="placeholder"></textarea>
         <div class="control">
-          <div class="tools">
+          <div class="tools hidden-xs">
             <div class="tool"><i class="fa fa-smile-o"></i> 插入表情</div>
             <div class="tool"># 插入软件</div>
           </div>

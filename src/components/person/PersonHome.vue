@@ -60,7 +60,7 @@
         </div>
         <div>
           <h4 class="pull-left">技能雷达</h4>
-          <div id="echarts" style="width: 340px;height: 200px"></div>
+          <div id="echarts" style="width: 340px;height: 250px"></div>
         </div>
         <div class="user-record text-left">
           <h4>访问统计</h4>
@@ -112,7 +112,7 @@
           <li role="presentation" id="tab-popular" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Popular', params: {userId: user.id}}">热门博文</router-link></li>
           <li role="presentation" id="tab-activity" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Activity', params: {userId: user.id}}">动态</router-link></li>
           <li role="presentation" id="tab-tweet" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Tweet', params: {userId: user.id}}">动弹</router-link></li>
-          <li class="pull-right search-group">
+          <li class="pull-right search-group hidden-xs hidden-sm">
             <div class="input-group">
               <input type="text" class="form-control"  :placeholder="'搜索' + user.username + '的博客'">
             </div>
@@ -423,13 +423,19 @@
     .container {
       width: 100%;
     }
+    .container>.left {
+      width: 100%!important;
+    }
+    .container>.right {
+       width: 100%!important;
+    }
   }
   @media only screen and (min-width: 1300px) {
     .container {
       width: 1300px;
     }
   }
-  @media only screen and (min-width: 768px) and (max-width: 992px) {
+  @media only screen and (min-width: 769px) and (max-width: 992px) {
     .container {
       width: 768px;
     }
@@ -528,7 +534,7 @@
   }
 
   .user-record {
-    margin-top: 70px;
+    margin-top: 50px;
     margin-bottom: 10px;
   }
 
@@ -632,8 +638,8 @@
 
   .breadcrumb-path {
     background-color: transparent;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
     margin-bottom: 5px;
   }
   .breadcrumb-path li {

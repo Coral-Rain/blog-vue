@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container write-blog">
       <div class="text-left">
         <ol v-if="blogId" class="breadcrumb breadcrumb-path">
           <li><router-link :to="{name: 'PersonDefault'}">{{user.username}}的个人空间</router-link></li>
@@ -424,6 +424,14 @@
     .container {
       width: 100%;
     }
+    .items-inline {
+      display: block!important;
+    }
+    .form-title .col-xs-8,.form-title .col-xs-4{
+      width: 100%!important;
+      padding-left: 0!important;
+    }
+
   }
   @media only screen and (min-width: 1300px) {
     .container {
@@ -532,7 +540,7 @@
   form .form-items {
     margin-top: 20px;
     text-align: left;
-    height: 34px;
+    min-height: 34px;
     line-height: 34px;
     align-items: center;
   }
@@ -641,5 +649,8 @@
   .modal-body label+input {
     padding-left: 10px;
     padding-right: 10px;
+  }
+  .form-title >div{
+    margin-bottom: 10px;
   }
 </style>

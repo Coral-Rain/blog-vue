@@ -1,15 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import 'jquery'
-import layer from '../static/lib/layer/layer'
-import Global from './tools/Global.vue'
-import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import marked from 'marked'
 import semantic from 'semantic'
@@ -17,6 +13,10 @@ import '../semantic/dist/semantic.min.css'
 // import '../semantic/dist/semantic.min.js'
 import '../node_modules/semantic-ui-calendar/dist/calendar'
 import '../node_modules/semantic-ui-calendar/dist/calendar.min.css'
+import layer from '../static/lib/layer/layer'
+import Global from './tools/Global.vue'
+import mavonEditor from 'mavon-editor'
+import App from './App'
 
 Vue.prototype.GLOBAL = Global
 Vue.prototype.avatar = function(src){

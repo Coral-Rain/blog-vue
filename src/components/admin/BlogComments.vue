@@ -96,12 +96,13 @@
             that.comments = res.data.comments
             that.pager = res.data.pager
             $('.ui.attached.tab').removeClass("loading").addClass("display-block")
+            $('html,body').animate({scrollTop: '0px'}, 200)
           }
         })
       },
       pagechange: function(currentPage){
         this.pager.pageNo = currentPage
-        this.getLogs(currentPage)
+        this.getLogs()
       },
       showDeleteModal: function (comment) {
         this.deletedComment = comment

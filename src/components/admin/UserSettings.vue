@@ -6,18 +6,22 @@
         <div class="field">
           <label>我的网址</label>
           <div class="two fields">
-            <div class="seven wide field ui labeled input" style="padding-right: 0">
-              <div class="ui label" style="font-weight: 400">http://www.coralcloud.cn/</div>
-              <input type="text" placeholder="请输入个性网址">
+            <div class="seven wide field">
+              <div class=" ui labeled input">
+                <div class="ui label" style="font-weight: 400">http://www.coralcloud.cn/</div>
+                <input type="text" placeholder="请输入个性网址">
+              </div>
             </div>
             <div class="field">
               <span class="tip">设置后不能修改，请妥善填写。</span>
             </div>
           </div>
         </div>
-        <div class="seven wide field">
-          <label>网页标题</label>
-          <input v-model="user.username + '的个人空间'" type="text" placeholder="请输入网页标题">
+        <div class="fields">
+          <div class="seven wide field">
+            <label>网页标题</label>
+            <input v-model="user.username + '的个人空间'" type="text" placeholder="请输入网页标题">
+          </div>
         </div>
         <div class="submit ui large button teal">
           保存修改

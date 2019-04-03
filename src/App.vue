@@ -187,19 +187,26 @@
     })
     EventBus.$on("closeAvatar", function () {
       that.uploadAvatar = false
+      $('body').css('overflow-y', 'auto')
     })
     EventBus.$on("changeAvatar", function () {
       that.uploadAvatar = false
       that.user = JSON.parse(localStorage.getItem("user"))
+      $('body').css('overflow-y', 'auto')
     })
     EventBus.$on("showAvatar", function () {
-      that.uploadAvatar = true
+      $('html,body').animate({scrollTop: '0px'}, 200)
+      setTimeout(function () {
+        that.uploadAvatar = true
+        $('body').css('overflow-y', 'hidden')
+      }, 200)
     })
   }
 }
 </script>
 
 <style>
+  @import "../static/main.css";
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

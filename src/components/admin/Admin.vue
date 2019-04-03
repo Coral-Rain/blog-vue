@@ -1,6 +1,7 @@
 <template>
+  <div>
     <div class="container">
-      <div class="content left">
+      <div class="content left hidden-xs">
         <h3>个人空间管理</h3>
         <div class="menu">
           <h5>个人信息管理</h5>
@@ -32,7 +33,7 @@
             <router-link :to="{name: 'AdminMobile'}">手机号码绑定</router-link>
           </div>
           <div class="item" :class="path === 'login-log' ? 'active' : ''">
-            <router-link :to="{name: 'AdminMobile'}">登录日志</router-link>
+            <router-link :to="{name: 'LoginLog'}">登录日志</router-link>
           </div>
         </div>
         <div class="menu">
@@ -79,7 +80,7 @@
         </div>
       </div>
       <div class="content right">
-        <div class="text-left">
+        <div class="text-left hidden-xs">
           <ol class="breadcrumb breadcrumb-path">
             <li>
               <router-link :to="{name: 'PersonDefault'}">
@@ -94,9 +95,19 @@
             <li class="active">{{pageName}}</li>
           </ol>
         </div>
+        <div class="text-left visible-xs">
+          <ol class="breadcrumb breadcrumb-path">
+            <li>
+              <router-link :to="{name: 'AdminDefault'}">
+                <i class="icon left angle"></i>返回空间管理
+              </router-link>
+            </li>
+          </ol>
+        </div>
         <router-view />
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -124,9 +135,9 @@
       return {
         path,
         pages: {
-          inbox: '我的消息',
-          profile: '修改个人资料',
-          chpwd: '修改登录密码',
+          'inbox': '我的消息',
+          'profile': '修改个人资料',
+          'chpwd': '修改登录密码',
           'change-email': '修改登录邮箱',
           'user-settings': '个人主页设置',
           'privacy': '个人隐私设置',
@@ -142,7 +153,8 @@
           'translation-delivered': '我投递的',
           'releases': '我投递的新闻',
           'projects': '投递软件管理',
-          'favorites': '我的收藏夹'
+          'favorites': '我的收藏夹',
+          'login-log': '登录日志'
         },
         user: userSession
       }
@@ -165,6 +177,9 @@
   @media only screen and (max-width: 768px) {
     .container {
       width: 100%;
+    }
+    .container>.right {
+      width: 100% !important;
     }
   }
   @media only screen and (min-width: 1300px) {

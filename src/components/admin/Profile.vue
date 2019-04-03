@@ -5,13 +5,28 @@
         <form class="ui form baseinfo">
           <div class="ui grid stackable">
             <div class="text-left twelve wide column">
+              <div class="field visible-xs text-center">
+                <label>头像</label>
+                <div class="avatar-wrap" >
+                  <div class="ui small circular image bordered dimmable">
+                    <div class="ui dimmer upload-btn-wrap transition hidden">
+                      <div class="content" @click="showUploadAvatar()">
+                        <div class="ui small primary button upload-avatar-btn">上传头像</div>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <img class="" :src="avatar(user.avatar)" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="field">
                 <label>昵称</label>
                 <div class="two fields">
-                  <div class="eight wide field">
+                  <div class="eight wide field mb-tip">
                     <input type="text" name="username" placeholder="输入昵称" maxlength="20" v-model="user.username">
                   </div>
-                  <div class="field">
+                  <div class="field mb-tip">
                     <span class="tip">2~20个字符</span>
                   </div>
                 </div>
@@ -48,19 +63,19 @@
               <div class="field">
                 <label>居住地区</label>
                 <div class="fields">
-                  <div class="four wide field">
+                  <div class="five wide field">
                     <select class="ui fluid dropdown" v-model="user.province" @change="changeProvince()" name="province">
                       <option value="">请选择省份</option>
                       <option v-for="p in provinces" :value="p.id">{{p.province}}</option>
                     </select>
                   </div>
-                  <div class="four wide field">
+                  <div class="five wide field">
                     <select class="ui fluid dropdown" id="city" @change="changeCity()" v-model="user.city" name="city">
                       <option value="">请选择城市</option>
                       <option v-for="c in cities" :value="c.id">{{c.city}}</option>
                     </select>
                   </div>
-                  <div class="four wide field">
+                  <div class="five wide field">
                     <select class="ui fluid dropdown" id="area" v-model="user.area" name="area">
                       <option value="">请选择地区</option>
                       <option v-for="a in areas" :value="a.id">{{a.area}}</option>
@@ -84,7 +99,7 @@
               </div>
             </div>
             <div class="four wide column">
-              <div class="field">
+              <div class="field hidden-xs">
                 <label>头像</label>
                 <div class="avatar-wrap" >
                   <div class="ui small circular image bordered dimmable">
@@ -467,7 +482,6 @@
     }
   }
 </script>
-
 <style scoped>
   .tip{
     font-weight: 400;

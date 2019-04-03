@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="left">
+  <div class="container blog-detail">
+    <div class="left hidden-xs hidden-sm">
       <div class="action">
         <div class="list-group">
           <a href="#" class="list-group-item" title="打赏">打赏<i class="fa fa-jpy"></i></a>
@@ -48,18 +48,18 @@
             <div v-html="compiledMD"></div>
             <div style="width: 100%; text-align: center">© 著作权归作者所有</div>
           </div>
-          <div class="segment">
-            <div class="btn-group">
-              <button class="btn btn-success"><i class="fa fa-jpy"></i> 打赏</button>
-              <button @click="likeBlog()" class="btn btn-default" :class="isLike ? 'like-active' : ''">
+          <div class="ui center aligned segment">
+            <div class="ui huge buttons">
+              <a class="ui green button"><i class="fa fa-jpy"></i> 打赏</a>
+              <a @click="likeBlog()" class="ui button" :class="isLike ? 'like-active' : ''">
                 <i class="fa" :class="isLike ? 'fa-thumbs-up' : 'fa-thumbs-o-up'"></i>
                  点赞 ({{blog.likes.length}})
-              </button>
-              <button @click="collectBlog()" class="btn btn-default" :class="isCollect ? 'favo-active' : ''">
+              </a>
+              <a @click="collectBlog()" class="ui button" :class="isCollect ? 'favo-active' : ''">
                 <i class="fa" :class="isCollect ? ' fa-star' : ' fa-star-o'"></i>
                  收藏 ({{blog.favorites.length}})
-              </button>
-              <button class="btn btn-default"><i class="fa fa-share"></i> 分享</button>
+              </a>
+              <a class="ui button"><i class="fa fa-share"></i> 分享</a>
             </div>
             <div class="jubao"><i class="fa fa-flag"></i> 举报</div>
           </div>
@@ -114,7 +114,7 @@
       <!--</div>-->
       </div>
     </div>
-    <div class="right"></div>
+    <div class="right hidden-xs hidden-sm"></div>
   </div>
 </template>
 
@@ -301,6 +301,10 @@
     .container {
       width: 768px;
     }
+    .container>.content {
+      width: 100%!important;
+      margin-left: 0!important;
+    }
   }
   @media only screen and (min-width: 993px) and (max-width: 1300px) {
     .container {
@@ -310,6 +314,12 @@
   @media only screen and (max-width: 768px) {
     .container {
       width: 100%;
+    }
+    .container>.content {
+      width: 100%!important;
+      margin-left: 0!important;
+      padding-left: 10px!important;
+      padding-right: 10px!important;
     }
   }
   @media only screen and (min-width: 1300px) {
@@ -349,7 +359,7 @@
   }
   .container .content {
     background-color: #fff;
-    width: 75%!important;
+    width: 75%;
     padding: 20px 50px;
     margin-left: 12.5%;
     min-height: 1000px;
@@ -410,10 +420,13 @@
 
   #blog-data {
     text-align: left;
+    margin-top: 20px;
   }
 
   .segment {
     margin-top: 20px;
+    border: none!important;
+    box-shadow: none !important;
   }
   .segment .btn {
     font-size: 20px;
@@ -536,5 +549,8 @@
   }
   .favo-active i {
     color: #fbbd08!important;
+  }
+  .ui.buttons>.ui.button {
+    font-weight: 400;
   }
 </style>

@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class="follow-wrap">
     <div class="ui grid">
-      <div class="row">
         <div class="ten wide computer ten wide tablet sixteen wide mobile column">
           <h2 class="ui header">{{title}}（{{list.length}}）</h2>
         </div>
@@ -16,10 +15,10 @@
             </div>
           </div>
         </div>
-      </div>
+
     </div>
     <div class="ui hidden divider"></div>
-    <div class="ui relaxed divided items attached tab" style="margin-left: -15px;margin-right: 15px">
+    <div class="ui relaxed divided items attached tab">
         <div class="item" v-for="l in list">
           <router-link :to="{name: 'PersonDefault', params: {userId: l.follower}}" class="ui avatar image" target="_blank" style="width: 35px">
             <img :src=avatar(l.avatar) :alt="l.username" :title="l.username">
