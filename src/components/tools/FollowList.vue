@@ -234,7 +234,7 @@
   }
 
   .display-block{
-    display: block;
+    display: block!important;
   }
   .hover-followed {
     padding-left: 10px;

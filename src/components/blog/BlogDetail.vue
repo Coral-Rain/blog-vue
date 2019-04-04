@@ -4,7 +4,7 @@
       <div class="action">
         <div class="list-group">
           <a href="#" class="list-group-item" title="打赏">打赏<i class="fa fa-jpy"></i></a>
-          <a href="#comments" class="list-group-item" title="评论">评论<i class="fa fa-comment-o"></i></a>
+          <a href="#comments" @click.prevent="scrollToComment()" class="list-group-item" title="评论">评论<i class="fa fa-comment-o"></i></a>
           <a href="#" @click.prevent="collectBlog" class="list-group-item" :class="isCollect ? 'favo-active' : ''" title="收藏">
             收藏<i class="fa" :class="isCollect ? 'fa-star' : 'fa-star-o'"></i></a>
           <a href="#" @click.prevent="likeBlog" class="list-group-item" :class="isLike ? 'like-active' : ''" title="点赞">
@@ -13,6 +13,7 @@
           <a href="#" class="list-group-item" title="分享到微博">微博<i class="fa fa-weibo"></i></a>
           <a href="#" class="list-group-item" title="分享到QQ">QQ<i class="fa fa-wechat"></i></a>
           <a href="#" class="list-group-item" title="分享到微信">微信<i class="fa fa-qq"></i></a>
+          <a href="#" class="list-group-item" @click.prevent="goTop()" title="返回顶部">顶部<i class="fa fa-arrow-up"></i></a>
         </div>
       </div>
     </div>
@@ -39,7 +40,7 @@
             <div @click="collectBlog" class="item action">收藏 {{blog.favorites.length}}</div>
             <div @click="likeBlog" class="item action">点赞 {{blog.likes.length}}</div>
             <div class="item action">
-              <a href="#comments" class="comment">
+              <a href="#comments" @click.prevent="scrollToComment()" class="comment">
                 <i class="fa fa-comment-o"></i> 评论 {{blog.comments.length}}
               </a>
             </div>
@@ -113,6 +114,9 @@
         <!--<TabPage :data="{}" :tabs="[{id: 1,name: '标签1'},{id: 2,name: '标签2'}]" />-->
       <!--</div>-->
       </div>
+      <div v-show="scrollTop" class="to-top hidden-md hidden-lg" @click="goTop()">
+        <i class="arrow alternate circle up icon large"></i>顶部
+      </div>
     </div>
     <div class="right hidden-xs hidden-sm"></div>
   </div>
@@ -171,6 +175,9 @@
       },
       compiledMD: function () {
         return marked(this.blog.content, {sanitize: true})
+      },
+      scrollTop: function () {
+        return true
       }
     },
     methods: {
@@ -248,6 +255,17 @@
             }
           }
         })
+      },
+      scrollToComment: function () {
+        // $('#comments')
+        $('html,body').animate({
+          scrollTop: $('#comments').offset().top-50
+        },300)
+      },
+      goTop: function () {
+        $('html,body').animate({
+          scrollTop: '0'
+        },300)
       }
     },
     created: function(){
@@ -552,5 +570,19 @@
   }
   .ui.buttons>.ui.button {
     font-weight: 400;
+  }
+  .to-top{
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 40px;
+    height: 60px;
+    background-color: #f0f0f0;
+    opacity: .8;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .to-top>.icon{
+    margin: 5px;
   }
 </style>

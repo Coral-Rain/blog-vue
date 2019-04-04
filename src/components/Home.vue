@@ -27,7 +27,9 @@
           <a class=" blog-tab item active" id="newest" @click="showBlogs($event, 1)">最新发表</a>
           <a class=" blog-tab item" @click="showBlogs($event, 2)">每日一博</a>
           <div v-if="user" class="right menu small">
-            <router-link :to="{name: 'WriteBlog', params: {userId: '10000001'}}" class="item" target="_blank"><i class="edit icon"></i>写博客</router-link>
+            <router-link :to="{name: 'WriteBlog', params: {userId: '10000001'}}" class="item" target="_blank">
+              <i class="edit icon"></i>写博客
+            </router-link>
           </div>
         </div>
       </div>
@@ -37,7 +39,7 @@
     </div>
     <div class="content col-md-3 col-sm-4 hidden-xs"> <!--Right-->
       <div>
-        <img width="100%" src="../../static/www_blog_sidebar_bottom_ISxBA.jpg" />
+        <img width="100%" src="/static/www_blog_sidebar_bottom_ISxBA.jpg" />
       </div>
       <div>
 
@@ -116,6 +118,10 @@
       EventBus.$on("changeTagName", function (name) {
         that.tagName = name
         // console.log(that.tagName)
+      })
+      EventBus.$on("loginSuccess", function (user) {
+        // that.showLoginWindow = false
+        that.user = user
       })
 
       const formdata = new FormData()

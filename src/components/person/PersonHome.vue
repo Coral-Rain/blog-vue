@@ -113,8 +113,9 @@
           <li role="presentation" id="tab-activity" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Activity', params: {userId: user.id}}">动态</router-link></li>
           <li role="presentation" id="tab-tweet" class="dropdown-tab" @click="changeTab($event)"><router-link :to="{name: 'Tweet', params: {userId: user.id}}">动弹</router-link></li>
           <li class="pull-right search-group hidden-xs hidden-sm">
-            <div class="input-group">
-              <input type="text" class="form-control"  :placeholder="'搜索' + user.username + '的博客'">
+            <div class="ui icon small input">
+              <input type="text" class="form-control" @keypress.enter="searchBlog()" v-model.trim="keyword"  :placeholder="'搜索' + user.username + '的博客'">
+              <i class="icon search link" @click="searchBlog()"></i>
             </div>
           </li>
         </ul>
@@ -216,7 +217,8 @@
         hoverFollow: false,
         tabs: ['newest','popular','activity','tweet'],
         count,
-        send: {id: '0', message: '', username: ''}
+        send: {id: '0', message: '', username: ''},
+        keyword: this.$route.query.q
       }
     },
     methods: {
@@ -296,6 +298,20 @@
         } else {
           layerError("请登录后操作")
         }
+      },
+      searchBlog: function () {
+        console.log("search...")
+        this.$router.push({
+          name: 'Newest',
+          params: {
+            userId: this.$route.params.userId
+          },
+          query: {
+            q: this.keyword
+          }
+        })
+        $('.dropdown-tab').removeClass('active')
+        $('#tab-newest').addClass('active')
       }
 
     },
@@ -390,6 +406,7 @@
     },
     watch: {
       $route(){
+        this.keyword = this.$route.query.q
         const path = location.pathname.split('/')
         if(path.length > 3){
           const tagName = path[3]
