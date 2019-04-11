@@ -1,0 +1,45 @@
+@media only screen and (max-width: 768px) {
+  #app .ui.form .four.wide.field,#app .ui.form .six.wide.field,
+  #app .ui.form .ten.wide.field,#app .ui.form .seven.wide.field,
+  #app .ui.form .five.wide.field{
+    width: 100%!important;
+  }
+  .ui.form .fields>.field{
+    padding-bottom: .5em;
+  }
+  .container {
+    padding-left: 0!important;
+    padding-right: 0!important;
+  }
+  .mb-tip {
+    padding-bottom: 0!important;
+    margin-bottom: 0!important;
+  }
+  .ta-left-mobile{
+    text-align: left!important;
+  }
+  #app .user-actions .buttons{
+    width: 100%!important;
+  }
+  #app .user-actions {
+    margin: .5rem 0 0 !important;
+  }
+  .follow-wrap .items .item {
+    display: block;
+  }
+  .follow-wrap .items>.item .avatar {
+    float: left;
+    margin: 4px auto;
+  }
+  .follow-wrap .items>.item>.content {
+    float: left;
+    padding: 0 0 .5em 1em!important;
+  }
+  #app .blog-detail.container .buttons .button{
+    font-size: .85714286rem
+  }
+  .write-blog.container{
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+  }
+}
