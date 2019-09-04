@@ -8,7 +8,7 @@
           <p>{{user.username}}</p>
           <div class="signature" v-if="user.signature">{{user.signature}}</div>
           <router-link v-if="isTarget" class="btn btn-default" :to="{name: 'AdminDefault'}">
-            <i class="glyphicon glyphicon-cog"></i> 账号设置
+            <i class="fa fa-cog"></i> 账号设置
           </router-link>
           <div class="user-statistics">
             <a href="#" class="statistics">
@@ -31,26 +31,26 @@
           <div class="user-action">
             <div v-if="isTarget">
               <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}" style="width: 110px" class="btn btn-success">
-                <i class="glyphicon glyphicon-edit"></i>&nbsp;&nbsp;写博客
+                <i class="fa fa-pencil-square fa-lg"></i>&nbsp;&nbsp;写博客
               </router-link>
               <router-link :to="{name: 'Drafts', params: {userId: user.id}}" class="btn btn-default">
-                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;草稿箱 ({{count.draftCount}})
+                <i class="fa fa-folder-open-o fa-lg"></i>&nbsp;&nbsp;草稿箱 ({{count.draftCount}})
               </router-link>
             </div>
             <div v-else>
               <div class="item action clearfix">
                 <a class="ui green button follow-btn" @mouseover="hoverFollow = true" @mouseleave="hoverFollow = false">
-                  <i class="heart icon" :class="hoverFollow ? '' : 'outline'"></i>
+                  <i class="fa" :class="hoverFollow ? 'fa-heart' : 'fa-heart-o'"></i>
                   <span class="text">关注</span>
                 </a>
-                <a class="ui green basic button" @click="showSendModal()"><i class="envelope outline icon"></i>私信</a>
+                <a class="ui green basic button" @click="showSendModal()"><i class="fa fa-envelope-o"></i>私信</a>
                 <div class="ui basic dropdown more dropdown-more" tabindex="0">
-                  <div class="ui icon green basic button menu-btn"><i class="bars icon"></i></div>
+                  <div class="ui icon green basic button menu-btn"><i class="fa fa-bars"></i></div>
                   <div class="menu transition hidden" tabindex="-1">
-                    <a class="item" href="#" target="_blank"><i class="comment outline icon"></i>提问</a>
-                    <a class="item" ><i class="ban icon"></i><span class="text">加灰</span></a>
+                    <a class="item" href="#" target="_blank"><i class="fa fa-comment-o"></i>提问</a>
+                    <a class="item" ><i class="fa fa-ban"></i><span class="text">加灰</span></a>
                     <a class="item ban">
-                      <i class="flag icon"></i>举报
+                      <i class="fa fa-flag"></i>举报
                     </a>
                   </div>
                 </div>
@@ -115,7 +115,7 @@
           <li class="pull-right search-group hidden-xs hidden-sm">
             <div class="ui icon small input">
               <input type="text" class="form-control" @keypress.enter="searchBlog()" v-model.trim="keyword"  :placeholder="'搜索' + user.username + '的博客'">
-              <i class="icon search link" @click="searchBlog()"></i>
+              <i class="fa-search icon link" @click="searchBlog()"></i>
             </div>
           </li>
         </ul>
@@ -668,5 +668,8 @@
     top: 40%;
     margin-left: auto;
     margin-right: auto;
+  }
+  i.fa{
+    margin-right: 5px;
   }
 </style>

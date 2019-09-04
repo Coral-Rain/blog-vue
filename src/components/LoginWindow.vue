@@ -2,7 +2,7 @@
   <div v-show="showLoginWindow" class="tool-window">
     <div v-if="showLogin" class="tool-login">
       <!--<button title="关闭" class="btn btn-default ">-->
-        <i class="close icon pull-right" @click="hideLoginWindow"></i>
+        <i class="fa fa-times fa-lg pull-right" @click="hideLoginWindow"></i>
       <!--</button>-->
       <p>账号密码登录</p>
       <form>

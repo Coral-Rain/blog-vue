@@ -55,7 +55,7 @@
                 <label>出生日期</label>
                 <div class="ui calendar birthday">
                   <div class="ui input left icon">
-                    <i class="calendar alternate outline icon"></i>
+                    <i class="fa-calendar icon alternate"></i>
                     <input type="text" name="birthday" placeholder="请选择出生日期" v-model="user.birthday">
                   </div>
                 </div>

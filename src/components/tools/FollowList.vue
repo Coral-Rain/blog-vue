@@ -39,7 +39,7 @@
                 <span class="text">已关注</span>
               </a>
               <a class="ui button follow-btn" v-else @click="addFollow(l)" @mouseenter="overFollow($event)" @mouseleave="leaveFollow($event)">
-                <i class="heart icon outline"></i>
+                <i class="fa fa-heart"></i>
                 <span class="text">关注</span>
               </a>
             </div>

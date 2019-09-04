@@ -1,6 +1,6 @@
 <template>
   <div class="container blog-detail">
-    <div class="left hidden-xs hidden-sm">
+    <div class="left hidden-xs hidden-sm" style="height: 100%;z-index: 1;">
       <div class="action">
         <div class="list-group">
           <a href="#" class="list-group-item" title="打赏">打赏<i class="fa fa-jpy"></i></a>
@@ -265,7 +265,7 @@
       goTop: function () {
         $('html,body').animate({
           scrollTop: '0'
-        },300)
+        },500)
       }
     },
     created: function(){
@@ -385,8 +385,12 @@
 
   .left .action {
     width: 90px;
-    margin-top: 200px;
     font-size: 15px;
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    height: 364px;
+    margin-top: -182px;
   }
 
   .left .action i {

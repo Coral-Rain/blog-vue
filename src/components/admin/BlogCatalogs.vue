@@ -2,7 +2,7 @@
   <div>
     <div class="pull-right" style="margin-top: -15px">
       <button class="btn btn-success" @click="showAddModal()">
-        <i class="plus icon"></i>
+        <i class="fa fa-plus fa-lg"></i>
         添加分类
       </button>
     </div>
@@ -207,8 +207,8 @@
   .ui.modal{
     position: absolute;
     top: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto!important;
+    margin-right: auto!important;
   }
   .catalog-delete{
     height: 200px;

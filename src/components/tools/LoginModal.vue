@@ -3,7 +3,7 @@
     <div class="ui modal tools" :style="{'width': '400px','height': showLogin ? '400px': '580px','margin': 'auto'}">
       <div class="header">
         {{showLogin ? '账号密码登录' : '注册账号'}}
-        <i class="icon close" @click="hideModal"></i>
+        <i class="fa fa-close fa-lg pull-right" style="cursor: pointer" @click="hideModal"></i>
       </div>
       <div class="content text-center">
         <div v-if="showLogin">
