@@ -25,7 +25,7 @@ import LoginLog from '../components/admin/LoginLog'
 import BlogCatalogs from '../components/admin/BlogCatalogs'
 import BlogComments from '../components/admin/BlogComments'
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   mode: "history",
@@ -279,27 +279,26 @@ const router = new Router({
       }
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
-  $('.modal').remove(':not(.tools)')
-  if(to.meta.title){
+  $('.modal').remove(':not(.not-hide)');
+  if (to.meta.title) {
     document.title = to.meta.title
   }
-  if(!to.matched.some(res => res.meta.skipAuth)){
-    if(localStorage.getItem("user")){
+  if (!to.matched.some(res => res.meta.skipAuth)) {
+    if (localStorage.getItem("user")) {
       next()
-    }else{
+    } else {
       //登录页
       router.replace("/")
     }
-  }
-  else{
+  } else {
     next()
   }
-})
+});
 router.afterEach((to, from) => {
   $('html,body').animate({scrollTop: '0px'}, 200)
-})
+});
 
 export default router

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="content col-md-2 visible-lg visible-md"><!--Left-->
       <!--<div class="ui tab attached">-->
-        <TagList :list="list"></TagList>
+      <TagList :list="list"></TagList>
 
       <!--</div>-->
     </div>
@@ -34,12 +34,12 @@
         </div>
       </div>
       <div class="ui attached tab">
-        <BlogList :blogs="blogs" />
+        <BlogList :blogs="blogs"/>
       </div>
     </div>
     <div class="content col-md-3 col-sm-4 hidden-xs"> <!--Right-->
       <div>
-        <img width="100%" src="/static/www_blog_sidebar_bottom_ISxBA.jpg" />
+        <img width="100%" src="/static/www_blog_sidebar_bottom_ISxBA.jpg"/>
       </div>
       <div>
 
@@ -57,24 +57,25 @@
   import {GET, POST} from '@/api'
   import TabPage from '@/components/TabPage'
   import BlogList from '@/components/BlogList'
+
   export default {
     name: 'Home',
     components: {BlogList, TabPage, RecommendPanel, TagList},
-    data () {
-      let list = []
-      let blogs = []
-      const that = this
+    data() {
+      let list = [];
+      let blogs = [];
+      const that = this;
       GET({
         url: '/api/blog/listItemTagType',
         callback: res => {
-          if(res.code === 200){
+          if (res.code === 200) {
             that.list = res.data.list
           }
         }
-      })
+      });
 
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         userSession = JSON.parse(userSession)
       }
 
@@ -97,7 +98,7 @@
             comments: "2"
           }
         ],
-        tagName : '',
+        tagName: '',
         tabs: [
           {id: 1, name: '最新发表'},
           {id: 2, name: '每日一博'}
@@ -114,30 +115,30 @@
       // if(element !== null){
       //   this.tagName = element.innerText
       // }
-      const that = this
+      const that = this;
       EventBus.$on("changeTagName", function (name) {
         that.tagName = name
         // console.log(that.tagName)
-      })
+      });
       EventBus.$on("loginSuccess", function (user) {
         // that.showLoginWindow = false
         that.user = user
-      })
+      });
 
-      const formdata = new FormData()
-      formdata.append("type", "1")
-      formdata.append("pageNo", "1")
-      if(this.tagId){
+      const formdata = new FormData();
+      formdata.append("type", "1");
+      formdata.append("pageNo", "1");
+      if (this.tagId) {
         formdata.append("itemTag", this.tagId)
       }
 
-      $('.ui.attached.tab').addClass("loading").removeClass("display-block")
+      $('.ui.attached.tab').addClass("loading").removeClass("display-block");
       POST({
         url: '/api/blog/list',
         data: formdata,
         callback: res => {
-          if(res.code === 200) {
-            that.blogs = res.data.blogs
+          if (res.code === 200) {
+            that.blogs = res.data.blogs;
             $('.ui.attached.tab').removeClass("loading").addClass("display-block")
           }
         }
@@ -146,29 +147,29 @@
     methods: {
       showBlogs: function (event, type) {
         // console.log(event)
-        const that = this
-        $('.blog-tab.item').removeClass('active')
-        if(event) {
+        const that = this;
+        $('.blog-tab.item').removeClass('active');
+        if (event) {
           event.srcElement.classList.add("active")
         } else {
           $('#newest').addClass('active')
         }
-        this.blogType = type
-        this.blogs = []
+        this.blogType = type;
+        this.blogs = [];
 
-        $('.ui.attached.tab').addClass("loading").removeClass("display-block")
-        const formdata = new FormData()
-        formdata.append("type", this.blogType)
-        formdata.append("pageNo", "1")
-        if(this.tagId){
+        $('.ui.attached.tab').addClass("loading").removeClass("display-block");
+        const formdata = new FormData();
+        formdata.append("type", this.blogType);
+        formdata.append("pageNo", "1");
+        if (this.tagId) {
           formdata.append("itemTag", this.tagId)
         }
         POST({
           url: '/api/blog/list',
           data: formdata,
           callback: res => {
-            if(res.code === 200) {
-              that.blogs = res.data.blogs
+            if (res.code === 200) {
+              that.blogs = res.data.blogs;
               $('.ui.attached.tab').removeClass("loading").addClass("display-block")
             }
           }
@@ -176,10 +177,10 @@
       }
     },
     watch: {
-      $route(){
+      $route() {
         this.tagId = this.$route.query.item_tag
       },
-      tagId(){
+      tagId() {
         this.showBlogs(null, 1)
       }
     }
@@ -187,31 +188,35 @@
 </script>
 
 <style scoped>
-  h3{
+  h3 {
     margin-top: 5px;
   }
+
   @media only screen and (min-width: 768px) and (max-width: 992px) {
     .container {
       width: 768px;
     }
   }
+
   @media only screen and (min-width: 993px) and (max-width: 1300px) {
     .container {
       width: 992px;
     }
   }
+
   @media only screen and (max-width: 768px) {
     .container {
       width: 100%;
     }
   }
+
   @media only screen and (min-width: 1300px) {
     .container {
       width: 1300px;
     }
   }
 
-  .container{
+  .container {
     padding: 50px 0 0px;
     background-color: #fff;
     height: 100%;
@@ -219,6 +224,7 @@
     margin-left: auto;
     margin-right: auto;
   }
+
   .container .content {
     display: inline-block;
     height: 100%;
@@ -229,23 +235,26 @@
   .content-title {
     text-align: left;
     font-size: 20px;
-    color: rgba(0,0,0,.9);
+    color: rgba(0, 0, 0, .9);
     font-weight: 700;
   }
 
-  .breadcrumb-path{
+  .breadcrumb-path {
     background-color: transparent;
     padding-left: 0;
     margin-bottom: 5px;
     font-size: 16px;
   }
-  .breadcrumb-path li.active{
+
+  .breadcrumb-path li.active {
     font-weight: 700;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
   }
-  a:focus,a:hover{
+
+  a:focus, a:hover {
     text-decoration: none;
   }
+
   .display-block {
     display: block !important;
   }

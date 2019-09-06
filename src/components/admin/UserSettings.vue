@@ -34,9 +34,9 @@
 <script>
   export default {
     name: 'UserSettings',
-    data(){
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+    data() {
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         // console.log(userSession)
         userSession = JSON.parse(userSession)
       }
@@ -48,9 +48,9 @@
 </script>
 
 <style scoped>
-  .tip{
+  .tip {
     font-weight: 400;
-    color: rgba(0,0,0,.5);
+    color: rgba(0, 0, 0, .5);
     font-size: 13px;
     line-height: 38px;
   }

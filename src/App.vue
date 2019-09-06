@@ -5,7 +5,8 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                  data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -17,7 +18,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><router-link to="/">博客</router-link>
+            <li class="active">
+              <router-link to="/">博客</router-link>
             <li><a href="#">翻译</a></li>
             <li><a href="#">问答</a></li>
           </ul>
@@ -32,12 +34,15 @@
               <img :src="avatar(user.avatar)" title="修改头像" @click="" class="navbar-avatar" :alt="user.username">
             </li>
             <li class="dropdown">
-              <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+              <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                 aria-haspopup="true">
                 {{user.username}}
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><router-link :to="{name: 'PersonDefault', params: {userId: user.id}}">个人中心</router-link></li>
+                <li>
+                  <router-link :to="{name: 'PersonDefault', params: {userId: user.id}}">个人中心</router-link>
+                </li>
                 <li class="divider" role="separator"></li>
                 <li>
                   <router-link :to="{name: 'WriteBlog', params: {userId: user.id}}">写博客</router-link>
@@ -97,8 +102,8 @@
       </div>
     </div>
     <!--<LoginWindow :show-login="showLogin" :show-login-window="showLoginWindow"/>-->
-    <LoginModal :show-login="showLogin" />
-    <Avatar v-if="isLogin" :src="avatar(user.avatar)" :is-show="uploadAvatar" />
+    <LoginModal :show-login="showLogin"/>
+    <Avatar v-if="isLogin" :src="avatar(user.avatar)" :is-show="uploadAvatar"/>
   </div>
 </template>
 
@@ -109,116 +114,117 @@
   import LoginModal from '@/components/tools/LoginModal'
 
   export default {
-  name: 'App',
-  components: {LoginModal,Avatar},
-  data() {
-    let isLogin = false
-    let userSession = localStorage.getItem("user")
-    if(userSession){
-      isLogin = true
-      userSession = JSON.parse(userSession)
-    }
-    console.log(userSession)
+    name: 'App',
+    components: {LoginModal, Avatar},
+    data() {
+      let isLogin = false;
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
+        isLogin = true;
+        userSession = JSON.parse(userSession)
+      }
+      console.log(userSession);
 
-    return {
-      showLoginWindow: false,
-      showLogin: true,
-      isLogin: isLogin,
-      user: userSession,
-      uploadAvatar: false
-    }
-  },
-  methods: {
-    toLogin: function () {
-      // this.showLoginWindow = true
-      EventBus.$emit("showLoginModal", true)
+      return {
+        showLoginWindow: false,
+        showLogin: true,
+        isLogin: isLogin,
+        user: userSession,
+        uploadAvatar: false
+      }
     },
-    toRegiste: function () {
-      // layerError("dadasdas")
-      // this.showLoginWindow = true
-      // this.showLogin = false
-      EventBus.$emit("showLoginModal", false)
-    },
-    logout: function () {
-      this.isLogin = false
-      const that = this
-      GET({
-        url: '/api/user/logout',
-        callback: res => {
-          if(res.code === 200){
-            localStorage.clear()
-            // layerMsg("Logout Success!")
-            if(!that.$route.meta.skipAuth){
-              // setTimeout(function () {
+    methods: {
+      toLogin: function () {
+        // this.showLoginWindow = true
+        EventBus.$emit("showLoginModal", true)
+      },
+      toRegiste: function () {
+        // layerError("dadasdas")
+        // this.showLoginWindow = true
+        // this.showLogin = false
+        EventBus.$emit("showLoginModal", false)
+      },
+      logout: function () {
+        this.isLogin = false;
+        const that = this;
+        GET({
+          url: '/api/user/logout',
+          callback: res => {
+            if (res.code === 200) {
+              localStorage.clear();
+              // layerMsg("Logout Success!")
+              if (!that.$route.meta.skipAuth) {
+                // setTimeout(function () {
                 that.$router.replace("/blog")
-              // }, 2000)
+                // }, 2000)
+              } else {
+                location.reload()
+              }
             } else {
-              location.reload()
+              layerMsg("Logout Error: " + res.message + "!")
             }
-          } else {
-            layerMsg("Logout Error: " + res.message + "!")
           }
-        }
+        })
+      }
+    },
+    mounted: function () {
+      const that = this;
+      // var data = new FormData()
+      // data.append("captcha", "0000000")
+      // POST({
+      //   url: '/api/user/sendRegCode',
+      //   data: data,
+      //   callback: res => {
+      //     layerMsg(res.message)
+      //   }
+      // })
+      EventBus.$on("loginSuccess", function (user) {
+        // that.showLoginWindow = false
+        that.isLogin = true;
+        that.user = user
+      });
+      // EventBus.$on("goRegiste", function () {
+      //   that.toRegiste()
+      // })
+      // EventBus.$on("goLogin", function () {
+      //   that.toLogin()
+      // })
+      // EventBus.$on("hideLoginWindow", function () {
+      //   that.showLoginWindow = false
+      // })
+      EventBus.$on("closeAvatar", function () {
+        that.uploadAvatar = false;
+        $('body').css('overflow-y', 'auto')
+      });
+      EventBus.$on("changeAvatar", function () {
+        that.uploadAvatar = false;
+        that.user = JSON.parse(localStorage.getItem("user"));
+        $('body').css('overflow-y', 'auto')
+      });
+      EventBus.$on("showAvatar", function () {
+        $('html,body').animate({scrollTop: '0px'}, 200);
+        setTimeout(function () {
+          that.uploadAvatar = true;
+          $('body').css('overflow-y', 'hidden')
+        }, 200)
       })
     }
-  },
-  mounted: function () {
-    const that = this
-    // var data = new FormData()
-    // data.append("captcha", "0000000")
-    // POST({
-    //   url: '/api/user/sendRegCode',
-    //   data: data,
-    //   callback: res => {
-    //     layerMsg(res.message)
-    //   }
-    // })
-    EventBus.$on("loginSuccess", function (user) {
-      // that.showLoginWindow = false
-      that.isLogin = true
-      that.user = user
-    })
-    // EventBus.$on("goRegiste", function () {
-    //   that.toRegiste()
-    // })
-    // EventBus.$on("goLogin", function () {
-    //   that.toLogin()
-    // })
-    // EventBus.$on("hideLoginWindow", function () {
-    //   that.showLoginWindow = false
-    // })
-    EventBus.$on("closeAvatar", function () {
-      that.uploadAvatar = false
-      $('body').css('overflow-y', 'auto')
-    })
-    EventBus.$on("changeAvatar", function () {
-      that.uploadAvatar = false
-      that.user = JSON.parse(localStorage.getItem("user"))
-      $('body').css('overflow-y', 'auto')
-    })
-    EventBus.$on("showAvatar", function () {
-      $('html,body').animate({scrollTop: '0px'}, 200)
-      setTimeout(function () {
-        that.uploadAvatar = true
-        $('body').css('overflow-y', 'hidden')
-      }, 200)
-    })
   }
-}
 </script>
 
 <style>
   @import "../static/css/main.css";
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /*height: 100%;*/
-  min-height: 100%;
-  background-color: #eeeeee;
-}
+
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    /*height: 100%;*/
+    min-height: 100%;
+    background-color: #eeeeee;
+  }
 
   .navbar-avatar {
     width: 30px;
@@ -228,24 +234,25 @@
   }
 
   .label.ui.prompt.visible {
-    font-weight: normal!important;
+    font-weight: normal !important;
   }
 
   #footer {
     background-color: #fff;
-    border-top: 1px solid rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
     padding-top: 25px;
     padding-bottom: 25px;
   }
 
-.dropdown-menu li a{
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
+  .dropdown-menu li a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 
-  .dropdown-menu li[role=separator]{
+  .dropdown-menu li[role=separator] {
     margin: 3px 0;
   }
+
   .navbar-fixed-top {
     z-index: 999;
   }

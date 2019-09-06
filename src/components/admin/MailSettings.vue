@@ -19,13 +19,12 @@
 
 <script>
   import CheckBox from '@/components/CheckBox'
+
   export default {
     name: 'MailSettings',
     components: {CheckBox},
-    data(){
-      return {
-
-      }
+    data() {
+      return {}
     },
     computed: {
       weeklyReport: function () {

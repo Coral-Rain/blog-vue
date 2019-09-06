@@ -104,7 +104,7 @@
             </li>
           </ol>
         </div>
-        <router-view />
+        <router-view/>
       </div>
     </div>
   </div>
@@ -118,16 +118,16 @@
         return this.pages[this.path]
       }
     },
-    data(){
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+    data() {
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         // console.log(userSession)
         userSession = JSON.parse(userSession)
       }
 
-      let path = ''
-      const paths = location.pathname.split('/')
-      if(paths.length >= 5){
+      let path = '';
+      const paths = location.pathname.split('/');
+      if (paths.length >= 5) {
         path = paths[4]
       } else {
         path = 'profile'
@@ -159,11 +159,11 @@
         user: userSession
       }
     },
-    watch:{
-      $route(){
-        const paths = location.pathname.split('/')
+    watch: {
+      $route() {
+        const paths = location.pathname.split('/');
 
-        if(paths.length === 5){
+        if (paths.length === 5) {
           this.path = paths[4]
         } else {
           this.path = 'profile'
@@ -178,44 +178,52 @@
     .container {
       width: 100%;
     }
-    .container>.right {
+
+    .container > .right {
       width: 100% !important;
     }
   }
+
   @media only screen and (min-width: 1300px) {
     .container {
       width: 1300px;
     }
   }
+
   @media only screen and (min-width: 768px) and (max-width: 992px) {
     .container {
       width: 768px;
     }
+
     .user-info .user-action a {
       display: block;
       margin: 3px 5px;
-      width: auto!important;
+      width: auto !important;
     }
   }
+
   @media only screen and (min-width: 993px) and (max-width: 1300px) {
     .container {
       width: 992px;
     }
   }
-  h3,h5{
+
+  h3, h5 {
     font-weight: 600;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
     margin: 0;
   }
+
   h5 {
     margin-top: 20px;
     font-size: 15px;
     margin-bottom: 20px;
   }
 
-  a{
+  a {
     text-decoration: none;
   }
+
   .container {
     height: 100%;
     background-color: #eee;
@@ -223,6 +231,7 @@
     margin-left: auto;
     margin-right: auto;
   }
+
   .container .content {
     display: inline-block;
     height: 100%;
@@ -233,6 +242,7 @@
     -webkit-box-sizing: inherit;
     -moz-box-sizing: inherit;
   }
+
   .container .left {
     width: 18.75%;
     float: left;
@@ -241,25 +251,31 @@
     padding-right: 20px;
     text-align: left;
   }
+
   .menu {
     cursor: default;
   }
+
   .menu a {
     display: block;
-    color: rgba(0,0,0,.5);
+    color: rgba(0, 0, 0, .5);
     line-height: 1;
   }
-  .menu a:hover{
-    color: rgba(0,0,0,.87);
+
+  .menu a:hover {
+    color: rgba(0, 0, 0, .87);
   }
-  .menu .item.active a{
-    color: #32aa66!important;
+
+  .menu .item.active a {
+    color: #32aa66 !important;
     font-weight: 600;
   }
+
   .menu .item {
     padding-top: 7px;
     padding-bottom: 7px;
   }
+
   .container .right {
     width: 81.25%;
     float: left;
@@ -273,8 +289,9 @@
     margin-bottom: 0;
     padding-left: 0;
   }
+
   .breadcrumb-path li.active {
     font-weight: 700;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
   }
 </style>

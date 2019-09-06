@@ -1,16 +1,14 @@
 <template>
-    <div>
-      热门博文
-    </div>
+  <div>
+    热门博文
+  </div>
 </template>
 
 <script>
   export default {
     name: 'Popular',
     data() {
-      return {
-
-      }
+      return {}
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ui modal tools" :style="{'width': '400px','height': showLogin ? '400px': '580px','margin': 'auto'}">
+    <div class="ui modal tools not-hide" :style="{'width': '400px','height': showLogin ? '400px': '580px','margin': 'auto'}">
       <div class="header">
         {{showLogin ? '账号密码登录' : '注册账号'}}
         <i class="fa fa-close fa-lg pull-right" style="cursor: pointer" @click="hideModal"></i>
@@ -28,16 +28,17 @@
           <div class="ui basic padded segment">
             <form class="ui form">
               <div class="field">
-                <input type="text" id="petname" v-model.trim="username" placeholder="请输入用户名" />
+                <input type="text" id="petname" v-model.trim="username" placeholder="请输入用户名"/>
               </div>
               <div class="field">
-                <input type="text" id="email" v-model.trim="email" placeholder="请输入邮箱" />
+                <input type="text" id="email" v-model.trim="email" placeholder="请输入邮箱"/>
               </div>
               <div class="field">
-                <input type="password" id="passwordReg" autocomplete="new-password" v-model.trim="passwordReg" placeholder="请输入密码" />
+                <input type="password" id="passwordReg" autocomplete="new-password" v-model.trim="passwordReg"
+                       placeholder="请输入密码"/>
               </div>
               <div class="field">
-                <input type="password" id="repeatPassword" v-model.trim="repeat" placeholder="请重复密码" />
+                <input type="password" id="repeatPassword" v-model.trim="repeat" placeholder="请重复密码"/>
               </div>
               <div class="field">
                 <div class="ui right labeled input">
@@ -49,7 +50,7 @@
               </div>
               <div class="field">
                 <div class="ui right labeled input">
-                  <input type="text" id="code" v-model.trim="code" placeholder="请输入邮件验证码" />
+                  <input type="text" id="code" v-model.trim="code" placeholder="请输入邮件验证码"/>
                   <div class="ui basic label btn-code">
                     <div @click="sendRegCode" class="ui button">获取验证码</div>
                   </div>
@@ -74,7 +75,7 @@
 
   export default {
     name: 'LoginModal',
-    data(){
+    data() {
       return {
         signDate: new Date(),
         email: '',
@@ -89,35 +90,35 @@
     },
     methods: {
       submitLoginForm: function () {
-        if(!(/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email))){
+        if (!(/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email))) {
           layerError("错误: 账号格式输入错误！");
           $('#account').focus();
           return;
         }
-        if(this.password.length < 1){
+        if (this.password.length < 1) {
           layerError("错误: 你还没有输入密码！");
           $('#password').focus();
           return;
         }
-        const data = new FormData()
-        data.append("account", this.email)
-        data.append("password", this.password)
-        const that = this
+        const data = new FormData();
+        data.append("account", this.email);
+        data.append("password", this.password);
+        const that = this;
         POST({
           url: '/api/user/login',
           data: data,
           callback: res => {
-            if(res.code === 200) {
-              if(res.data.message){
+            if (res.code === 200) {
+              if (res.data.message) {
                 layerMsg(res.data.message)
               } else {
                 layerMsg("登录成功...")
               }
-              localStorage.setItem("user", JSON.stringify(res.data.user))
-              setTimeout(function(){
-                EventBus.$emit("loginSuccess", res.data.user)
+              localStorage.setItem("user", JSON.stringify(res.data.user));
+              setTimeout(function () {
+                EventBus.$emit("loginSuccess", res.data.user);
                 $('.tools.modal').modal('hide')
-              },2000)
+              }, 2000)
             } else {
               layerError(res.message);
             }
@@ -126,40 +127,40 @@
       },
       goRegiste: function () {
         // EventBus.$emit("goRegiste")
-        this.password = ''
-        this.email = ''
+        this.password = '';
+        this.email = '';
         this.showLogin = false
       },
       goLogin: function () {
         // EventBus.$emit("goLogin")
-        this.showLogin = true
-        this.email = ''
-        this.passwordReg = ''
-        this.repeat = ''
-        this.captcha = ''
-        this.code = ''
+        this.showLogin = true;
+        this.email = '';
+        this.passwordReg = '';
+        this.repeat = '';
+        this.captcha = '';
+        this.code = '';
         this.username = ''
       },
-      hideModal: function() {
+      hideModal: function () {
         // console.log("hideModal")
-        $('.ui.tools.modal').modal('hide')
-        this.email = ''
-        this.passwordReg = ''
-        this.repeat = ''
-        this.captcha = ''
-        this.code = ''
-        this.username = ''
+        $('.ui.tools.modal').modal('hide');
+        this.email = '';
+        this.passwordReg = '';
+        this.repeat = '';
+        this.captcha = '';
+        this.code = '';
+        this.username = '';
         this.password = ''
 
       },
       submitRegForm: function () {
 
-        if(this.username.length === 0 || this.username.length > 10) {
+        if (this.username.length === 0 || this.username.length > 10) {
           layerError('错误: 用户名应为1-10位字符！');
           $('#petname').focus();
           return;
         }
-        if(!/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email)){
+        if (!/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email)) {
           layerError('错误: 邮箱格式输入不正确！');
           $('#email').focus();
           return;
@@ -174,50 +175,55 @@
           $('#repeatPassword').focus();
           return;
         }
-        const data = new FormData()
-        data.append("username", this.username)
-        data.append("email", this.email)
-        data.append("password", this.passwordReg)
-        data.append("repeatPassword", this.repeat)
-        data.append("code", this.code)
-        const that = this
+        const data = new FormData();
+        data.append("username", this.username);
+        data.append("email", this.email);
+        data.append("password", this.passwordReg);
+        data.append("repeatPassword", this.repeat);
+        data.append("code", this.code);
+        const that = this;
         POST({
           url: '/api/user/registe',
           data: data,
           callback: res => {
-            if (res.data.code === 200) {
+            if (res.code === 200) {
               layerMsg('注册成功！');
               // setTimeout(function(){
               //   that.$router.replace("/index/login")
               // },2000)
             } else {
-              if (res.code === 402){
+              if (res.code === 402) {
                 $('#email').focus();
-              } else if (res.code === 401){
+              } else if (res.code === 401) {
                 $('#code').focus();
-              } else if(res.code === 403){
+              } else if (res.code === 403) {
                 $('#petname').focus();
-              } else if(res.code === 404){
+              } else if (res.code === 404) {
                 $('#passwordReg').focus();
               } else {
                 $('#repeatPassword').focus();
               }
-              that.signDate = new Date()
+              that.signDate = new Date();
               layerError(res.message);
             }
           }
         })
       },
       sendRegCode: function () {
-        if(!/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email)){
+        if (!/^[a-zA-Z0-9._]+@([a-z]|\d){2,10}[.][a-zA-Z0-9._]+$/.test(this.email)) {
           layerError('错误: 邮箱格式输入不正确！');
           $('#email').focus();
           return;
         }
-        const that = this
-        const data = new FormData()
-        data.append("email", this.email)
-        data.append("captcha", this.captcha)
+        if (this.captcha.trim().length === 0) {
+          layerError('错误: 请输入验证码！');
+          $('#captcha').focus();
+          return;
+        }
+        const that = this;
+        const data = new FormData();
+        data.append("email", this.email);
+        data.append("captcha", this.captcha);
         POST({
           url: '/api/user/sendRegCode',
           data: data,
@@ -229,10 +235,10 @@
               // },2000)
               $('#code').focus()
             } else {
-              if (res.code === 401){
+              if (res.code === 401) {
                 $('#captcha').focus();
                 that.signDate = new Date()
-              } else if (res.code === 400){
+              } else if (res.code === 400) {
                 $('#email').focus();
               }
               layerError(res.message);
@@ -242,18 +248,18 @@
       }
     },
     mounted: function () {
-      const that = this
+      const that = this;
       EventBus.$on('showLoginModal', function (showLogin) {
-        that.showLogin=showLogin
-        that.email = ''
-        that.passwordReg = ''
-        that.repeat = ''
-        that.captcha = ''
-        that.code = ''
-        that.username = ''
-        that.password = ''
+        that.showLogin = showLogin;
+        that.email = '';
+        that.passwordReg = '';
+        that.repeat = '';
+        that.captcha = '';
+        that.code = '';
+        that.username = '';
+        that.password = '';
         $('.tools.modal').modal('show')
-      })
+      });
       EventBus.$on('hideLoginModal', function () {
         $('.tools.modal').modal('hide')
       })
@@ -267,7 +273,7 @@
 </script>
 
 <style scoped>
-  input[type=text], input[type=password]{
+  input[type=text], input[type=password] {
     height: 40px;
     width: 100%;
     margin: 8px 0;
@@ -278,9 +284,11 @@
     text-align: center;
     border-radius: 3px;
   }
+
   input:focus {
     border: 1px solid #3582f8;
   }
+
   input[type=submit] {
     width: 100%;
     height: 40px;
@@ -311,11 +319,13 @@
     line-height: 40px;
     text-decoration: none;
   }
+
   .login img {
     display: block;
     width: 150px;
     margin: 0 auto;
   }
+
   p {
     text-align: center;
     margin: 20px 0;
@@ -347,18 +357,22 @@
     float: right;
     width: 40%;
   }
+
   .ui.modal.login {
     width: 400px;
     margin: auto;
   }
-  .label.captcha,.label.btn-code {
-    padding: 0!important;
+
+  .label.captcha, .label.btn-code {
+    padding: 0 !important;
   }
+
   .label.captcha img {
-    height: 38px!important;
+    height: 38px !important;
   }
-  .label.btn-code .button{
-    height: 38px!important;
+
+  .label.btn-code .button {
+    height: 38px !important;
     width: 100%;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;

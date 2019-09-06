@@ -1,16 +1,14 @@
 <template>
-    <div>
-      动态
-    </div>
+  <div>
+    动态
+  </div>
 </template>
 
 <script>
   export default {
     name: 'Activity',
     data() {
-      return {
-
-      }
+      return {}
     }
   }
 </script>

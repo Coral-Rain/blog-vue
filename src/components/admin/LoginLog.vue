@@ -23,7 +23,8 @@
         </tbody>
       </table>
     </div>
-    <Pagination :total="pager.total" :display="pager.pageSize" :currentPage="pager.pageNo" @pagechange="pagechange"></Pagination>
+    <Pagination :total="pager.total" :display="pager.pageSize" :currentPage="pager.pageNo"
+                @pagechange="pagechange"></Pagination>
   </div>
 </template>
 
@@ -34,10 +35,10 @@
   export default {
     name: 'LoginLog',
     components: {Pagination},
-    data(){
-      let logs = []
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+    data() {
+      let logs = [];
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         // console.log(userSession)
         userSession = JSON.parse(userSession)
       }
@@ -49,7 +50,7 @@
       }
     },
     mounted: function () {
-      const that = this
+      const that = this;
       this.refreshData()
     },
     computed: {
@@ -61,28 +62,28 @@
     },
     methods: {
       refreshData: function () {
-        const that = this
-        $('.ui.attached.tab').addClass("loading").removeClass("display-block")
-        const formdata = new FormData()
-        formdata.append("userId", this.user.id)
-        formdata.append("pageNo", this.pager.pageNo)
+        const that = this;
+        $('.ui.attached.tab').addClass("loading").removeClass("display-block");
+        const formdata = new FormData();
+        formdata.append("userId", this.user.id);
+        formdata.append("pageNo", this.pager.pageNo);
         POST({
           url: '/api/user/log/list',
           data: formdata,
           callback: res => {
-            if(res.code === 200){
+            if (res.code === 200) {
               setTimeout(function () {
-                that.logs = res.data.logs
-                that.pager = res.data.pager
-                $('.ui.attached.tab').removeClass("loading").addClass("display-block")
+                that.logs = res.data.logs;
+                that.pager = res.data.pager;
+                $('.ui.attached.tab').removeClass("loading").addClass("display-block");
                 $('html,body').animate({scrollTop: '0px'}, 200)
               }, 300)
             }
           }
         })
       },
-      pagechange: function(currentPage){
-        this.pager.pageNo = currentPage
+      pagechange: function (currentPage) {
+        this.pager.pageNo = currentPage;
         this.refreshData()
       },
     }

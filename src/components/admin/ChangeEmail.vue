@@ -47,9 +47,9 @@
 
   export default {
     name: 'ChangeEmail',
-    data(){
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+    data() {
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         // console.log(userSession)
         userSession = JSON.parse(userSession)
       }
@@ -63,26 +63,26 @@
     },
     methods: {
       submitChangeEmail: function () {
-        const that = this
-        const formdata = new FormData()
-        formdata.append('password', that.password)
-        formdata.append('email', that.email)
-        formdata.append('captcha', that.captcha)
+        const that = this;
+        const formdata = new FormData();
+        formdata.append('password', that.password);
+        formdata.append('email', that.email);
+        formdata.append('captcha', that.captcha);
 
         POST({
           url: '/api/user/change-email',
           data: formdata,
           callback: res => {
-            if(res.code === 200) {
-              layerMsg("验证邮箱已发送, 请点击链接激活!")
-              that.password = ''
-              that.email = ''
+            if (res.code === 200) {
+              layerMsg("验证邮箱已发送, 请点击链接激活!");
+              that.password = '';
+              that.email = '';
               that.captcha = ''
-            } else if(res.code === 400){
+            } else if (res.code === 400) {
               $('.ui.form').form('add prompt', 'password', '密码错误')
-            } else if(res.code === 401){
+            } else if (res.code === 401) {
               $('.ui.form').form('add prompt', 'captcha', '验证码错误')
-            } else if(res.code === 402){
+            } else if (res.code === 402) {
               $('.ui.form').form('add prompt', 'email', '请输入正确的邮箱地址')
             }
           }
@@ -95,8 +95,8 @@
       }
     },
     mounted: function () {
-      document.title = '修改登录邮箱 - ' + this.user.username + '的个人空间'
-      const that = this
+      document.title = '修改登录邮箱 - ' + this.user.username + '的个人空间';
+      const that = this;
       $(document).ready(function () {
         $('.ui.form').form({
           inline: true,
@@ -135,7 +135,7 @@
             }
           },
           onSuccess: function (e) {
-            e.preventDefault()
+            e.preventDefault();
             that.submitChangeEmail()
           }
         })
@@ -146,9 +146,10 @@
 
 <style scoped>
   .label.captcha {
-    padding: 0!important;
+    padding: 0 !important;
   }
+
   .label.captcha img {
-    height: 38px!important;
+    height: 38px !important;
   }
 </style>

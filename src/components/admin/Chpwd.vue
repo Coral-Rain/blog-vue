@@ -36,9 +36,9 @@
 
   export default {
     name: 'Chpwd',
-    data(){
-      let userSession = localStorage.getItem("user")
-      if(userSession) {
+    data() {
+      let userSession = localStorage.getItem("user");
+      if (userSession) {
         // console.log(userSession)
         userSession = JSON.parse(userSession)
       }
@@ -50,8 +50,8 @@
       }
     },
     mounted: function () {
-      document.title = '修改登录密码 - ' + this.user.username + '的个人空间'
-      const that = this
+      document.title = '修改登录密码 - ' + this.user.username + '的个人空间';
+      const that = this;
       $(document).ready(function () {
         $('.ui.form').form({
           inline: true,
@@ -94,7 +94,7 @@
             }
           },
           onSuccess: function (e) {
-            e.preventDefault()
+            e.preventDefault();
             that.submitChangePwd()
           }
         })
@@ -102,23 +102,23 @@
     },
     methods: {
       submitChangePwd: function () {
-        const formdata = new FormData()
-        formdata.append('oldPassword', this.oldPassword)
-        formdata.append('newPassword', this.newPassword)
-        formdata.append('repeatPassword', this.repeatPassword)
-        const that = this
+        const formdata = new FormData();
+        formdata.append('oldPassword', this.oldPassword);
+        formdata.append('newPassword', this.newPassword);
+        formdata.append('repeatPassword', this.repeatPassword);
+        const that = this;
         POST({
           url: '/api/user/chpwd',
           data: formdata,
           callback: res => {
-            if(res.code === 200) {
-              layerMsg("成功修改密码")
+            if (res.code === 200) {
+              layerMsg("成功修改密码");
               // $('.ui.form').reset()
-              that.oldPassword = ''
-              that.newPassword = ''
+              that.oldPassword = '';
+              that.newPassword = '';
               that.repeatPassword = ''
-            } else if(res.code === 400) {
-              $('.ui.form input[name=oldPassword]').focus()
+            } else if (res.code === 400) {
+              $('.ui.form input[name=oldPassword]').focus();
               $('.ui.form').form('add prompt', 'oldPassword', '密码错误')
             } else {
               layerError(res.message)
@@ -131,7 +131,7 @@
 </script>
 
 <style scoped>
-  .tip{
+  .tip {
     margin-left: 10px;
     font-size: 13px;
     line-height: 38px;

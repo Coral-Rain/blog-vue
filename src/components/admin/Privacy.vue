@@ -17,6 +17,7 @@
 
 <script>
   import CheckBox from '@/components/CheckBox'
+
   export default {
     name: 'Privacy',
     components: {CheckBox},

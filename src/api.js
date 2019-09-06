@@ -1,31 +1,31 @@
 import axios from 'axios'
 
 export function POST(params) {
-    axios.post(params.url, params.data, params.config).then(function (response) {
-        let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data
-        if(res.code === 144){
-            localStorage.clear()
-            sessionStorage.clear()
-            setTimeout(function () {
-              location.href = location.protocol + "//" + location.host + "/"
-            }, 1000)
-            layerError(res.message)
-            return
-        }
-        params.callback(res)
-    })
+  axios.post(params.url, params.data, params.config).then(function (response) {
+    let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+    if (res.code === 144) {
+      localStorage.clear();
+      sessionStorage.clear();
+      setTimeout(function () {
+        location.href = location.protocol + "//" + location.host + "/"
+      }, 1000);
+      layerError(res.message);
+      return
+    }
+    params.callback(res)
+  })
 }
 
 export function GET(params) {
-    axios.get(params.url).then(function (response) {
-        let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data
-        if(res.code === 144){
-            location.href = location.protocol + "//" + location.host + "/#/index/login"
-            localStorage.clear()
-            sessionStorage.clear()
-            layerError(res.message)
-            return
-        }
-        params.callback(res)
-    })
+  axios.get(params.url).then(function (response) {
+    let res = typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+    if (res.code === 144) {
+      location.href = location.protocol + "//" + location.host + "/#/index/login";
+      localStorage.clear();
+      sessionStorage.clear();
+      layerError(res.message);
+      return
+    }
+    params.callback(res)
+  })
 }

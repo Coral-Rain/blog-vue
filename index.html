@@ -1,50 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="/static/lib/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/static/lib/layer/layer.css">
-    <title>blog-vue</title>
-  </head>
-  <!-- oncontextmenu="return false" ondragstart="return false" onselect="document.selection.empty()"-->
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-    <script type="application/javascript">
-      function layerMsg(content) {
-        layer.closeAll();
-        layer.open({
-          skin:'msg',
-          content:content,
-          anim: 6,
-          time:2
-        });
-      }
-      function layerError(content) {
-        layer.closeAll();
-        layer.open({
-          skin:'msg',
-          content:content,
-          offset: 't',
-          anim: 6,
-          time:2,
-          style:'background-color:#ddd; color:red; font-size:20px;'
-        });
-      }
-    </script>
-  </body>
-  <style>
-    html{
-      height: 100%;
-    }
-    body{
-      height: 100%;
-      font-family: 'PingFang SC','Helvetica Neue','Microsoft YaHei UI','Microsoft YaHei','Noto Sans CJK SC',Sathu,EucrosiaUPC,Arial,Helvetica,sans-serif;
-    }
-    #blog-data img {
-      max-width: 100%;
-    }
-  </style>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="/static/lib/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/static/lib/layer/layer.css">
+  <title>blog-vue</title>
+</head>
+<!-- oncontextmenu="return false" ondragstart="return false" onselect="document.selection.empty()"-->
+<body>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+<script type="application/javascript">
+  function layerMsg(content) {
+    layer.closeAll();
+    layer.open({
+      skin: 'msg',
+      content: content,
+      anim: 6,
+      time: 2
+    });
+  }
+
+  function layerError(content) {
+    layer.closeAll();
+    layer.open({
+      skin: 'msg',
+      content: content,
+      offset: 't',
+      anim: 6,
+      time: 2,
+      style: 'background-color:#ddd; color:red; font-size:20px;'
+    });
+  }
+</script>
+</body>
+<style>
+  html {
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    font-family: 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei UI', 'Microsoft YaHei', 'Noto Sans CJK SC', Sathu, EucrosiaUPC, Arial, Helvetica, sans-serif;
+  }
+
+  #blog-data img {
+    max-width: 100%;
+  }
+</style>
 
 </html>
