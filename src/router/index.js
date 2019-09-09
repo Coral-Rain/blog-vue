@@ -11,6 +11,7 @@ import Following from '../components/person/Following'
 import WriteBlog from '../components/blog/WriteBlog'
 import BlogDetail from '../components/blog/BlogDetail'
 import Admin from '../components/admin/Admin'
+import Inbox from '../components/admin/Inbox'
 import Profile from '../components/admin/Profile'
 import Chpwd from '../components/admin/Chpwd'
 import ChangeEmail from '../components/admin/ChangeEmail'
@@ -128,7 +129,7 @@ const router = new Router({
         {
           path: 'inbox',
           name: 'AdminInbox',
-          component: Admin,
+          component: Inbox,
           children: [{path: '*', redirect: ''}]
         },
         {

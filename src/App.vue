@@ -29,7 +29,31 @@
             </div>
           </form>
           <ul v-if="isLogin" style="vertical-align: center" class="nav navbar-nav navbar-right">
-            <!--Img, Name-->
+            <li class="navbar-bell dropdown">
+              <a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <i class="fa fa-bell fa-lg"></i>
+              </a>
+              <div class="dropdown-menu message" :style="{fontSize: hasUnReadMsg ? '14px' : '12px'}" role="menu">
+                <div class="header message-header">
+                  {{hasUnReadMsg ? '站内消息通知' : '暂没有未读消息'}}
+                </div>
+
+                <div class="message-list" style="max-height: 200px">
+<!--                  循环未读消息列表-->
+                  <div class="list-group">
+                    <router-link :to="{name: 'AdminMessageDetail', params: {userId: user.id, messageId: m.id}}" v-for="m in messages" class="list-group-item" >
+                      <div class="title">{{m.title}}</div>
+                      <div class="date">{{m.createTime | datetime}}</div>
+                    </router-link>
+                  </div>
+                </div>
+                <div class="separator"></div>
+                <div class="header action clearfix">
+                  <span class="go-inbox"><router-link :to="{name: 'AdminInbox', params: {userId: user.id}}">消息中心</router-link></span>
+                  <span class="mark-read-all pull-right" :style="{display: hasUnReadMsg ? 'inline' : 'none'}"><a href="javascript:">全部标记为已读</a></span>
+                </div>
+              </div>
+            </li>
             <li style="line-height: 50px">
               <img :src="avatar(user.avatar)" title="修改头像" @click="" class="navbar-avatar" :alt="user.username">
             </li>
@@ -110,7 +134,7 @@
 <script>
   import Avatar from '@/components/Avatar'
   import EventBus from '@/EventBus'
-  import {GET} from './api'
+  import {GET, POST} from './api'
   import LoginModal from '@/components/tools/LoginModal'
 
   export default {
@@ -119,18 +143,36 @@
     data() {
       let isLogin = false;
       let userSession = localStorage.getItem("user");
+      let messages = [];
+      const that = this;
       if (userSession) {
         isLogin = true;
-        userSession = JSON.parse(userSession)
+        userSession = JSON.parse(userSession);
+        // 获取未读消息列表
+        const formdata = new FormData();
+        formdata.append("receiver", userSession.id);
+        formdata.append("status", "0");
+        formdata.append("pageNo", "1");
+        POST({
+          url: '/api/message/list',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200){
+              that.messages = res.data.messages;
+            } else {
+              layerError(res.message)
+            }
+          }
+        })
       }
-      console.log(userSession);
 
       return {
         showLoginWindow: false,
         showLogin: true,
         isLogin: isLogin,
         user: userSession,
-        uploadAvatar: false
+        uploadAvatar: false,
+        messages: messages
       }
     },
     methods: {
@@ -165,6 +207,11 @@
             }
           }
         })
+      }
+    },
+    computed: {
+      hasUnReadMsg: function () {
+        return this.messages.length > 0;
       }
     },
     mounted: function () {
@@ -252,8 +299,53 @@
   .dropdown-menu li[role=separator] {
     margin: 3px 0;
   }
-
+  .dropdown:hover .dropdown-menu.message {
+    display: block;
+    margin-top: 0;
+  }
   .navbar-fixed-top {
     z-index: 999;
+  }
+  .dropdown-menu.message {
+    /*display: block!important;*/
+    /*margin-top: 0!important;*/
+    width: 250px;
+    font-size: 12px;
+    padding: 5px 0;
+  }
+  .dropdown-menu.message .message-header{
+    font-weight: 700;
+    padding-left: 15px;
+    padding-bottom: 5px;
+    color: rgba(0,0,0,.85);
+    text-transform: uppercase;
+  }
+  .dropdown-menu.message .action {
+    font-weight: 700;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .dropdown-menu.message .separator{
+    border-top: 1px solid rgba(0,0,0,.3);
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .message-list .list-group {
+    margin-bottom: 0;
+  }
+  .message-list .list-group .list-group-item {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    border-bottom: none;
+    padding: 5px 15px;
+  }
+  .message-list .list-group .list-group-item .title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
   }
 </style>
