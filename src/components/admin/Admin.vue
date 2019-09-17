@@ -6,7 +6,7 @@
         <div class="menu">
           <h5>个人信息管理</h5>
           <div class="item" :class="path === 'inbox' ? 'active' : ''">
-            <router-link :to="{name: 'AdminInbox'}">我的消息</router-link>
+            <router-link :to="{name: 'AdminInboxDefault'}">我的消息</router-link>
           </div>
           <div class="item" :class="path === 'profile' ? 'active' : ''">
             <router-link :to="{name: 'AdminProfile'}">修改个人资料</router-link>
@@ -127,8 +127,9 @@
 
       let path = '';
       const paths = location.pathname.split('/');
-      if (paths.length >= 5) {
-        path = paths[4]
+      let indexAdmin = paths.indexOf('admin');
+      if (indexAdmin !== -1) {
+        path = paths[indexAdmin + 1]
       } else {
         path = 'profile'
       }
@@ -162,9 +163,9 @@
     watch: {
       $route() {
         const paths = location.pathname.split('/');
-
-        if (paths.length === 5) {
-          this.path = paths[4]
+        let indexAdmin = paths.indexOf('admin');
+        if (indexAdmin !== -1) {
+          this.path = paths[indexAdmin + 1]
         } else {
           this.path = 'profile'
         }

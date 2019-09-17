@@ -1,6 +1,6 @@
 <template>
   <div class="data-main">
-    <div v-for="blog in blogs" class="blog text-left">
+    <div v-for="(blog, index) in blogs" :key="index" class="blog text-left">
       <div class="meta">
         <router-link class="title"
                      :to="{name: 'BlogDetail',path:'/#aaa', params: {userId: blog.user.id, blogId: blog.id}}">

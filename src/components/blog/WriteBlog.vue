@@ -38,7 +38,7 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li v-for="type in blogTypes" @click="changeType(type.id, type.name)">
+                <li v-for="(type, index) in blogTypes" :key="index" @click="changeType(type.id, type.name)">
                   <div class="item-li" :class="isActive(type.id) ? 'active' : ''">{{type.name}}</div>
                 </li>
               </ul>
@@ -67,7 +67,7 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-              <li v-for="type in sysTypes" @click="changeSysType(type.id, type.name)">
+              <li v-for="(type, index) in sysTypes" :key="index" @click="changeSysType(type.id, type.name)">
                 <div class="item-li" :class="isSysActive(type.id) ? 'active' : ''">{{type.name}}</div>
               </li>
             </ul>
@@ -131,11 +131,13 @@
   // import 'tinymce/plugins/media'// 插入视频插件
   import 'tinymce/plugins/table'// 插入表格插件
   import 'tinymce/plugins/lists'// 列表插件
-  import 'tinymce/plugins/wordcount'// 字数统计插件
+  import 'tinymce/plugins/wordcount'
+  import HTMLEditor from "../tools/HTMLEditor";
+  // 字数统计插件
 
   export default {
     name: 'WriteBlog',
-    components: {Editor},
+    components: {HTMLEditor, Editor},
     data() {
       let blogId = '';
       if (this.$route.params.blogId) {

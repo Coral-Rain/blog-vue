@@ -7,7 +7,7 @@
       <li :class="{'disabled': current === 1}">
         <a href="javascript:" @click="setCurrent(1)"> 首页 </a>
       </li>
-      <li v-for="p in grouplist" :class="{'active': current === p.val}">
+      <li v-for="(p, index) in grouplist" :key="index" :class="{'active': current === p.val}">
         <a href="javascript:" @click="setCurrent(p.val)"> {{ p.text }} </a>
       </li>
       <li :class="{'disabled': current === page}">

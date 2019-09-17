@@ -1,6 +1,6 @@
 <template>
   <div class="data-main">
-    <div v-for="blog in blogs" class="blog text-left">
+    <div v-for="(blog, index) in blogs" :key="index" class="blog text-left">
       <div style="display: flex">
         <div class="meta">
           <router-link class="title" target="_blank"
@@ -38,7 +38,7 @@
                        :to="{name: 'Newest', params: {userId: blog.user.id}, query: {categoryId: blog.userTagId}}">
             {{blogType(blog.userTagId)}}
           </router-link>
-          <router-link target="_blank" v-else :to="{name: 'PersonHome', params: {userId: blog.user.id}}">
+          <router-link target="_blank" v-else :to="{name: 'PersonDefault', params: {userId: blog.user.id}}">
             {{blog.user.username}}
           </router-link>
         </div>

@@ -2,7 +2,7 @@
   <div>
     <h3 class="main-title ui dividing header text-left" style="margin-top: 10px">我的收藏夹 （{{collects.length}}）</h3>
     <div class="ui relaxed divided items attached tab">
-      <div class="item collect text-left" v-for="c in collects">
+      <div class="item collect text-left" v-for="(c, index) in collects" :key="index">
         <div class="content">
           <div class="top">
             <div class="left">
@@ -18,7 +18,7 @@
             <div v-if="hasImg(c.content)" class="images">
               <router-link target="_blank" class="ui small image"
                            :to="{name: 'BlogDetail', params: {userId: c.user.id, blogId: c.blogId}}">
-                <img :src="imgSrc(c.content)" style="width: 100%; height: auto;" alt="">
+                <img :src="imgSrc(c.content)" style="width: 100%; height: 70px;" alt="">
               </router-link>
             </div>
           </div>

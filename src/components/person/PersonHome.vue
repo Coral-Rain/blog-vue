@@ -108,7 +108,7 @@
               </router-link>
             </li>
             <li class="divider" role="separator"></li>
-            <li v-for="type in blogTypes" @click="changeBlogType()">
+            <li v-for="(type, index) in blogTypes" :key="index" @click="changeBlogType()">
               <router-link :to="{name: 'Newest', params: {userId: user.id}, query: {categoryId: type.id}}"
                            class="blog-type-dropdown item-li" :class="isTypeActive(type.id) ? 'active' : ''">
                 <span class="text-left">{{type.name}}</span>
@@ -149,13 +149,14 @@
       </div>
       <router-view></router-view>
     </div>
-    <div class="message-send modal ui tiny not-hide">
+    <div class="message-send modal ui tiny not-hide editor">
       <i class="icon close"></i>
       <div class="header">发送私信给： {{send.username}}</div>
       <div class="content">
         <form class="ui form">
           <div class="field">
-            <textarea v-model="send.message" placeholder="请输入内容" rows="5" style="resize: none;height: 100px"></textarea>
+            <HTMLEditor ref="editor" />
+            <!--            <textarea v-model="send.message" placeholder="请输入内容" rows="5" style="resize: none;height: 100px"></textarea>-->
           </div>
         </form>
       </div>
@@ -171,6 +172,7 @@
   import echarts from 'echarts'
   import {GET, POST} from '../../api'
   import EventBus from '@/EventBus'
+  import HTMLEditor from '../tools/HTMLEditor'
 
   export default {
     name: 'PersonHome',
@@ -231,7 +233,7 @@
           {id: '2', name: '日常作品', count: 0},
           {id: '3', name: '转载文章', count: 0}
         ],
-        user: {avatar: 'avatar.png'},
+        user: {id: '0',avatar: 'avatar.png'},
         hoverFollow: false,
         tabs: ['newest', 'popular', 'activity', 'tweet'],
         count,
@@ -239,6 +241,7 @@
         keyword: this.$route.query.q
       }
     },
+    components: {HTMLEditor},
     methods: {
       drawPie: function (id) {
         const charts = echarts.init(document.getElementById(id));
@@ -311,8 +314,10 @@
         if (this.userSession) {
           this.send.id = this.user.id;
           this.send.message = '';
+          this.$refs.editor.clear();
           this.send.username = this.user.username;
-          $('.message-send.modal').modal('show')
+          $('.message-send.modal').modal('show');
+          EventBus.$emit('initEditor');
         } else {
           layerError("请登录后操作")
         }
@@ -366,6 +371,26 @@
       },
       sendMessage() {
         // 发送私信
+        this.send.message = this.$refs.editor.value();
+        if(this.send.message.trim().length === 0){
+          layerError("私信内容不能为空!");
+          return;
+        }
+        const formdata = new FormData();
+        formdata.append("receiver", this.send.id);
+        formdata.append("content", this.send.message);
+        POST({
+          url: '/api/message/send',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200){
+              layerMsg("成功发送私信！");
+              $('.message-send.modal').modal('hide')
+            } else {
+              layerError(res.message)
+            }
+          }
+        })
       }
 
     },
@@ -750,13 +775,15 @@
   .breadcrumb-path li {
     width: 350px;
   }
-
-  .message-send.modal {
-    height: 270px;
+  .editor.modal {
+    height: 100%;
+    width: 80%;
     position: absolute;
-    top: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto!important;
+  }
+  .editor.modal .content {
+    height: calc(100% - 130px);
+    overflow-y: auto;
   }
 
   i.fa {

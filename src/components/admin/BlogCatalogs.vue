@@ -17,7 +17,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="center aligned" v-for="(c, index) in catalogs">
+      <tr class="center aligned" v-for="(c, index) in catalogs" :key="index">
         <td class="one wide">{{index + 1}}</td>
         <td class="ten wide">{{c.name}}</td>
         <td class="two wide">{{c.count}}</td>

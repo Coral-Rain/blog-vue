@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-panel">
-    <div class="recommend-panel-div" v-for="blog in blogs">
+    <div class="recommend-panel-div" v-for="(blog, index) in blogs" :key="index">
       <div>
         <img class="recommend-panel-image" src="../../static/14332c86c2bc49c25c0845fe85a94f9931e.jpg" alt="">
         <a href="#" target="_blank"></a>

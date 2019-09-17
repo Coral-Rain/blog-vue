@@ -66,19 +66,19 @@
                 <div class="five wide field">
                   <select class="ui fluid dropdown" v-model="user.province" @change="changeProvince()" name="province">
                     <option value="">请选择省份</option>
-                    <option v-for="p in provinces" :value="p.id">{{p.province}}</option>
+                    <option v-for="(p, index) in provinces" :key="index" :value="p.id">{{p.province}}</option>
                   </select>
                 </div>
                 <div class="five wide field">
                   <select class="ui fluid dropdown" id="city" @change="changeCity()" v-model="user.city" name="city">
                     <option value="">请选择城市</option>
-                    <option v-for="c in cities" :value="c.id">{{c.city}}</option>
+                    <option v-for="(c, index) in cities" :key="index" :value="c.id">{{c.city}}</option>
                   </select>
                 </div>
                 <div class="five wide field">
                   <select class="ui fluid dropdown" id="area" v-model="user.area" name="area">
                     <option value="">请选择地区</option>
-                    <option v-for="a in areas" :value="a.id">{{a.area}}</option>
+                    <option v-for="(a, index) in areas" :key="index" :value="a.id">{{a.area}}</option>
                   </select>
                 </div>
               </div>

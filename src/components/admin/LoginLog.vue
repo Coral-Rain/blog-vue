@@ -13,7 +13,7 @@
         </tr>
         </thead>
         <tbody class="text-center">
-        <tr v-for="(l,index) in logs">
+        <tr v-for="(l,index) in logs" :key="index">
           <td>{{(pager.pageNo-1) * pager.pageSize + index+1}}</td>
           <td>{{l.loginIp}}</td>
           <td>{{l.address}}</td>

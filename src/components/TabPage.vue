@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="nav nav-tabs">
-      <li v-for="tab in tabs" role="presentation"
+      <li v-for="(tab, index) in tabs" :key="index" role="presentation"
           :class="tab.id === activeId ? 'active' : ''">
         <!--<a>{{tab.name}}</a>-->
         <router-link :to="tab.to">{{tab.name}}</router-link>

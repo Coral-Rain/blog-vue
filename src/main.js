@@ -192,7 +192,7 @@ Vue.filter('markdown', function (content) {
 Vue.filter('imgUrl', function (content) {
   const html = marked(content, {sanitize: true});
   const imgs = $(html).find('img');
-  console.log(imgs);
+  // console.log(imgs);
   if (imgs.length > 0) {
     return imgs[0].currentSrc
   } else {

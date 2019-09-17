@@ -41,7 +41,7 @@
                 <div class="message-list" style="max-height: 200px">
 <!--                  循环未读消息列表-->
                   <div class="list-group">
-                    <router-link :to="{name: 'AdminMessageDetail', params: {userId: user.id, messageId: m.id}}" v-for="m in messages" class="list-group-item" >
+                    <router-link :to="{name: 'InboxMessages', params: {userId: user.id}, query: {user: m.sender, detail: m.id}}" v-for="(m, index) in messages" :key="index" class="list-group-item" >
                       <div class="title">{{m.title}}</div>
                       <div class="date">{{m.createTime | datetime}}</div>
                     </router-link>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="separator"></div>
                 <div class="header action clearfix">
-                  <span class="go-inbox"><router-link :to="{name: 'AdminInbox', params: {userId: user.id}}">消息中心</router-link></span>
+                  <span class="go-inbox"><router-link :to="{name: 'AdminInboxDefault', params: {userId: user.id}}">消息中心</router-link></span>
                   <span class="mark-read-all pull-right" :style="{display: hasUnReadMsg ? 'inline' : 'none'}"><a href="javascript:">全部标记为已读</a></span>
                 </div>
               </div>
@@ -228,7 +228,23 @@
       EventBus.$on("loginSuccess", function (user) {
         // that.showLoginWindow = false
         that.isLogin = true;
-        that.user = user
+        that.user = user;
+        // 获取未读消息列表
+        const formdata = new FormData();
+        formdata.append("receiver", user.id);
+        formdata.append("status", "0");
+        formdata.append("pageNo", "1");
+        POST({
+          url: '/api/message/list',
+          data: formdata,
+          callback: res => {
+            if(res.code === 200){
+              that.messages = res.data.messages;
+            } else {
+              layerError(res.message)
+            }
+          }
+        })
       });
       // EventBus.$on("goRegiste", function () {
       //   that.toRegiste()

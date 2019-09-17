@@ -2,15 +2,15 @@
   <div>
     <h3 class="main-title ui dividing header text-left" style="margin-top: 10px">草稿箱 （{{drafts.length}}）</h3>
     <div class="ui relaxed divided items attached tab">
-      <div class="item draft text-left" v-for="draft in drafts">
+      <div class="item draft text-left" v-for="(draft, index) in drafts" :key="index">
         <div class="content">
           <router-link :to="{name: 'EditDraft', params: {userId: user.id, blogId: draft.id}}" target="_blank"
                        class="header">
             {{draft.title}}
           </router-link>
           <div class="description">
-            <p v-if="c.markdown" class="line-clamp">{{c.content | markdown}}</p>
-            <p v-else class="line-clamp">{{c.content | delHTMLTag}}</p>
+            <p v-if="draft.markdown" class="line-clamp">{{draft.content | markdown}}</p>
+            <p v-else class="line-clamp">{{draft.content | delHTMLTag}}</p>
           </div>
           <div class="extra">
             <div class="ui horizontal list">
@@ -150,8 +150,8 @@
     height: 200px;
     position: absolute;
     top: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto!important;
+    margin-right: auto!important;
   }
 
   .display-block {

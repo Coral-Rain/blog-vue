@@ -3,10 +3,10 @@
     <router-link to="/blog" class="item item-all" :class="tagClass('0', '全部')" @click.native="onTagClick($event, '全部')">
       全部
     </router-link>
-    <div v-for="l in list" class="item-tag-container">
+    <div v-for="(l, index) in list" :key="index" class="item-tag-container">
       <h4 class="header">{{l.name}}</h4>
       <router-link @click.native="onTagClick($event, tag.name)" :class="tagClass(tag.id, tag.name)" class="item"
-                   :to="{path: '/blog', query:{item_tag: tag.id}}" v-for="tag in l.tags">
+                   :to="{path: '/blog', query:{item_tag: tag.id}}" v-for="(tag, index) in l.tags" :key="index">
         <li class="item">{{tag.name}}</li>
       </router-link>
     </div>

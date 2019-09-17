@@ -12,6 +12,8 @@ import WriteBlog from '../components/blog/WriteBlog'
 import BlogDetail from '../components/blog/BlogDetail'
 import Admin from '../components/admin/Admin'
 import Inbox from '../components/admin/Inbox'
+import InboxDefault from '../components/admin/InboxDefault'
+import Messages from '../components/admin/Messages'
 import Profile from '../components/admin/Profile'
 import Chpwd from '../components/admin/Chpwd'
 import ChangeEmail from '../components/admin/ChangeEmail'
@@ -51,7 +53,6 @@ const router = new Router({
     },
     {
       path: '/u/:userId',
-      name: 'PersonHome',
       component: PersonHome,
       children: [
         {
@@ -117,7 +118,6 @@ const router = new Router({
     },
     {
       path: '/u/:userId/admin',
-      name: 'PersonAdmin',
       component: Admin,
       children: [
         {
@@ -128,9 +128,19 @@ const router = new Router({
         },
         {
           path: 'inbox',
-          name: 'AdminInbox',
           component: Inbox,
-          children: [{path: '*', redirect: ''}]
+          children: [
+            {
+              path: '',
+              name: 'AdminInboxDefault',
+              component: InboxDefault
+            },
+            {
+              path: 'msgs',
+              name: 'InboxMessages',
+              component: Messages,
+            },
+          ]
         },
         {
           path: 'profile',
@@ -283,7 +293,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  $('.modal').remove(':not(.not-hide)');
+  if (to.path !== from.path) {
+    $('.modal').remove(':not(.not-hide)');
+  }
   if (to.meta.title) {
     document.title = to.meta.title
   }

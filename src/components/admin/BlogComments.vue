@@ -2,7 +2,7 @@
   <div>
     <h3 class="main-title ui dividing header text-left" style="margin-top: 10px">博客评论管理 （{{pager.total}}）</h3>
     <div class="ui relaxed divided items attached tab">
-      <div class="item text-left" v-for="c in comments">
+      <div class="item text-left" v-for="(c, index) in comments" :key="index">
         <router-link :to="{name: 'PersonDefault', params: {userId: c.userId}}" target="_blank" class="ui avatar image"
                      style="width: 35px">
           <img :src=avatar(c.avatar)>

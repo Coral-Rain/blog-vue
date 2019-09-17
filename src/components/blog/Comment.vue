@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="comment in comments" class="comment">
+    <div v-for="(comment, index) in comments" :key="index" class="comment">
       <router-link class="avatar" :to="{name: 'PersonDefault', params: {userId: comment.user.id}}">
         <img :src="avatar(comment.user.avatar)" alt="">
       </router-link>

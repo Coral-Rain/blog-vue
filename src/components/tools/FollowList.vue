@@ -25,7 +25,7 @@
     </div>
     <div class="ui hidden divider"></div>
     <div class="ui relaxed divided items attached tab">
-      <div class="item" v-for="l in list">
+      <div class="item" v-for="(l, index) in list" :key="index">
         <router-link :to="{name: 'PersonDefault', params: {userId: l.follower}}" class="ui avatar image" target="_blank"
                      style="width: 35px">
           <img :src=avatar(l.avatar) :alt="l.username" :title="l.username">
@@ -44,7 +44,7 @@
             <a class="ui button set-nickname-btn" v-if="tergetUserId === userId && title === '我的关注'"
                @click="showEditRemarkModal(l)"><i class="pencil alternate icon"></i>备注</a>
             <a class="ui button send-message-btn" @click="showSendMessageModal(l)"><i class="envelope outline icon"></i>私信</a>
-            <a class="ui button follow-btn" @click="cancleFollow(l)" v-if="l.follow" @mouseenter="overFollowed($event)"
+            <a class="ui button follow-btn" @click="cancleFollow(l)" v-if="l.isFollow" @mouseenter="overFollowed($event)"
                @mouseleave="leaveFollowed($event)">
               <i class="heart icon red"></i>
               <span class="text">已关注</span>
@@ -190,7 +190,7 @@
           data: formdata,
           callback: res => {
             if (res.code === 200) {
-              follow.follow = false
+              follow.isFollow = false
             } else {
               layerError(res.message)
             }
@@ -207,7 +207,7 @@
             data: formdata,
             callback: res => {
               if (res.code === 200) {
-                follow.follow = true
+                follow.isFollow = true
               } else {
                 layerError(res.message)
               }
